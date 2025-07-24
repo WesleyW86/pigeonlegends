@@ -1,0 +1,455 @@
+﻿<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinanciÃ«n - Pigeon Legends</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4f46e5;
+      --primary-dark: #3730a3;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --border-color: #e2e8f0;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: var(--text-primary);
+    }
+
+    .header {
+      background: var(--bg-primary);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .back-button:hover {
+      background: var(--bg-tertiary);
+      transform: translateY(-1px);
+    }
+
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .finances-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .finance-card {
+      background: var(--bg-primary);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .finance-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+    }
+
+    .income-icon {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .expense-icon {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+
+    .profit-icon {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+
+    .balance-icon {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .card-amount {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .income-amount {
+      color: var(--success-color);
+    }
+
+    .expense-amount {
+      color: var(--error-color);
+    }
+
+    .profit-amount {
+      color: var(--primary-color);
+    }
+
+    .balance-amount {
+      color: var(--warning-color);
+    }
+
+    .card-description {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .transaction-list {
+      background: var(--bg-primary);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border: 1px solid var(--border-color);
+    }
+
+    .transaction-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .transaction-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .add-transaction-btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .add-transaction-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .transaction-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+    }
+
+    .transaction-item:hover {
+      background: var(--bg-secondary);
+    }
+
+    .transaction-item:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: white;
+    }
+
+    .transaction-details h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .transaction-details p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .transaction-amount {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .amount-positive {
+      color: var(--success-color);
+    }
+
+    .amount-negative {
+      color: var(--error-color);
+    }
+
+    .coming-soon {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--bg-primary);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border: 1px solid var(--border-color);
+    }
+
+    .coming-soon h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .coming-soon p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .feature-text {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        padding: 0 1rem;
+      }
+
+      .main-container {
+        padding: 1rem;
+      }
+
+      .finances-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .finance-card {
+        padding: 1.5rem;
+      }
+
+      .transaction-list {
+        padding: 1.5rem;
+      }
+
+      .feature-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="header-left">
+        <a href="index.html" class="back-button" id="back-link">
+          <i class="fas fa-arrow-left"></i>
+          <span data-translate="back">Terug</span>
+        </a>
+        <h1 class="page-title">
+          <i class="fas fa-chart-line"></i>
+          <span data-translate="finances">FinanciÃ«n</span>
+        </h1>
+      </div>
+      <div class="header-actions">
+        <!-- Language selector will be added here -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <div class="coming-soon">
+      <h2>ðŸ’° <span data-translate="finances">FinanciÃ«n</span> Systeem</h2>
+      <p data-translate="manage_finances">Het financiÃ«n systeem wordt momenteel ontwikkeld en komt binnenkort beschikbaar!</p>
+      
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-chart-pie"></i>
+          </div>
+          <span class="feature-text">Inkomsten & Uitgaven Tracking</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <span class="feature-text">Winstgevendheid Analyse</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <span class="feature-text">FinanciÃ«le Planning</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-file-invoice"></i>
+          </div>
+          <span class="feature-text">Rapporten & Statistieken</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-piggy-bank"></i>
+          </div>
+          <span class="feature-text">Investeringen Beheer</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-chart-bar"></i>
+          </div>
+          <span class="feature-text">Prestatie Grafieken</span>
+        </div>
+      </div>
+      
+      <p><strong data-translate="try_again">Blijf op de hoogte voor updates!</strong></p>
+    </div>
+  </main>
+
+  <script src="config.js"></script>`n<script type="module">
+    
+    import './weather.js';
+    
+    // Add language selector and translate page
+    addLanguageSelector();
+    translatePage();
+    
+    // Update back link with language parameter
+    const backLink = document.getElementById('back-link');
+    if (backLink) {
+      backLink.href = `index.html?lang=${getCurrentLanguage()}`;
+    }
+  </script>
+</body>
+</html> 

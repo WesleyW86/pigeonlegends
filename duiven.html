@@ -1,0 +1,807 @@
+﻿<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ðŸ¦… Pigeon Legends - Duiven Beheer</title>
+    <script src="config.js"></script>`n<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ•Šï¸</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .back-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        /* Weather Widget */
+        .weather-widget {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .weather-time {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-day {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .weather-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            color: #1f2937;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        /* Duiven Grid */
+        .duiven-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .duif-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .duif-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .duif-card.man {
+            border-color: #3b82f6;
+        }
+
+        .duif-card.vrouw {
+            border-color: #ec4899;
+        }
+
+        .duif-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .duif-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .duif-info h3 {
+            color: #1f2937;
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .duif-meta {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .duif-geslacht {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .duif-geslacht.man {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .duif-geslacht.vrouw {
+            background: #fce7f3;
+            color: #be185d;
+        }
+
+        .duif-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .duif-status.vliegkooi {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .duif-status.kweekkooi {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .duif-status.jong {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .duif-status.gestopt {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .duif-eigenschappen {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .eigenschap {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .eigenschap-label {
+            color: #6b7280;
+        }
+
+        .eigenschap-waarde {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .libido-indicator {
+            color: #ec4899;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: #ef4444;
+            font-size: 1.1rem;
+        }
+
+        /* Success notification */
+        .success-notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: #10b981;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+
+        .success-notification .icon {
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filters {
+                justify-content: center;
+            }
+
+            .duiven-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <a href="index.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Terug
+                </a>
+                <span>ðŸ•Šï¸</span>
+                <div>
+                    <h1>Duiven Beheer</h1>
+                    <p class="subtitle">Beheer je duiven en bekijk hun eigenschappen</p>
+                </div>
+            </div>
+
+            <!-- Weather Widget -->
+            <div class="weather-widget">
+                <div id="currentTime" class="weather-time">--:--</div>
+                <div id="currentDate" class="weather-day">Laden...</div>
+                <div class="weather-info">
+                    <span id="weatherIcon">â˜ï¸</span>
+                    <span id="weatherTemp">--Â°C</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="controls">
+                <button id="startDuivenBtn" class="btn btn-secondary">
+                    <i class="fas fa-home"></i> Start met 6 Duiven
+                </button>
+                
+                <div class="filters">
+                    <select id="filterGeslacht">
+                        <option value="alle">Alle Geslachten</option>
+                        <option value="man">Alleen Mannetjes</option>
+                        <option value="vrouw">Alleen Vrouwtjes</option>
+                    </select>
+
+                    <select id="filterStatus">
+                        <option value="alle">Alle Statussen</option>
+                        <option value="vliegkooi">Vliegkooi</option>
+                        <option value="kweekkooi">Kweekkooi</option>
+                        <option value="jong">Jong</option>
+                        <option value="gestopt">Gestopt</option>
+                    </select>
+
+                    <select id="sortEigenschap">
+                        <option value="created_at">Nieuwste Eerst</option>
+                        <option value="leeftijd_maanden">Leeftijd</option>
+                        <option value="snelheid">Snelheid</option>
+                        <option value="vormpeil">Vormpeil</option>
+                        <option value="conditie">Conditie</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="duiven-lijst" class="duiven-grid">
+                <div class="loading">Laden...</div>
+            </div>
+
+            <!-- Success notification -->
+            <div id="successNotification" class="success-notification">
+                <span class="icon">ðŸŽ‰</span>
+                <span id="successMessage">Duiven succesvol toegevoegd!</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>`n<script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+        import './weather.js';
+        import './training-background.js';
+    import './competition-background.js';
+
+        const SUPABASE_URL = 'SUPABASE_CONFIG.url';
+        const SUPABASE_KEY = 'SUPABASE_CONFIG.anonKey';
+        const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Namen voor duiven
+        const manVoornamen = ['Wesje', 'Tomo', 'Max', 'Rocco', 'Boris', 'Finn', 'Jules', 'Mats', 'Daan', 'Lars', 'Niels', 'Raf', 'Jip', 'Tijn', 'Sem', 'Koen', 'Thijs', 'Bram', 'Joris', 'Tim'];
+        const vrouwVoornamen = ['Luna', 'Fien', 'Lotte', 'Mila', 'Nora', 'Saar', 'Tess', 'Evi', 'Fleur', 'Jade', 'Lieke', 'Noor', 'Puck', 'Romy', 'Sofie', 'Anna', 'Emma', 'Lisa', 'Sara', 'Julia'];
+        const achternamen = [
+            'de Trage', 'de Windvanger', 'Klapwiek', 'de Snavelbijter', 'de Onverwoestbare',
+            'de Vliegenvanger', 'de Snelste', 'de Draaier', 'de Turbo', 'de Rakker',
+            'de Snuffelaar', 'de Zwerver', 'de Dondersteen', 'de Fladderaar', 'de Snelle Jelle',
+            'de Stormvleugel', 'de Regenrijder', 'de Zonzoeker', 'de Avonturier', 'de Nachtvlieger',
+            'de Sluiper', 'de Grappenmaker', 'de Dappere', 'de Slimme', 'de Pechvogel',
+            'de Lucky', 'de Vleugelheld', 'de Koerier', 'de Snater', 'de Wervelwind'
+        ];
+
+        function randomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function randomItem(list) {
+            return list[Math.floor(Math.random() * list.length)];
+        }
+
+        // Genereer eigenschappen met som maximaal 45 voor jonge duiven
+        function genereerJongeDuifEigenschappen() {
+            const eigenschappen = [
+                'vormpeil', 'snelheid', 'conditie', 'oriÃ«ntatie', 'techniek',
+                'ervaring', 'aerodynamica', 'intelligentie', 'nachtvliegen'
+            ];
+            
+            let totaal = 0;
+            const result = {};
+            
+            // Verdeel willekeurig over eigenschappen
+            eigenschappen.forEach(eigenschap => {
+                const waarde = randomInt(0, 10);
+                result[eigenschap] = waarde;
+                totaal += waarde;
+            });
+            
+            // Als totaal > 45, herverdeel
+            if (totaal > 45) {
+                const factor = 45 / totaal;
+                eigenschappen.forEach(eigenschap => {
+                    result[eigenschap] = Math.floor(result[eigenschap] * factor);
+                });
+            }
+            
+            return result;
+        }
+
+        function genereerDuifProfiel() {
+            const geslacht = Math.random() < 0.5 ? 'man' : 'vrouw';
+            const voornaam = geslacht === 'man' ? randomItem(manVoornamen) : randomItem(vrouwVoornamen);
+            const achternaam = randomItem(achternamen);
+            const eigenschappen = genereerJongeDuifEigenschappen();
+            
+            return {
+                naam: `${voornaam} ${achternaam}`,
+                geslacht,
+                leeftijd_maanden: 0,
+                status: 'vliegkooi',
+                libido: randomInt(1, 5),
+                geboren_op: new Date().toISOString().split('T')[0],
+                ...eigenschappen
+            };
+        }
+
+        function berekenLeeftijd(leeftijdMaanden) {
+            const leeftijd = leeftijdMaanden || 0;
+            const jaren = Math.floor(leeftijd / 12);
+            const maanden = leeftijd % 12;
+            
+            if (jaren === 0) {
+                return `${maanden} maand${maanden !== 1 ? 'en' : ''}`;
+            } else if (maanden === 0) {
+                return `${jaren} jaar`;
+            } else {
+                return `${jaren} jaar, ${maanden} maand${maanden !== 1 ? 'en' : ''}`;
+            }
+        }
+
+        function berekenTotaalEigenschappen(duif) {
+            return (duif.vormpeil || 0) + (duif.snelheid || 0) + (duif.conditie || 0) + (duif.oriÃ«ntatie || 0) + 
+                   (duif.techniek || 0) + (duif.ervaring || 0) + (duif.aerodynamica || 0) + (duif.intelligentie || 0) + (duif.nachtvliegen || 0);
+        }
+
+        function renderLibido(libido) {
+            const hearts = 'â¤ï¸'.repeat(libido);
+            return `<span class="libido-indicator">${hearts}</span>`;
+        }
+
+        function toonSuccessMelding(bericht) {
+            const notification = document.getElementById('successNotification');
+            const message = document.getElementById('successMessage');
+            message.textContent = bericht;
+            notification.style.display = 'flex';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 4000);
+        }
+
+        // Maak 6 start duiven voor nieuwe spelers (Ã©Ã©nmalig per gebruiker)
+        async function maakStartDuiven() {
+            try {
+                // Haal huidige gebruiker op
+                const { data: { user }, error: userError } = await client.auth.getUser();
+                
+                if (userError || !user) {
+                    alert('Je moet ingelogd zijn om duiven te maken!');
+                    return;
+                }
+                
+                // Controleer eerst of deze gebruiker al duiven heeft
+                const { data: bestaandeDuiven, error: checkError } = await client
+                    .from('duiven')
+                    .select('id')
+                    .eq('user_id', user.id)
+                    .limit(1);
+                
+                if (checkError) {
+                    alert('Fout bij controleren bestaande duiven: ' + checkError.message);
+                    return;
+                }
+                
+                if (bestaandeDuiven && bestaandeDuiven.length > 0) {
+                    alert('Je hebt al duiven! Deze knop is alleen voor nieuwe spelers.');
+                    return;
+                }
+                
+                // Genereer 6 unieke jonge duiven voor deze gebruiker
+                const startDuiven = [];
+                for (let i = 0; i < 6; i++) {
+                    const nieuweDuif = genereerDuifProfiel();
+                    // Voeg user_id toe aan elke duif
+                    nieuweDuif.user_id = user.id;
+                    startDuiven.push(nieuweDuif);
+                }
+                
+                console.log('Start duiven voor gebruiker:', user.email, startDuiven);
+                
+                const { data, error } = await client.from('duiven').insert(startDuiven);
+                
+                if (error) {
+                    alert('Fout bij toevoegen start duiven: ' + error.message);
+                    return;
+                }
+                
+                console.log('6 start duiven succesvol toegevoegd voor gebruiker:', user.email);
+                toonSuccessMelding('ðŸŽ‰ 6 jonge duiven toegevoegd! Welkom bij Pigeon Legends!');
+                
+                // Verberg de knop na gebruik
+                const startBtn = document.getElementById('startDuivenBtn');
+                if (startBtn) {
+                    startBtn.style.display = 'none';
+                }
+                
+                laadDuiven();
+            } catch (error) {
+                console.error('Fout:', error);
+                alert('Er is een fout opgetreden: ' + error.message);
+            }
+        }
+
+        async function laadDuiven() {
+            const lijst = document.getElementById('duiven-lijst');
+            lijst.innerHTML = '<div class="loading">Laden...</div>';
+
+            try {
+                // Haal huidige gebruiker op
+                const { data: { user }, error: userError } = await client.auth.getUser();
+                
+                if (userError || !user) {
+                    lijst.innerHTML = '<div class="error">âŒ Je moet ingelogd zijn om je duiven te zien</div>';
+                    return;
+                }
+
+                const filterGeslacht = document.getElementById('filterGeslacht').value;
+                const filterStatus = document.getElementById('filterStatus').value;
+                const sortEigenschap = document.getElementById('sortEigenschap').value;
+
+                let query = client.from('duiven').select('*').eq('user_id', user.id);
+
+                if (filterGeslacht !== 'alle') {
+                    query = query.eq('geslacht', filterGeslacht);
+                }
+
+                if (filterStatus !== 'alle') {
+                    query = query.eq('status', filterStatus);
+                }
+
+                query = query.order(sortEigenschap, { ascending: false });
+
+                const { data: duiven, error } = await query;
+
+                if (error) {
+                    lijst.innerHTML = `<div class="error">âŒ Fout bij laden: ${error.message}</div>`;
+                    return;
+                }
+
+                if (!duiven || duiven.length === 0) {
+                    lijst.innerHTML = '<div class="loading">Geen duiven gevonden</div>';
+                    return;
+                }
+
+                lijst.innerHTML = '';
+
+                duiven.forEach(duif => {
+                    const leeftijd = berekenLeeftijd(duif.leeftijd_maanden);
+                    const totaalEigenschappen = berekenTotaalEigenschappen(duif);
+                    const foto = duif.geslacht === 'man' ? 'mannetje.png' : 'vrouwtje.png';
+                    
+                    const card = document.createElement('div');
+                    card.className = `duif-card ${duif.geslacht} ${duif.status}`;
+                    
+                    card.innerHTML = `
+                        <div class="duif-header">
+                            <img src="${foto}" alt="${duif.naam}" class="duif-avatar">
+                            <div class="duif-info">
+                                <h3>${duif.naam}</h3>
+                                <div class="duif-meta">
+                                    ${leeftijd} â€¢ ${totaalEigenschappen} punten
+                                    <span class="duif-geslacht ${duif.geslacht}">${duif.geslacht === 'man' ? 'â™‚' : 'â™€'}</span>
+                                    <span class="duif-status ${duif.status}">${duif.status}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="duif-eigenschappen">
+                            <div class="eigenschap">
+                                <span class="eigenschap-label">â¤ï¸ Libido</span>
+                                <span class="eigenschap-waarde">${renderLibido(duif.libido || 0)}</span>
+                            </div>
+                            <div class="eigenschap">
+                                <span class="eigenschap-label">âš¡ Snelheid</span>
+                                <span class="eigenschap-waarde">${duif.snelheid || 0}</span>
+                            </div>
+                            <div class="eigenschap">
+                                <span class="eigenschap-label">ðŸ’ª Conditie</span>
+                                <span class="eigenschap-waarde">${duif.conditie || 0}</span>
+                            </div>
+                            <div class="eigenschap">
+                                <span class="eigenschap-label">ðŸ§­ OriÃ«ntatie</span>
+                                <span class="eigenschap-waarde">${duif.oriÃ«ntatie || 0}</span>
+                            </div>
+                            <div class="eigenschap">
+                                <span class="eigenschap-label">ðŸŽ¯ Techniek</span>
+                                <span class="eigenschap-waarde">${duif.techniek || 0}</span>
+                            </div>
+                            <div class="eigenschap">
+                                <span class="eigenschap-label">ðŸ“š Ervaring</span>
+                                <span class="eigenschap-waarde">${duif.ervaring || 0}</span>
+                            </div>
+                            <div class="eigenschap">
+                                <span class="eigenschap-label">âœˆï¸ Aerodynamica</span>
+                                <span class="eigenschap-waarde">${duif.aerodynamica || 0}</span>
+                            </div>
+                            <div class="eigenschap">
+                                <span class="eigenschap-label">ðŸ§  Intelligentie</span>
+                                <span class="eigenschap-waarde">${duif.intelligentie || 0}</span>
+                            </div>
+                            <div class="eigenschap">
+                                <span class="eigenschap-label">ðŸŒ™ Nachtvliegen</span>
+                                <span class="eigenschap-waarde">${duif.nachtvliegen || 0}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    lijst.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Fout bij laden duiven:', error);
+                lijst.innerHTML = `<div class="error">âŒ Er is een fout opgetreden: ${error.message}</div>`;
+            }
+        }
+
+        // Controleer of start knop verborgen moet worden
+        async function controleerStartKnop() {
+            try {
+                // Haal huidige gebruiker op
+                const { data: { user }, error: userError } = await client.auth.getUser();
+                
+                if (userError || !user) {
+                    return; // Niet ingelogd, knop blijft zichtbaar
+                }
+                
+                const { data: bestaandeDuiven, error } = await client
+                    .from('duiven')
+                    .select('id')
+                    .eq('user_id', user.id)
+                    .limit(1);
+                
+                if (!error && bestaandeDuiven && bestaandeDuiven.length > 0) {
+                    const startBtn = document.getElementById('startDuivenBtn');
+                    if (startBtn) {
+                        startBtn.style.display = 'none';
+                    }
+                } else {
+                    // Toon de knop als gebruiker geen duiven heeft
+                    const startBtn = document.getElementById('startDuivenBtn');
+                    if (startBtn) {
+                        startBtn.style.display = 'inline-flex';
+                    }
+                }
+            } catch (error) {
+                console.error('Fout bij controleren start knop:', error);
+            }
+        }
+
+        // Tijd en Weer Widget functies
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('nl-NL', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                timeZone: 'Europe/Amsterdam'
+            });
+            const dateString = now.toLocaleDateString('nl-NL', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                timeZone: 'Europe/Amsterdam'
+            });
+            
+            document.getElementById('currentTime').textContent = timeString;
+            document.getElementById('currentDate').textContent = dateString;
+        }
+
+        async function updateWeather() {
+            try {
+                // Use shared weather manager
+                if (window.weatherManager) {
+                    window.weatherManager.updateWeatherDisplay();
+                }
+            } catch (error) {
+                console.error('Weer update fout:', error);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('startDuivenBtn').addEventListener('click', maakStartDuiven);
+        document.getElementById('filterGeslacht').addEventListener('change', laadDuiven);
+        document.getElementById('filterStatus').addEventListener('change', laadDuiven);
+        document.getElementById('sortEigenschap').addEventListener('change', laadDuiven);
+
+        // Update tijd elke seconde, weer elke 5 minuten
+        setInterval(updateTime, 1000);
+        setInterval(updateWeather, 300000);
+        updateTime();
+        updateWeather();
+        
+        // Ensure weather is displayed immediately
+        if (window.weatherManager) {
+            window.weatherManager.updateWeatherDisplay();
+        }
+
+        // Start de applicatie
+        laadDuiven();
+        controleerStartKnop();
+    </script>
+</body>
+</html>
+

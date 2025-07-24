@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦅 Pigeon Legends - In Ontwikkeling</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦅</text></svg>">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            border: 2px solid #f59e0b;
+        }
+
+        .features {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .features h3 {
+            color: #1f2937;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #374151;
+            font-size: 1rem;
+        }
+
+        .feature-list li i {
+            color: #10b981;
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .login-section {
+            background: #eff6ff;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid #3b82f6;
+        }
+
+        .login-section h3 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .login-section p {
+            color: #374151;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .contact-info {
+            background: #f0fdf4;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 2px solid #10b981;
+        }
+
+        .contact-info h4 {
+            color: #065f46;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-info p {
+            color: #374151;
+            font-size: 1rem;
+        }
+
+        .contact-info a {
+            color: #059669;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .test-accounts {
+            background: #fef3c7;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border: 2px solid #f59e0b;
+        }
+
+        .test-accounts h4 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .test-accounts p {
+            color: #78350f;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo" style="margin-bottom:1rem;">
+            <!-- Blauwgeschelpte vliegduif SVG -->
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="40" cy="50" rx="24" ry="14" fill="#bcd0e7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6"/>
+                <ellipse cx="54" cy="38" rx="7" ry="6" fill="#bcd0e7"/>
+                <ellipse cx="26" cy="38" rx="7" ry="6" fill="#bcd0e7"/>
+                <ellipse cx="40" cy="32" rx="7" ry="6" fill="#bcd0e7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <ellipse cx="40" cy="36" rx="18" ry="16" fill="#e5ecf6" fill-opacity="0.7"/>
+                <!-- Vleugelstrepen -->
+                <rect x="30" y="44" width="20" height="2" rx="1" fill="#6b7280"/>
+                <rect x="32" y="48" width="16" height="2" rx="1" fill="#6b7280"/>
+                <rect x="34" y="52" width="12" height="2" rx="1" fill="#6b7280"/>
+                <!-- Kopje -->
+                <ellipse cx="48" cy="28" rx="5" ry="5" fill="#e5ecf6"/>
+                <ellipse cx="49.5" cy="27.5" rx="1.2" ry="1.2" fill="#222"/>
+                <!-- Snavel -->
+                <polygon points="53,29 56,30 53,31" fill="#fbbf24"/>
+            </svg>
+        </div>
+                    <h1 class="title">🦅 Pigeon Legends</h1>
+        <p class="subtitle">Professioneel duivenbeheer systeem</p>
+        
+        <div class="status-badge">
+            <i class="fas fa-tools"></i> In Ontwikkeling
+        </div>
+
+        <div class="features">
+            <h3><i class="fas fa-star"></i> Beschikbare Functies</h3>
+            <ul class="feature-list">
+                <li><i class="fas fa-check"></i> Persoonlijk duivenbeheer per gebruiker</li>
+                <li><i class="fas fa-check"></i> Gedeelde trainingen en wedstrijden</li>
+                <li><i class="fas fa-check"></i> Duiventil management</li>
+                <li><i class="fas fa-check"></i> Financiële tracking</li>
+                <li><i class="fas fa-check"></i> Prestatie statistieken</li>
+                <li><i class="fas fa-check"></i> Weerbericht integratie</li>
+            </ul>
+        </div>
+
+        <div class="login-section">
+            <h3><i class="fas fa-lock"></i> Toegang</h3>
+            <p>Deze applicatie is momenteel in ontwikkeling en alleen beschikbaar voor 3 testgebruikers. Registratie is tijdelijk uitgeschakeld.</p>
+            <p>Testgebruikers kunnen inloggen met hun vaste account gegevens.</p>
+            <a href="login.html" style="display:inline-block;background:#3b82f6;color:white;padding:0.75rem 1.5rem;border-radius:12px;text-decoration:none;font-weight:600;margin-top:1rem;transition:all 0.3s ease;">
+                <i class="fas fa-sign-in-alt"></i> Inloggen
+            </a>
+        </div>
+
+        <div class="test-accounts">
+            <h4><i class="fas fa-users"></i> Test Accounts</h4>
+            <p>Momenteel zijn er 4 vaste test accounts actief voor ontwikkeling en testing van de applicatie.</p>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // Supabase configuratie
+        const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+        // Controleer of gebruiker al is ingelogd
+        async function checkAuth() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                // Redirect naar dashboard als al ingelogd
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        // Check auth bij laden
+        checkAuth();
+    </script>
+</body>
+</html>

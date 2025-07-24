@@ -1,0 +1,564 @@
+﻿<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ðŸ¦… Pigeon Legends - Profiel Instellingen</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ¦…</text></svg>">
+    <script src="config.js"></script>`n<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="config.js"></script>`n<script type="module" src="weather.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .notification {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .notification.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .notification.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .weather-widget {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .weather-time {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .weather-icon {
+            font-size: 1.5rem;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .current-user {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .current-user h3 {
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .current-user p {
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Weather Widget -->
+    <div class="weather-widget">
+        <div class="weather-time" id="weather-time">Laden...</div>
+        <div class="weather-info">
+            <span class="weather-icon" id="weather-icon">ðŸŒ¤ï¸</span>
+            <span id="weather-temp">--Â°C</span>
+        </div>
+        <div id="weather-desc" style="font-size:0.8rem;color:#6b7280;margin-top:0.25rem;">Laden...</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <a href="dashboard.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Terug
+            </a>
+            <h1><i class="fas fa-user-cog"></i> Profiel Instellingen</h1>
+            <p>Beheer je account en team instellingen</p>
+        </div>
+
+        <div class="content">
+            <div id="notification"></div>
+            
+            <div class="current-user" id="current-user">
+                <h3>Huidige Gebruiker</h3>
+                <p><strong>Team:</strong> <span id="user-email">Laden...</span></p>
+                <p><strong>Naam:</strong> <span id="user-name">Laden...</span></p>
+                <p><strong>Team:</strong> <span id="user-team">Laden...</span></p>
+                <p><strong>Locatie:</strong> <span id="user-location">Laden...</span></p>
+            </div>
+
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="team-name">
+                        <i class="fas fa-flag"></i> Team Naam
+                    </label>
+                    <input type="text" id="team-name" name="team-name" placeholder="Voer je team naam in..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="user-name-input">
+                        <i class="fas fa-user"></i> Volledige Naam
+                    </label>
+                    <input type="text" id="user-name-input" name="user-name" placeholder="Voer je volledige naam in..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="user-location-input">
+                        <i class="fas fa-map-marker-alt"></i> Locatie
+                    </label>
+                    <input type="text" id="user-location-input" name="user-location" placeholder="Voer je locatie in..." required>
+                </div>
+
+                <button type="submit" class="btn" id="save-btn">
+                    <i class="fas fa-save"></i>
+                    <span id="save-text">Instellingen Opslaan</span>
+                </button>
+            </form>
+
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+                <h3 style="color: #374151; margin-bottom: 1rem;">
+                    <i class="fas fa-info-circle"></i> Over Team Namen
+                </h3>
+                <p style="color: #6b7280; line-height: 1.6;">
+                    Je team naam wordt weergegeven in de wedstrijd en training tabellen, zodat andere spelers kunnen zien van welk team je duiven zijn. 
+                    Kies een unieke en herkenbare naam voor je team!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>`n<script>
+        // Supabase configuratie
+        const supabaseUrl = 'SUPABASE_CONFIG.url';
+        const supabaseKey = 'SUPABASE_CONFIG.anonKey';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Controleer of gebruiker is ingelogd
+        async function checkAuth() {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error || !user) {
+                window.location.href = 'login.html';
+                return null;
+            }
+            return user;
+        }
+
+        // Toon notificatie
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.innerHTML = `
+                <div class="notification ${type}">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                    ${message}
+                </div>
+            `;
+            
+            setTimeout(() => {
+                notification.innerHTML = '';
+            }, 5000);
+        }
+
+        // Laad gebruiker gegevens
+        async function loadUserData() {
+            const user = await checkAuth();
+            if (!user) return;
+
+            try {
+                console.log('ðŸ” Laden gebruiker gegevens voor:', user.email, 'ID:', user.id);
+                
+                // Probeer eerst via email te zoeken (als user.id niet werkt)
+                let { data: userData, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('email', user.email)
+                    .single();
+
+                if (error) {
+                    console.log('âš ï¸ Zoeken via email mislukt, probeer via ID...');
+                    // Probeer via ID als email niet werkt
+                    const { data: userDataById, error: errorById } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('id', user.id)
+                        .single();
+                    
+                    if (errorById) {
+                        console.error('âŒ Beide methoden mislukt:', error, errorById);
+                        throw errorById;
+                    }
+                    userData = userDataById;
+                }
+
+                console.log('âœ… Gebruiker gegevens geladen:', userData);
+
+                // Vul formulier
+                document.getElementById('team-name').value = userData.team_naam || '';
+                document.getElementById('user-name-input').value = userData.naam || '';
+                document.getElementById('user-location-input').value = userData.locatie || '';
+
+                // Toon huidige gebruiker info
+                document.getElementById('user-email').textContent = userData.team_naam || userData.naam || user.email;
+                document.getElementById('user-name').textContent = userData.naam || 'Niet ingesteld';
+                document.getElementById('user-team').textContent = userData.team_naam || 'Niet ingesteld';
+                document.getElementById('user-location').textContent = userData.locatie || 'Niet ingesteld';
+
+            } catch (error) {
+                console.error('âŒ Fout bij laden gebruiker gegevens:', error);
+                showNotification('Fout bij laden gebruiker gegevens: ' + error.message, 'error');
+                
+                // Toon email als fallback
+                document.getElementById('user-email').textContent = user.email;
+                document.getElementById('user-name').textContent = 'Niet gevonden';
+                document.getElementById('user-team').textContent = 'Niet gevonden';
+                document.getElementById('user-location').textContent = 'Niet gevonden';
+                
+                // Probeer gebruiker aan te maken als deze niet bestaat
+                console.log('ðŸ†• Probeer gebruiker aan te maken...');
+                try {
+                    const { data: newUser, error: createError } = await supabase
+                        .from('users')
+                        .insert({
+                            id: user.id,
+                            email: user.email,
+                            naam: user.email.split('@')[0], // Gebruik email prefix als naam
+                            team_naam: 'Team Duiven',
+                            locatie: 'Onbekend',
+                            wachtwoord: 'auth_user' // Placeholder voor wachtwoord
+                        })
+                        .select()
+                        .single();
+                    
+                    if (createError) {
+                        console.error('âŒ Fout bij aanmaken gebruiker:', createError);
+                        // Probeer zonder ID (laat Supabase een nieuwe ID genereren)
+                        const { data: newUserAlt, error: createErrorAlt } = await supabase
+                            .from('users')
+                            .insert({
+                                email: user.email,
+                                naam: user.email.split('@')[0],
+                                team_naam: 'Team Duiven',
+                                locatie: 'Onbekend',
+                                wachtwoord: 'auth_user'
+                            })
+                            .select()
+                            .single();
+                        
+                        if (createErrorAlt) {
+                            console.error('âŒ Ook alternatieve methode mislukt:', createErrorAlt);
+                        } else {
+                            console.log('âœ… Nieuwe gebruiker aangemaakt (alternatief):', newUserAlt);
+                            // Herlaad de data
+                            await loadUserData();
+                        }
+                    } else {
+                        console.log('âœ… Nieuwe gebruiker aangemaakt:', newUser);
+                        // Herlaad de data
+                        await loadUserData();
+                    }
+                } catch (createError) {
+                    console.error('âŒ Fout bij aanmaken gebruiker:', createError);
+                }
+            }
+        }
+
+        // Sla instellingen op
+        async function saveSettings(event) {
+            event.preventDefault();
+            
+            const user = await checkAuth();
+            if (!user) return;
+
+            const saveBtn = document.getElementById('save-btn');
+            const saveText = document.getElementById('save-text');
+            
+            // Toon loading state
+            saveBtn.disabled = true;
+            saveText.innerHTML = '<span class="loading"></span> Opslaan...';
+
+            try {
+                const teamName = document.getElementById('team-name').value.trim();
+                const userName = document.getElementById('user-name-input').value.trim();
+                const userLocation = document.getElementById('user-location-input').value.trim();
+
+                if (!teamName || !userName || !userLocation) {
+                    throw new Error('Vul alle velden in');
+                }
+
+                console.log('ðŸ’¾ Opslaan instellingen voor:', user.email, 'ID:', user.id);
+
+                // Probeer eerst via email te updaten
+                let { error } = await supabase
+                    .from('users')
+                    .update({
+                        team_naam: teamName,
+                        naam: userName,
+                        locatie: userLocation
+                    })
+                    .eq('email', user.email);
+
+                if (error) {
+                    console.log('âš ï¸ Update via email mislukt, probeer via ID...');
+                    // Probeer via ID als email niet werkt
+                    const { error: errorById } = await supabase
+                        .from('users')
+                        .update({
+                            team_naam: teamName,
+                            naam: userName,
+                            locatie: userLocation
+                        })
+                        .eq('id', user.id);
+                    
+                    if (errorById) {
+                        console.error('âŒ Beide update methoden mislukt:', error, errorById);
+                        throw errorById;
+                    }
+                }
+
+                console.log('âœ… Instellingen succesvol opgeslagen');
+                showNotification('Instellingen succesvol opgeslagen!');
+                
+                // Update huidige gebruiker info
+                document.getElementById('user-name').textContent = userName;
+                document.getElementById('user-team').textContent = teamName;
+                document.getElementById('user-location').textContent = userLocation;
+
+            } catch (error) {
+                console.error('âŒ Fout bij opslaan instellingen:', error);
+                showNotification('Fout bij opslaan instellingen: ' + error.message, 'error');
+            } finally {
+                // Herstel button state
+                saveBtn.disabled = false;
+                saveText.textContent = 'Instellingen Opslaan';
+            }
+        }
+
+        // Weather functies
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('nl-NL', {
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Europe/Brussels'
+            });
+            const dateString = now.toLocaleDateString('nl-NL', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                timeZone: 'Europe/Brussels'
+            });
+            document.getElementById('weather-time').textContent = `${dateString} - ${timeString}`;
+        }
+
+        async function updateWeather() {
+            try {
+                const weatherData = JSON.parse(localStorage.getItem('weatherData') || '{}');
+                const lastUpdate = localStorage.getItem('weatherLastUpdate');
+                const now = Date.now();
+
+                // Update elke 5 minuten
+                if (!lastUpdate || (now - parseInt(lastUpdate)) > 300000) {
+                    // Genereer nieuw weer (simulatie)
+                    const conditions = ['ðŸŒ¤ï¸', 'â˜€ï¸', 'â›…', 'ðŸŒ¥ï¸', 'ðŸŒ¦ï¸', 'ðŸŒ§ï¸', 'â›ˆï¸', 'ðŸŒ©ï¸'];
+                    const descriptions = ['Licht bewolkt', 'Zonnig', 'Gedeeltelijk bewolkt', 'Bewolkt', 'Lichte regen', 'Regen', 'Onweer', 'Storm'];
+                    
+                    const randomIndex = Math.floor(Math.random() * conditions.length);
+                    const temp = Math.floor(Math.random() * 25) + 5; // 5-30Â°C
+                    
+                    const newWeather = {
+                        icon: conditions[randomIndex],
+                        temp: temp,
+                        desc: descriptions[randomIndex],
+                        location: 'Gent, BelgiÃ«'
+                    };
+
+                    localStorage.setItem('weatherData', JSON.stringify(newWeather));
+                    localStorage.setItem('weatherLastUpdate', now.toString());
+                    
+                    // Update display
+                    document.getElementById('weather-icon').textContent = newWeather.icon;
+                    document.getElementById('weather-temp').textContent = `${newWeather.temp}Â°C`;
+                    document.getElementById('weather-desc').textContent = newWeather.desc;
+                } else {
+                    // Gebruik bestaande data
+                    document.getElementById('weather-icon').textContent = weatherData.icon || 'ðŸŒ¤ï¸';
+                    document.getElementById('weather-temp').textContent = `${weatherData.temp || 18}Â°C`;
+                    document.getElementById('weather-desc').textContent = weatherData.desc || 'Licht bewolkt';
+                }
+            } catch (error) {
+                console.error('Weer update fout:', error);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('profile-form').addEventListener('submit', saveSettings);
+
+        // Import training background
+        import('./training-background.js');
+    import('./competition-background.js');
+
+        // Initialisatie
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadUserData();
+            updateTime();
+            updateWeather();
+            
+            // Update tijd elke seconde, weer elke 5 minuten
+            setInterval(updateTime, 1000);
+            setInterval(updateWeather, 300000);
+        });
+    </script>
+</body>
+</html> 

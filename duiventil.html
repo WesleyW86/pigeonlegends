@@ -1,0 +1,976 @@
+﻿<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+      <title>ðŸ¦… Pigeon Legends - Duiventil Beheer ðŸ </title>
+      <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ¦…</text></svg>">
+  <script src="config.js"></script>`n<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --primary-dark: #2563eb;
+      --secondary-color: #10b981;
+      --accent-color: #f59e0b;
+      --danger-color: #ef4444;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #e0f2fe 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      padding: 2rem;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    /* Duiven achtergrond decoratie */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(245, 158, 11, 0.02) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Vliegende duiven animatie */
+    @keyframes fly {
+      0% { transform: translateX(-100px) translateY(0px) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.3; }
+      90% { opacity: 0.3; }
+      100% { transform: translateX(calc(100vw + 100px)) translateY(-50px) rotate(5deg); opacity: 0; }
+    }
+
+    .flying-dove {
+      position: fixed;
+      font-size: 2rem;
+      color: rgba(59, 130, 246, 0.1);
+      animation: fly 15s linear infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .flying-dove:nth-child(1) { top: 15%; animation-delay: 0s; }
+    .flying-dove:nth-child(2) { top: 35%; animation-delay: 5s; }
+    .flying-dove:nth-child(3) { top: 55%; animation-delay: 10s; }
+    .flying-dove:nth-child(4) { top: 75%; animation-delay: 3s; }
+    .flying-dove:nth-child(5) { top: 25%; animation-delay: 8s; }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: var(--primary-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+
+    .back-button:hover {
+      background: var(--primary-dark);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 0 0 0.5rem 0;
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Tijd en Weer Widget */
+    .weather-time-widget {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: var(--shadow-lg);
+      z-index: 100;
+      min-width: 200px;
+      border: 1px solid var(--border-color);
+    }
+
+    .weather-time-widget h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .time-display {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .date-display {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .weather-display {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .weather-icon {
+      font-size: 1.5rem;
+    }
+
+    .weather-temp {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .weather-desc {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #059669;
+      transform: translateY(-1px);
+    }
+
+    .btn-tertiary {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .btn-tertiary:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+    }
+
+    .kooien-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .kooi-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kooi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .kooi-card.kweekkooi {
+      border-left: 4px solid #f59e0b;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    }
+
+    .kooi-card.vliegkooi {
+      border-left: 4px solid #10b981;
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    }
+
+    .kooi-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .kooi-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .kooi-info h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 0 0.25rem 0;
+      color: var(--text-primary);
+    }
+
+    .kooi-nummer {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .duiven-sectie {
+      margin-bottom: 0.75rem;
+    }
+
+    .sectie-titel {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .duif-selector {
+      margin-bottom: 0.5rem;
+    }
+
+    .libido-display {
+      margin-top: 0.25rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .libido-indicator {
+      font-size: 0.9rem;
+    }
+
+    .duif-selector label {
+      display: block;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      background: white;
+      transition: border-color 0.2s;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .voeding-sectie {
+      margin-top: 1.5rem;
+    }
+
+    .voeding-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .voeding-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .voeding-item label {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .voeding-item input {
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .voeding-item input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .voeding-totaal {
+      background: var(--bg-secondary);
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .voeding-totaal.correct {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .voeding-totaal.incorrect {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .kooi-buttons {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .kooi-buttons .btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .status-message {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+
+    .status-message.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-message.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    /* CSS toevoegen voor vaste positie */
+    .time-date-widget {
+      position: absolute;
+      top: 32px;
+      right: 32px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 1.5rem 2.5rem;
+      z-index: 10;
+      text-align: center;
+    }
+    .time-date-widget .time-display {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+    .time-date-widget .date-display {
+      font-size: 1.1rem;
+      color: #6b7280;
+    }
+
+    @media (max-width: 768px) {
+      .kooien-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .weather-time-widget {
+        position: static;
+        margin-bottom: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Vliegende duiven animatie -->
+  <div class="flying-dove">ðŸ•Šï¸</div>
+  <div class="flying-dove">ðŸ•Šï¸</div>
+  <div class="flying-dove">ðŸ•Šï¸</div>
+  <div class="flying-dove">ðŸ•Šï¸</div>
+  <div class="flying-dove">ðŸ•Šï¸</div>
+
+  <!-- Tijd Widget (vast bovenaan, geen weer) -->
+  <div class="time-date-widget">
+    <div class="time-display" id="currentTime">--:--</div>
+    <div class="date-display" id="currentDate">--</div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <a class="back-button" href="index.html" id="back-link">
+        <i class="fas fa-arrow-left"></i> <span data-translate="back">Terug</span>
+      </a>
+      <h1>ðŸ  <span data-translate="pigeon_loft">Duiventil</span> Beheer</h1>
+      <p class="subtitle" data-translate="manage_loft">Beheer je kooien en plaats duiven</p>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" onclick="maakNieuweKooi('kweekkooi')">
+        <i class="fas fa-plus"></i> <span data-translate="new_breeding_cage">Nieuwe Kweekkooi</span>
+      </button>
+      
+      <button class="btn btn-secondary" onclick="maakNieuweKooi('vliegkooi')">
+        <i class="fas fa-plus"></i> <span data-translate="new_flying_cage">Nieuwe Vliegkooi</span>
+      </button>
+      
+      <button class="btn btn-tertiary" onclick="maakStandaardKooien()">
+        <i class="fas fa-home"></i> <span data-translate="standard_setup">Standaard Setup</span>
+      </button>
+    </div>
+
+    <div id="kooien-lijst" class="kooien-grid">
+      <div class="empty-state">
+        <i class="fas fa-home"></i>
+        <h3>Geen kooien gevonden</h3>
+        <p>Maak je eerste kooi aan om te beginnen!</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>`n<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    import './training-background.js';
+    import './competition-background.js';
+    
+    const SUPABASE_URL = 'SUPABASE_CONFIG.url';
+    const SUPABASE_KEY = 'SUPABASE_CONFIG.anonKey';
+    const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Tijd en Weer Widget
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('nl-NL', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        timeZone: 'Europe/Amsterdam'
+      });
+      const dateString = now.toLocaleDateString('nl-NL', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        timeZone: 'Europe/Amsterdam'
+      });
+      
+      document.getElementById('currentTime').textContent = timeString;
+      document.getElementById('currentDate').textContent = dateString;
+    }
+
+    // Update tijd elke seconde, weer elke 5 minuten
+    setInterval(updateTime, 1000);
+    updateTime();
+    
+    // Kooien beheer functies
+    window.maakNieuweKooi = async function(type) {
+      try {
+        if (!type || !['vliegkooi', 'kweekkooi'].includes(type)) {
+          alert('Ongeldig kooi type');
+          return;
+        }
+
+        // Haal huidige gebruiker op
+        const { data: { user }, error: userError } = await client.auth.getUser();
+        if (userError || !user) {
+          alert('Je bent niet ingelogd');
+          return;
+        }
+
+        // Bepaal het volgende nummer voor dit type kooi (alleen voor deze gebruiker)
+        const { data: bestaandeKooien } = await client
+          .from('kooien')
+          .select('nummer')
+          .eq('type', type)
+          .eq('user_id', user.id)
+          .order('nummer', { ascending: false })
+          .limit(1);
+
+        const volgendNummer = bestaandeKooien && bestaandeKooien.length > 0 
+          ? bestaandeKooien[0].nummer + 1 
+          : 1;
+
+        const { data, error } = await client
+          .from('kooien')
+          .insert([{ type, nummer: volgendNummer, user_id: user.id }]);
+
+        if (error) {
+          alert('Fout bij aanmaken kooi: ' + error.message);
+          return;
+        }
+
+        laadKooien();
+      } catch (error) {
+        console.error('Fout:', error);
+        alert('Er is een fout opgetreden: ' + error.message);
+      }
+    }
+
+    window.maakStandaardKooien = async function() {
+      try {
+        // Haal huidige gebruiker op
+        const { data: { user }, error: userError } = await client.auth.getUser();
+        if (userError || !user) {
+          alert('Je bent niet ingelogd');
+          return;
+        }
+
+        const standaardKooien = [
+          { type: 'kweekkooi', nummer: 1, user_id: user.id },
+          { type: 'kweekkooi', nummer: 2, user_id: user.id },
+          { type: 'vliegkooi', nummer: 1, user_id: user.id },
+          { type: 'vliegkooi', nummer: 2, user_id: user.id },
+          { type: 'vliegkooi', nummer: 3, user_id: user.id },
+          { type: 'vliegkooi', nummer: 4, user_id: user.id }
+        ];
+
+        const { data, error } = await client
+          .from('kooien')
+          .insert(standaardKooien);
+
+        if (error) {
+          alert('Fout bij aanmaken standaard kooien: ' + error.message);
+          return;
+        }
+
+        toonSuccessMelding('6 standaard kooien aangemaakt!');
+        laadKooien();
+      } catch (error) {
+        console.error('Fout:', error);
+        alert('Er is een fout opgetreden: ' + error.message);
+      }
+    }
+
+    function toonSuccessMelding(bericht) {
+      // Implementeer success melding (zoals in duiven.html)
+      alert(bericht);
+    }
+
+    async function laadKooien() {
+      const lijst = document.getElementById('kooien-lijst');
+      lijst.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><h3>Laden...</h3></div>';
+
+      try {
+        // Haal huidige gebruiker op
+        const { data: { user }, error: userError } = await client.auth.getUser();
+        if (userError || !user) {
+          lijst.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Niet ingelogd</h3><p>Log in om je kooien te zien</p></div>';
+          return;
+        }
+
+        const { data: kooien, error: kooienError } = await client
+          .from('kooien')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: true }); // Nieuwste eerst
+
+        const { data: duiven, error: duivenError } = await client
+          .from('duiven')
+          .select('id, naam, geslacht, status, libido')
+          .eq('user_id', user.id);
+
+        if (kooienError || duivenError) {
+          lijst.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Fout bij laden</h3><p>Probeer het opnieuw</p></div>';
+          return;
+        }
+
+        if (!kooien || kooien.length === 0) {
+          lijst.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-home"></i>
+              <h3>Geen kooien gevonden</h3>
+              <p>Maak je eerste kooi aan om te beginnen!</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Bepaal welke duiven al in kooien zitten
+        const bezetteDuiven = new Set();
+        kooien.forEach(kooi => {
+          if (kooi.duif_1_id) bezetteDuiven.add(kooi.duif_1_id);
+          if (kooi.duif_2_id) bezetteDuiven.add(kooi.duif_2_id);
+        });
+
+        // Filter beschikbare duiven
+        const beschikbareDuiven = duiven?.filter(d => 
+          !bezetteDuiven.has(d.id) && d.status === 'vliegkooi'
+        ) || [];
+
+        const beschikbareMannetjes = beschikbareDuiven.filter(d => d.geslacht === 'man');
+        const beschikbareVrouwtjes = beschikbareDuiven.filter(d => d.geslacht === 'vrouw');
+
+        lijst.innerHTML = '';
+
+        // Sorteer kooien: kweekkooien eerst, dan vliegkooien
+        const gesorteerdeKooien = [...kooien].sort((a, b) => {
+          if (a.type === 'kweekkooi' && b.type === 'vliegkooi') return -1;
+          if (a.type === 'vliegkooi' && b.type === 'kweekkooi') return 1;
+          return 0;
+        });
+
+        gesorteerdeKooien.forEach(kooi => {
+          const duif1 = duiven?.find(d => d.id === kooi.duif_1_id);
+          const duif2 = duiven?.find(d => d.id === kooi.duif_2_id);
+          
+          const card = document.createElement('div');
+          card.className = `kooi-card ${kooi.type}`;
+          
+          card.innerHTML = `
+            <div class="kooi-header">
+              <div class="kooi-icon">
+                ${kooi.type === 'kweekkooi' ? 'ðŸ’•' : 'ðŸ '}
+              </div>
+              <div class="kooi-info">
+                <h3>${kooi.type === 'kweekkooi' ? 'Kweekkooi' : 'Vliegkooi'}</h3>
+              </div>
+            </div>
+
+            <div class="duiven-sectie">
+              
+              ${kooi.type === 'kweekkooi' ? `
+                <div class="duif-selector">
+                  <label>Mannetje: ${kooi.duif_1_id && duif1 ? renderLibido(duif1.libido) : ''}</label>
+                  <select id="duif1-${kooi.id}" onchange="updateDuif('${kooi.id}', 1, this.value)">
+                    <option value="">Selecteer mannetje</option>
+                    ${beschikbareMannetjes.map(d => 
+                      `<option value="${d.id}" ${kooi.duif_1_id === d.id ? 'selected' : ''}>${d.naam}</option>`
+                    ).join('')}
+                    ${kooi.duif_1_id && duif1 ? `<option value="${duif1.id}" selected>${duif1.naam}</option>` : ''}
+                  </select>
+                </div>
+                
+                <div class="duif-selector">
+                  <label>Vrouwtje: ${kooi.duif_2_id && duif2 ? renderLibido(duif2.libido) : ''}</label>
+                  <select id="duif2-${kooi.id}" onchange="updateDuif('${kooi.id}', 2, this.value)">
+                    <option value="">Selecteer vrouwtje</option>
+                    ${beschikbareVrouwtjes.map(d => 
+                      `<option value="${d.id}" ${kooi.duif_2_id === d.id ? 'selected' : ''}>${d.naam}</option>`
+                    ).join('')}
+                    ${kooi.duif_2_id && duif2 ? `<option value="${duif2.id}" selected>${duif2.naam}</option>` : ''}
+                  </select>
+                </div>
+              ` : `
+                <div class="duif-selector">
+                  <label>Duif:</label>
+                  <select id="duif1-${kooi.id}" onchange="updateDuif('${kooi.id}', 1, this.value)">
+                    <option value="">Selecteer duif</option>
+                    ${beschikbareDuiven.map(d => 
+                      `<option value="${d.id}" ${kooi.duif_1_id === d.id ? 'selected' : ''}>${d.naam} (${d.geslacht})</option>`
+                    ).join('')}
+                    ${kooi.duif_1_id && duif1 ? `<option value="${duif1.id}" selected>${duif1.naam} (${duif1.geslacht})</option>` : ''}
+                  </select>
+                </div>
+              `}
+            </div>
+
+            <div class="voeding-sectie">
+              <div class="sectie-titel">
+                <i class="fas fa-seedling"></i> Voeding
+              </div>
+              
+              <div class="voeding-grid">
+                <div class="voeding-item">
+                  <label>MaÃ¯s:</label>
+                  <input type="number" id="mais-${kooi.id}" value="25" min="0" max="100" onchange="updateVoedingTotaal('${kooi.id}')">
+                </div>
+                <div class="voeding-item">
+                  <label>Tarwe:</label>
+                  <input type="number" id="tarwe-${kooi.id}" value="25" min="0" max="100" onchange="updateVoedingTotaal('${kooi.id}')">
+                </div>
+                <div class="voeding-item">
+                  <label>Gerst:</label>
+                  <input type="number" id="gerst-${kooi.id}" value="25" min="0" max="100" onchange="updateVoedingTotaal('${kooi.id}')">
+                </div>
+                <div class="voeding-item">
+                  <label>Pinda:</label>
+                  <input type="number" id="pinda-${kooi.id}" value="25" min="0" max="100" onchange="updateVoedingTotaal('${kooi.id}')">
+                </div>
+              </div>
+              
+              <div class="voeding-totaal" id="totaal-${kooi.id}">Totaal: 100/100</div>
+              
+              <div class="kooi-buttons">
+                <button class="btn btn-primary" onclick="opslaanVoeding('${kooi.id}')">
+                  <i class="fas fa-save"></i> Opslaan
+                </button>
+                <button class="btn btn-secondary" onclick="resetVoeding('${kooi.id}')">
+                  <i class="fas fa-undo"></i> Reset
+                </button>
+              </div>
+              
+              <div class="status-message" id="status-${kooi.id}"></div>
+            </div>
+          `;
+          
+          lijst.appendChild(card);
+          updateVoedingTotaal(kooi.id);
+        });
+
+      } catch (error) {
+        console.error('Fout bij laden kooien:', error);
+        lijst.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Fout bij laden</h3><p>Probeer het opnieuw</p></div>';
+      }
+    }
+
+    // Helper functie om libido te renderen
+    function renderLibido(libido) {
+      const hearts = 'â¤ï¸'.repeat(libido || 1);
+      return `<span class="libido-indicator">${hearts}</span>`;
+    }
+
+    // Maak functies globaal beschikbaar
+    window.updateDuif = async function(kooiId, duifNummer, duifId) {
+      try {
+        // Eerst de oude duif uit deze kooi halen (als die er is)
+        const { data: huidigeKooi } = await client
+          .from('kooien')
+          .select('duif_1_id, duif_2_id')
+          .eq('id', kooiId)
+          .single();
+
+        let oudeDuifId = null;
+        if (duifNummer === 1 && huidigeKooi?.duif_1_id) {
+          oudeDuifId = huidigeKooi.duif_1_id;
+        } else if (duifNummer === 2 && huidigeKooi?.duif_2_id) {
+          oudeDuifId = huidigeKooi.duif_2_id;
+        }
+
+        // Update de kooi
+        const updateData = {};
+        if (duifNummer === 1) {
+          updateData.duif_1_id = duifId || null;
+        } else {
+          updateData.duif_2_id = duifId || null;
+        }
+
+        const { error: kooiError } = await client
+          .from('kooien')
+          .update(updateData)
+          .eq('id', kooiId);
+
+        if (kooiError) {
+          alert('Fout bij update kooi: ' + kooiError.message);
+          return;
+        }
+
+        // Update de duiven tabel
+        // 1. Verwijder kooi_id van de oude duif (als die er was)
+        if (oudeDuifId) {
+          const { error: oudeDuifError } = await client
+            .from('duiven')
+            .update({ kooi_id: null })
+            .eq('id', oudeDuifId);
+
+          if (oudeDuifError) {
+            console.error('Fout bij verwijderen oude duif kooi_id:', oudeDuifError);
+          }
+        }
+
+        // 2. Zet kooi_id van de nieuwe duif (als die er is)
+        if (duifId) {
+          const { error: nieuweDuifError } = await client
+            .from('duiven')
+            .update({ kooi_id: kooiId })
+            .eq('id', duifId);
+
+          if (nieuweDuifError) {
+            console.error('Fout bij zetten nieuwe duif kooi_id:', nieuweDuifError);
+          }
+        }
+
+        // Herlaad de lijst om ervoor te zorgen dat duiven niet dubbel kunnen worden toegewezen
+        laadKooien();
+      } catch (error) {
+        console.error('Fout:', error);
+        alert('Er is een fout opgetreden: ' + error.message);
+      }
+    }
+
+
+
+
+
+    window.updateVoedingTotaal = function(kooiId) {
+      const mais = parseInt(document.getElementById(`mais-${kooiId}`).value) || 0;
+      const tarwe = parseInt(document.getElementById(`tarwe-${kooiId}`).value) || 0;
+      const gerst = parseInt(document.getElementById(`gerst-${kooiId}`).value) || 0;
+      const pinda = parseInt(document.getElementById(`pinda-${kooiId}`).value) || 0;
+      
+      const totaal = mais + tarwe + gerst + pinda;
+      const totaalEl = document.getElementById(`totaal-${kooiId}`);
+      
+      totaalEl.textContent = `Totaal: ${totaal}/100`;
+      totaalEl.className = `voeding-totaal ${totaal === 100 ? 'correct' : 'incorrect'}`;
+    }
+
+    window.opslaanVoeding = async function(kooiId) {
+      try {
+        const mais = parseInt(document.getElementById(`mais-${kooiId}`).value) || 0;
+        const tarwe = parseInt(document.getElementById(`tarwe-${kooiId}`).value) || 0;
+        const gerst = parseInt(document.getElementById(`gerst-${kooiId}`).value) || 0;
+        const pinda = parseInt(document.getElementById(`pinda-${kooiId}`).value) || 0;
+
+        const totaal = mais + tarwe + gerst + pinda;
+        if (totaal !== 100) {
+          toonStatusMelding(kooiId, 'De som van voeding moet exact 100 zijn!', 'error');
+          return;
+        }
+
+        const { error } = await client
+          .from('voeding')
+          .upsert({
+            kooi_id: kooiId,
+            mais,
+            tarwe,
+            gerst,
+            pinda
+          });
+
+        if (error) {
+          toonStatusMelding(kooiId, 'Fout bij opslaan: ' + error.message, 'error');
+          return;
+        }
+
+        toonStatusMelding(kooiId, 'Voeding succesvol opgeslagen!', 'success');
+      } catch (error) {
+        console.error('Fout:', error);
+        toonStatusMelding(kooiId, 'Er is een fout opgetreden: ' + error.message, 'error');
+      }
+    }
+
+    window.resetVoeding = function(kooiId) {
+      document.getElementById(`mais-${kooiId}`).value = 25;
+      document.getElementById(`tarwe-${kooiId}`).value = 25;
+      document.getElementById(`gerst-${kooiId}`).value = 25;
+      document.getElementById(`pinda-${kooiId}`).value = 25;
+      updateVoedingTotaal(kooiId);
+    }
+
+    function toonStatusMelding(kooiId, bericht, type) {
+      const statusEl = document.getElementById(`status-${kooiId}`);
+      statusEl.textContent = bericht;
+      statusEl.className = `status-message ${type}`;
+      statusEl.style.display = 'block';
+      
+      setTimeout(() => {
+        statusEl.style.display = 'none';
+      }, 3000);
+    }
+
+    // Start de applicatie
+    laadKooien();
+    
+    // Add language selector and translate page
+    addLanguageSelector();
+    translatePage();
+    
+    // Update back link with language parameter
+    const backLink = document.getElementById('back-link');
+    if (backLink) {
+      backLink.href = `index.html?lang=${getCurrentLanguage()}`;
+    }
+  </script>
+</body>
+</html>
