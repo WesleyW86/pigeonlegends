@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>🦅 Pigeon Legends - Training</title>
-      <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦅</text></svg>">
+      <title>ðŸ¦… Pigeon Legends - Training</title>
+      <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ¦…</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -826,16 +826,16 @@
   </main>
 
   <!-- Vliegende duiven achtergrond -->
-  <div class="flying-dove">🕊️</div>
-  <div class="flying-dove">🕊️</div>
-  <div class="flying-dove">🕊️</div>
-  <div class="flying-dove">🕊️</div>
-  <div class="flying-dove">🕊️</div>
+  <div class="flying-dove">ðŸ•Šï¸</div>
+  <div class="flying-dove">ðŸ•Šï¸</div>
+  <div class="flying-dove">ðŸ•Šï¸</div>
+  <div class="flying-dove">ðŸ•Šï¸</div>
+  <div class="flying-dove">ðŸ•Šï¸</div>
 
   <!-- Duif Profiel Popup -->
   <div id="duifProfielPopup" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:9999;align-items:center;justify-content:center;"></div>
 
-  <script src="config.js"></script>
+  
   <script type="module">
     // Supabase client import
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
@@ -981,7 +981,7 @@
                           ${nieuwste.naam}
                         </h3>
                         <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
-                          ${nieuwste.start_locatie} → ${nieuwste.eind_locatie}
+                          ${nieuwste.start_locatie} â†’ ${nieuwste.eind_locatie}
                         </p>
                         <div style="display: flex; gap: 1rem; font-size: 0.875rem;">
                           <span style="color: var(--text-secondary);">
@@ -1020,13 +1020,13 @@
               </div>
               <div style="text-align: center; padding: 2rem;">
                 <div style="font-size: 4rem; color: var(--text-secondary); margin-bottom: 1rem;">
-                  🕊️
+                  ðŸ•Šï¸
                 </div>
                 <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.25rem;">
                   Maak je eerste training aan!
                 </h3>
                 <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 2rem;">
-                  Klik op "Nieuwe Training Maken" bovenaan de pagina om je eerste trainingsvlucht te creëren en te simuleren.
+                  Klik op "Nieuwe Training Maken" bovenaan de pagina om je eerste trainingsvlucht te creÃ«ren en te simuleren.
                 </p>
               </div>
             </div>
@@ -1101,7 +1101,7 @@
                     ${vlucht.naam}
                   </h3>
                   <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
-                    ${vlucht.start_locatie} → ${vlucht.eind_locatie}
+                    ${vlucht.start_locatie} â†’ ${vlucht.eind_locatie}
                   </p>
                   <div style="display: flex; gap: 1rem; font-size: 0.875rem;">
                     <span style="color: var(--text-secondary);">
@@ -1152,7 +1152,7 @@
     // Load flight detail with improved duiven selection
     async function laadVluchtDetail(vlucht) {
       try {
-        console.log('🔍 Laden vlucht detail voor:', vlucht.id);
+        console.log('ðŸ” Laden vlucht detail voor:', vlucht.id);
         
         // Haal duiven op die in vliegkooien zitten
         const { data: vliegkooien, error: kooiError } = await supabase
@@ -1161,7 +1161,7 @@
           .eq('type', 'vliegkooi');
 
         if (kooiError) {
-          console.error('❌ Fout bij ophalen vliegkooien:', kooiError);
+          console.error('âŒ Fout bij ophalen vliegkooien:', kooiError);
           showNotification('Fout bij ophalen vliegkooien', 'error');
           return;
         }
@@ -1171,7 +1171,7 @@
           return;
         }
 
-        console.log('📦 Vliegkooien gevonden:', vliegkooien.length);
+        console.log('ðŸ“¦ Vliegkooien gevonden:', vliegkooien.length);
 
         // Haal huidige gebruiker op
         const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -1189,12 +1189,12 @@
           .order('naam');
 
         if (duifError) {
-          console.error('❌ Fout bij ophalen duiven:', duifError);
+          console.error('âŒ Fout bij ophalen duiven:', duifError);
           showNotification('Fout bij ophalen duiven', 'error');
           return;
         }
 
-        console.log('🕊️ Duiven gevonden:', duiven?.length || 0);
+        console.log('ðŸ•Šï¸ Duiven gevonden:', duiven?.length || 0);
 
         if (!duiven || duiven.length === 0) {
           showNotification('Geen duiven in vliegkooien. Plaats eerst duiven in vliegkooien.', 'warning');
@@ -1202,21 +1202,21 @@
         }
 
         // Haal huidige deelnemers op met uitgebreide logging
-        console.log('🔍 Ophalen deelnemers voor vlucht:', vlucht.id);
+        console.log('ðŸ” Ophalen deelnemers voor vlucht:', vlucht.id);
         const { data: deelnemers, error: deelnemerError } = await supabase
           .from('trainingsvlucht_deelnames')
           .select('*, duiven!fk_duif(*, users!duiven_user_id_fkey(team_naam))')
           .eq('trainingsvlucht_id', vlucht.id);
 
         if (deelnemerError) {
-          console.error('❌ Fout bij ophalen deelnemers:', deelnemerError);
+          console.error('âŒ Fout bij ophalen deelnemers:', deelnemerError);
           showNotification('Fout bij ophalen deelnemers: ' + deelnemerError.message, 'error');
           return;
         }
 
-        console.log('📊 Deelnemers gevonden:', deelnemers?.length || 0);
+        console.log('ðŸ“Š Deelnemers gevonden:', deelnemers?.length || 0);
         if (deelnemers && deelnemers.length > 0) {
-          console.log('📋 Deelnemers details:', deelnemers.map(d => ({
+          console.log('ðŸ“‹ Deelnemers details:', deelnemers.map(d => ({
             id: d.id,
             duif_id: d.duif_id,
             duif_naam: d.duiven?.naam,
@@ -1244,12 +1244,12 @@
           }
           
           // Bereken totaal eigenschappen
-          const totaalEigenschappen = (duif.vormpeil || 0) + (duif.snelheid || 0) + (duif.conditie || 0) + (duif.oriëntatie || 0) + 
+          const totaalEigenschappen = (duif.vormpeil || 0) + (duif.snelheid || 0) + (duif.conditie || 0) + (duif.oriÃ«ntatie || 0) + 
                                      (duif.techniek || 0) + (duif.ervaring || 0) + (duif.aerodynamica || 0) + (duif.intelligentie || 0) + (duif.nachtvliegen || 0);
           
           // Mooiere libido weergave
-          const libidoHearts = '❤️'.repeat(duif.libido || 0);
-          const libidoDisplay = duif.libido > 0 ? `<span style="color:#ec4899;font-size:0.8rem;">${libidoHearts}</span>` : '<span style="color:#9ca3af;font-size:0.8rem;">💔</span>';
+          const libidoHearts = 'â¤ï¸'.repeat(duif.libido || 0);
+          const libidoDisplay = duif.libido > 0 ? `<span style="color:#ec4899;font-size:0.8rem;">${libidoHearts}</span>` : '<span style="color:#9ca3af;font-size:0.8rem;">ðŸ’”</span>';
           
           return `
             <label class="duif-checkbox-label ${geslachtClass}" style="
@@ -1271,7 +1271,7 @@
               <!-- Duif header -->
               <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
                 <span class="duif-geslacht ${duif.geslacht}" style="font-size:1rem;color:${duif.geslacht === 'man' ? '#3b82f6' : '#ec4899'};">
-                  ${duif.geslacht === 'man' ? '♂' : '♀'}
+                  ${duif.geslacht === 'man' ? 'â™‚' : 'â™€'}
                 </span>
                 <span class="duif-naam-link" style="font-weight:600;font-size:0.9rem;color:#1f2937;cursor:pointer;text-decoration:underline;" onclick="toonDuifProfiel('${duif.id}')">
                   ${duif.naam}
@@ -1281,12 +1281,12 @@
               
               <!-- Team naam -->
               <div style="font-size:0.7rem;color:#6b7280;margin-bottom:0.3rem;font-weight:500;">
-                🏆 ${teamNaam}
+                ðŸ† ${teamNaam}
               </div>
               
               <!-- Duif details -->
               <div style="font-size:0.75rem;color:#6b7280;margin-bottom:0.5rem;">
-                ${leeftijdTekst} • ${totaalEigenschappen} punten
+                ${leeftijdTekst} â€¢ ${totaalEigenschappen} punten
               </div>
               
               <!-- Libido -->
@@ -1296,19 +1296,19 @@
               
               <!-- Eigenschappen grid -->
               <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.3rem;font-size:0.7rem;">
-                <div style="color:#6b7280;">⚡ ${duif.snelheid || 0}</div>
-                <div style="color:#6b7280;">💪 ${duif.conditie || 0}</div>
-                <div style="color:#6b7280;">🧭 ${duif.oriëntatie || 0}</div>
-                <div style="color:#6b7280;">🎯 ${duif.techniek || 0}</div>
-                <div style="color:#6b7280;">📚 ${duif.ervaring || 0}</div>
-                <div style="color:#6b7280;">✈️ ${duif.aerodynamica || 0}</div>
-                <div style="color:#6b7280;">🧠 ${duif.intelligentie || 0}</div>
-                <div style="color:#6b7280;">🌙 ${duif.nachtvliegen || 0}</div>
+                <div style="color:#6b7280;">âš¡ ${duif.snelheid || 0}</div>
+                <div style="color:#6b7280;">ðŸ’ª ${duif.conditie || 0}</div>
+                <div style="color:#6b7280;">ðŸ§­ ${duif.oriÃ«ntatie || 0}</div>
+                <div style="color:#6b7280;">ðŸŽ¯ ${duif.techniek || 0}</div>
+                <div style="color:#6b7280;">ðŸ“š ${duif.ervaring || 0}</div>
+                <div style="color:#6b7280;">âœˆï¸ ${duif.aerodynamica || 0}</div>
+                <div style="color:#6b7280;">ðŸ§  ${duif.intelligentie || 0}</div>
+                <div style="color:#6b7280;">ðŸŒ™ ${duif.nachtvliegen || 0}</div>
               </div>
               
               <!-- Status indicators -->
-              ${isIngeschreven ? '<span style="color:#10b981;font-size:0.65rem;margin-top:0.5rem;display:block;">✓ Ingeschreven</span>' : ''}
-              ${isVliegend ? '<span style="position:absolute;top:-2px;right:-2px;background:#10b981;color:white;border-radius:50%;width:16px;height:16px;font-size:0.7rem;display:flex;align-items:center;justify-content:center;">🕊️</span>' : ''}
+              ${isIngeschreven ? '<span style="color:#10b981;font-size:0.65rem;margin-top:0.5rem;display:block;">âœ“ Ingeschreven</span>' : ''}
+              ${isVliegend ? '<span style="position:absolute;top:-2px;right:-2px;background:#10b981;color:white;border-radius:50%;width:16px;height:16px;font-size:0.7rem;display:flex;align-items:center;justify-content:center;">ðŸ•Šï¸</span>' : ''}
             </label>
           `;
         }).join('');
@@ -1317,7 +1317,7 @@
         let deelnemersTabel = '';
         if (deelnemers && deelnemers.length > 0) {
           const gesorteerdeDeelnemers = deelnemers.filter(d => d.duiven).sort((a, b) => (b.gemiddelde_snelheid || 0) - (a.gemiddelde_snelheid || 0));
-          console.log('🏆 Gesorteerde deelnemers:', gesorteerdeDeelnemers.length);
+          console.log('ðŸ† Gesorteerde deelnemers:', gesorteerdeDeelnemers.length);
           
           if (gesorteerdeDeelnemers.length === 0) {
             deelnemersTabel = `
@@ -1367,13 +1367,13 @@
                       const percentage = ((deelnemer.huidige_afstand_gevlogen || 0) / vlucht.afstand_km) * 100;
                       const positie = index + 1;
                       const medalClass = positie <= 3 ? `medal ${positie === 1 ? 'gold' : positie === 2 ? 'silver' : 'bronze'}` : '';
-                      const medalIcon = positie === 1 ? '🥇' : positie === 2 ? '🥈' : positie === 3 ? '🥉' : '';
+                      const medalIcon = positie === 1 ? 'ðŸ¥‡' : positie === 2 ? 'ðŸ¥ˆ' : positie === 3 ? 'ðŸ¥‰' : '';
                                         return `
                     <tr style="border-bottom:1px solid #e2e8f0;transition:background-color 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
                       <td class="position ${medalClass}" style="padding:0.4rem 0.25rem;text-align:center;font-size:0.8rem;font-weight:600;">${medalIcon || positie}</td>
                       <td style="padding:0.4rem 0.25rem;">
                         <div class="duif-naam-cell" style="gap:0.3rem;display:flex;align-items:center;">
-                          <span class="duif-geslacht-cell ${deelnemer.duiven.geslacht}" style="font-size:0.9rem;">${deelnemer.duiven.geslacht === 'man' ? '♂' : '♀'}</span>
+                          <span class="duif-geslacht-cell ${deelnemer.duiven.geslacht}" style="font-size:0.9rem;">${deelnemer.duiven.geslacht === 'man' ? 'â™‚' : 'â™€'}</span>
                           <span class="duif-naam-link" style="font-weight:600;font-size:0.85rem;color:#1f2937;cursor:pointer;text-decoration:underline;" onclick="toonDuifProfiel('${deelnemer.duif_id}')">${deelnemer.duiven.naam}</span>
                         </div>
                       </td>
@@ -1426,7 +1426,7 @@
             
             <div class="vlucht-header">
               <h2 class="vlucht-title">${vlucht.naam} (${vlucht.afstand_km} km)</h2>
-              <p class="vlucht-route">${vlucht.start_locatie} → ${vlucht.eind_locatie}</p>
+              <p class="vlucht-route">${vlucht.start_locatie} â†’ ${vlucht.eind_locatie}</p>
               <div class="vlucht-status ${vlucht.status}">
                 <i class="fas fa-${vlucht.status === 'actief' ? 'play' : vlucht.status === 'voltooid' ? 'check' : 'clock'}"></i>
                 Status: ${vlucht.status.charAt(0).toUpperCase() + vlucht.status.slice(1)}
@@ -1518,7 +1518,7 @@
         document.getElementById('duiven-inschrijf-form').onsubmit = async function(e) {
           e.preventDefault();
           
-          console.log('💾 Start opslaan deelnemers...');
+          console.log('ðŸ’¾ Start opslaan deelnemers...');
           
           const opslaanBtn = document.getElementById('opslaan-btn');
           const originalText = opslaanBtn.innerHTML;
@@ -1530,20 +1530,20 @@
             const geselecteerd = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
             const vluchtId = String(vlucht.id).trim();
             
-            console.log('📋 Geselecteerde duiven:', geselecteerd);
-            console.log('🆔 Vlucht ID:', vluchtId);
+            console.log('ðŸ“‹ Geselecteerde duiven:', geselecteerd);
+            console.log('ðŸ†” Vlucht ID:', vluchtId);
             
             // Extra beveiliging: controleer dat alleen eigen duiven worden ingeschreven
             const eigenDuifIds = duiven.filter(d => d.user_id === user.id).map(d => d.id);
             const onbevoegdeDuiven = geselecteerd.filter(duifId => !eigenDuifIds.includes(duifId));
             
             if (onbevoegdeDuiven.length > 0) {
-              console.error('❌ Onbevoegde duiven gedetecteerd:', onbevoegdeDuiven);
+              console.error('âŒ Onbevoegde duiven gedetecteerd:', onbevoegdeDuiven);
               throw new Error('Je kunt alleen je eigen duiven inschrijven voor trainingen.');
             }
             
             // Verwijder alleen eigen bestaande deelnemers
-            console.log('🗑️ Verwijderen eigen bestaande deelnemers...');
+            console.log('ðŸ—‘ï¸ Verwijderen eigen bestaande deelnemers...');
             
             // Haal eerst eigen bestaande deelnemers op
             const { data: eigenDeelnemers, error: eigenDeelnemersError } = await supabase
@@ -1553,7 +1553,7 @@
               .in('duif_id', eigenDuifIds);
               
             if (eigenDeelnemersError) {
-              console.error('❌ Fout bij ophalen eigen deelnemers:', eigenDeelnemersError);
+              console.error('âŒ Fout bij ophalen eigen deelnemers:', eigenDeelnemersError);
               throw new Error('Fout bij ophalen eigen deelnemers: ' + eigenDeelnemersError.message);
             }
             
@@ -1565,39 +1565,39 @@
 
             // Voeg nieuwe eigen deelnemers toe
             if (toeTeVoegen.length > 0) {
-              console.log('➕ Toevoegen nieuwe eigen deelnemers...');
+              console.log('âž• Toevoegen nieuwe eigen deelnemers...');
               const rows = toeTeVoegen.map(duifId => ({
                 trainingsvlucht_id: vluchtId,
                 duif_id: duifId,
                 status: 'ingeschreven'
               }));
-              console.log('📝 Rijen om toe te voegen:', rows);
+              console.log('ðŸ“ Rijen om toe te voegen:', rows);
               const { data: insertData, error: insertError } = await supabase
                 .from('trainingsvlucht_deelnames')
                 .insert(rows, { returning: 'minimal' });
               if (insertError) {
-                console.error('❌ Fout bij toevoegen nieuwe deelnemers:', insertError);
+                console.error('âŒ Fout bij toevoegen nieuwe deelnemers:', insertError);
                 throw new Error('Fout bij toevoegen nieuwe deelnemers: ' + insertError.message);
               }
-              console.log('✅ Nieuwe eigen deelnemers toegevoegd:', insertData);
+              console.log('âœ… Nieuwe eigen deelnemers toegevoegd:', insertData);
             }
 
             // Verwijder uitgeschreven eigen deelnemers
             if (teVerwijderen.length > 0) {
-              console.log('🗑️ Verwijderen uitgeschreven eigen deelnemers...');
+              console.log('ðŸ—‘ï¸ Verwijderen uitgeschreven eigen deelnemers...');
               const { error: deleteError } = await supabase
                 .from('trainingsvlucht_deelnames')
                 .delete()
                 .eq('trainingsvlucht_id', vluchtId)
                 .in('duif_id', teVerwijderen);
               if (deleteError) {
-                console.error('❌ Fout bij verwijderen eigen deelnemers:', deleteError);
+                console.error('âŒ Fout bij verwijderen eigen deelnemers:', deleteError);
                 throw new Error('Fout bij verwijderen eigen deelnemers: ' + deleteError.message);
               }
-              console.log('✅ Uitgeschreven eigen deelnemers verwijderd');
+              console.log('âœ… Uitgeschreven eigen deelnemers verwijderd');
             }
             
-            console.log('🔄 Herladen vlucht detail...');
+            console.log('ðŸ”„ Herladen vlucht detail...');
             
             // Herlaad vlucht detail
             const { data: vluchtNieuw, error: reloadError } = await supabase
@@ -1607,25 +1607,25 @@
               .single();
               
             if (reloadError) {
-              console.error('❌ Fout bij herladen vlucht:', reloadError);
+              console.error('âŒ Fout bij herladen vlucht:', reloadError);
               throw new Error('Fout bij herladen vlucht: ' + reloadError.message);
             }
             
             if (vluchtNieuw) {
               await laadVluchtDetail(vluchtNieuw);
-              showNotification(`✅ ${geselecteerd.length} duiven succesvol opgeslagen voor training!`, 'success');
-              console.log('🎉 Opslaan voltooid!');
+              showNotification(`âœ… ${geselecteerd.length} duiven succesvol opgeslagen voor training!`, 'success');
+              console.log('ðŸŽ‰ Opslaan voltooid!');
             }
           } catch (error) {
-            console.error('❌ Error saving participants:', error);
-            showNotification('❌ Fout bij opslaan deelnemers: ' + error.message, 'error');
+            console.error('âŒ Error saving participants:', error);
+            showNotification('âŒ Fout bij opslaan deelnemers: ' + error.message, 'error');
           } finally {
             opslaanBtn.disabled = false;
             opslaanBtn.innerHTML = originalText;
           }
         };
       } catch (error) {
-        console.error('❌ Error loading flight detail:', error);
+        console.error('âŒ Error loading flight detail:', error);
         showNotification('Fout bij laden vlucht details: ' + error.message, 'error');
       }
     }
@@ -1803,7 +1803,7 @@
           lastUpdate: new Date().toISOString()
         }));
       } catch (error) {
-        console.error('❌ Fout bij opslaan simulatie data:', error);
+        console.error('âŒ Fout bij opslaan simulatie data:', error);
       }
     }
     
@@ -1818,7 +1818,7 @@
           return true;
         }
       } catch (error) {
-        console.error('❌ Fout bij laden simulatie data:', error);
+        console.error('âŒ Fout bij laden simulatie data:', error);
       }
       return false;
     }
@@ -1828,7 +1828,7 @@
       try {
         localStorage.removeItem(`simulation_${vluchtId}`);
       } catch (error) {
-        console.error('❌ Fout bij verwijderen simulatie data:', error);
+        console.error('âŒ Fout bij verwijderen simulatie data:', error);
       }
     }
     
@@ -1839,7 +1839,7 @@
       
       // Controleer of er al een lopende simulatie is
       if (loadSimulationFromStorage(vluchtId)) {
-        console.log('🔄 Herstel lopende simulatie voor vlucht:', vluchtId);
+        console.log('ðŸ”„ Herstel lopende simulatie voor vlucht:', vluchtId);
         
         // Bereken hoeveel tijd er is verstreken sinds laatste update
         const nu = new Date();
@@ -1848,7 +1848,7 @@
         
         // Update simulatie data met verstreken tijd
         if (tijdVerstreken > 0) {
-          console.log(`⏰ ${tijdVerstreken.toFixed(1)} seconden verstreken, simulatie herstellen...`);
+          console.log(`â° ${tijdVerstreken.toFixed(1)} seconden verstreken, simulatie herstellen...`);
           updateOfflineSimulationWithTime(vluchtId, tijdVerstreken);
         }
         
@@ -1864,7 +1864,7 @@
       }
       
       // Start nieuwe offline simulatie
-      console.log('🚀 Start nieuwe simulatie voor vlucht:', vluchtId);
+      console.log('ðŸš€ Start nieuwe simulatie voor vlucht:', vluchtId);
       simulationStartTime = new Date();
       offlineSimulationData = {
         vluchtId: vluchtId,
@@ -1873,7 +1873,7 @@
         lastUpdate: new Date().toISOString()
       };
       
-      // Laad initiële data één keer
+      // Laad initiÃ«le data Ã©Ã©n keer
       loadInitialSimulationData(vluchtId).then(() => {
         const interval = fastForwardMode === 0 ? 2000 : fastForwardMode === 1 ? 1500 : fastForwardMode === 2 ? 1000 : 800;
         
@@ -1883,7 +1883,7 @@
       });
     }
     
-    // Laad initiële data één keer
+    // Laad initiÃ«le data Ã©Ã©n keer
     async function loadInitialSimulationData(vluchtId) {
       try {
         // Haal vlucht informatie op
@@ -1914,9 +1914,9 @@
           status: 'ingeschreven'
         }));
         
-        console.log('📊 Offline simulatie gestart met', offlineSimulationData.deelnemers.length, 'deelnemers voor', offlineSimulationData.vluchtAfstand, 'km');
+        console.log('ðŸ“Š Offline simulatie gestart met', offlineSimulationData.deelnemers.length, 'deelnemers voor', offlineSimulationData.vluchtAfstand, 'km');
       } catch (error) {
-        console.error('❌ Fout bij laden simulatie data:', error);
+        console.error('âŒ Fout bij laden simulatie data:', error);
       }
     }
     
@@ -1939,7 +1939,7 @@
         let basisSnelheid = 60;
         basisSnelheid += (parseFloat(duif.snelheid) || 0) * 0.6;
         basisSnelheid += (parseFloat(duif.conditie) || 0) * 0.3;
-        basisSnelheid += (parseFloat(duif.oriëntatie) || 0) * 0.1;
+        basisSnelheid += (parseFloat(duif.oriÃ«ntatie) || 0) * 0.1;
         basisSnelheid += (parseFloat(duif.techniek) || 0) * 0.1;
         basisSnelheid += (parseFloat(duif.ervaring) || 0) * 0.05;
         
@@ -1986,7 +1986,7 @@
     // Offline simulatie update (geen database calls)
     function updateOfflineSimulation(vluchtId) {
       if (!offlineSimulationData || !simulationStartTime) {
-        console.warn('⚠️ Geen simulatie data beschikbaar, stop simulatie');
+        console.warn('âš ï¸ Geen simulatie data beschikbaar, stop simulatie');
         if (trainingInterval) {
           clearInterval(trainingInterval);
           trainingInterval = null;
@@ -1996,7 +1996,7 @@
       
       // Veiligheidscheck - stop simulatie als er geen deelnemers zijn
       if (!offlineSimulationData.deelnemers || offlineSimulationData.deelnemers.length === 0) {
-        console.warn('⚠️ Geen deelnemers in simulatie, stop simulatie');
+        console.warn('âš ï¸ Geen deelnemers in simulatie, stop simulatie');
         if (trainingInterval) {
           clearInterval(trainingInterval);
           trainingInterval = null;
@@ -2010,7 +2010,7 @@
       // Veiligheidscheck - stop simulatie als deze te lang duurt
       const elapsedMs = nu - simulationStartTime;
       if (elapsedMs > maxSimulationTime) {
-        console.warn('⚠️ Simulatie duurt te lang, forceer einde');
+        console.warn('âš ï¸ Simulatie duurt te lang, forceer einde');
         finishOfflineSimulation(vluchtId, null);
         return;
       }
@@ -2029,7 +2029,7 @@
         let basisSnelheid = 60;
         basisSnelheid += (parseFloat(duif.snelheid) || 0) * 0.6;
         basisSnelheid += (parseFloat(duif.conditie) || 0) * 0.3;
-        basisSnelheid += (parseFloat(duif.oriëntatie) || 0) * 0.1;
+        basisSnelheid += (parseFloat(duif.oriÃ«ntatie) || 0) * 0.1;
         basisSnelheid += (parseFloat(duif.techniek) || 0) * 0.1;
         basisSnelheid += (parseFloat(duif.ervaring) || 0) * 0.05;
         
@@ -2044,7 +2044,7 @@
         
         // Veiligheidscheck - voorkom negatieve of oneindige waarden
         if (isNaN(afstandPerInterval) || afstandPerInterval < 0 || !isFinite(afstandPerInterval)) {
-          console.warn('⚠️ Ongeldige afstand berekening voor duif:', deelnemer.duif_id);
+          console.warn('âš ï¸ Ongeldige afstand berekening voor duif:', deelnemer.duif_id);
           return; // Stop deze update cyclus
         }
         
@@ -2100,13 +2100,13 @@
               const percentage = Math.min(100, ((deelnemer.huidige_afstand_gevlogen || 0) / vluchtAfstand) * 100);
               const positie = index + 1;
               const medalClass = positie <= 3 ? `medal ${positie === 1 ? 'gold' : positie === 2 ? 'silver' : 'bronze'}` : '';
-              const medalIcon = positie === 1 ? '🥇' : positie === 2 ? '🥈' : positie === 3 ? '🥉' : '';
+              const medalIcon = positie === 1 ? 'ðŸ¥‡' : positie === 2 ? 'ðŸ¥ˆ' : positie === 3 ? 'ðŸ¥‰' : '';
               return `
                 <tr style="border-bottom:1px solid #e2e8f0;transition:background-color 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
                   <td class="position ${medalClass}" style="padding:0.4rem 0.25rem;text-align:center;font-size:0.8rem;font-weight:600;">${medalIcon || positie}</td>
                   <td style="padding:0.4rem 0.25rem;">
                     <div class="duif-naam-cell" style="gap:0.3rem;display:flex;align-items:center;">
-                      <span class="duif-geslacht-cell ${deelnemer.duiven.geslacht}" style="font-size:0.9rem;">${deelnemer.duiven.geslacht === 'man' ? '♂' : '♀'}</span>
+                      <span class="duif-geslacht-cell ${deelnemer.duiven.geslacht}" style="font-size:0.9rem;">${deelnemer.duiven.geslacht === 'man' ? 'â™‚' : 'â™€'}</span>
                       <span class="duif-naam-link" style="font-weight:600;font-size:0.85rem;color:#1f2937;cursor:pointer;text-decoration:underline;" onclick="toonDuifProfiel('${deelnemer.duif_id}')">${deelnemer.duiven.naam}</span>
                     </div>
                   </td>
@@ -2134,7 +2134,7 @@
         // Eindig simulatie en sla resultaten op
     async function finishOfflineSimulation(vluchtId, winnaar) {
       try {
-        console.log('🏁 Beëindig simulatie voor vlucht:', vluchtId);
+        console.log('ðŸ BeÃ«indig simulatie voor vlucht:', vluchtId);
         
         if (trainingInterval) {
           clearInterval(trainingInterval);
@@ -2181,7 +2181,7 @@
         }
 
         showNotification('Simulatie voltooid!', 'success');
-        console.log('🎉 Offline simulatie voltooid en opgeslagen');
+        console.log('ðŸŽ‰ Offline simulatie voltooid en opgeslagen');
         
         // Herlaad vlucht detail
         const { data: vluchtNieuw } = await supabase.from('trainingsvluchten').select('*').eq('id', vluchtId).single();
@@ -2190,7 +2190,7 @@
         }
         
       } catch (error) {
-        console.error('❌ Fout bij opslaan simulatie resultaten:', error);
+        console.error('âŒ Fout bij opslaan simulatie resultaten:', error);
         showNotification('Fout bij opslaan resultaten', 'error');
       }
     }
@@ -2204,7 +2204,7 @@
           .eq('trainingsvlucht_id', vluchtId);
 
         if (error) {
-          console.error('❌ Fout bij ophalen deelnemers voor update:', error);
+          console.error('âŒ Fout bij ophalen deelnemers voor update:', error);
           return;
         }
 
@@ -2221,13 +2221,13 @@
               const percentage = Math.min(100, ((deelnemer.huidige_afstand_gevlogen || 0) / vlucht.afstand_km) * 100);
               const positie = index + 1;
               const medalClass = positie <= 3 ? `medal ${positie === 1 ? 'gold' : positie === 2 ? 'silver' : 'bronze'}` : '';
-              const medalIcon = positie === 1 ? '🥇' : positie === 2 ? '🥈' : positie === 3 ? '🥉' : '';
+              const medalIcon = positie === 1 ? 'ðŸ¥‡' : positie === 2 ? 'ðŸ¥ˆ' : positie === 3 ? 'ðŸ¥‰' : '';
               return `
                 <tr>
                   <td class="position ${medalClass}">${medalIcon || positie}</td>
                   <td>
                     <div style="display:flex;align-items:center;gap:0.3rem;">
-                      <span class="duif-geslacht-cell ${deelnemer.duiven.geslacht}" style="font-size:0.9rem;">${deelnemer.duiven.geslacht === 'man' ? '♂' : '♀'}</span>
+                      <span class="duif-geslacht-cell ${deelnemer.duiven.geslacht}" style="font-size:0.9rem;">${deelnemer.duiven.geslacht === 'man' ? 'â™‚' : 'â™€'}</span>
                       <span class="duif-naam-link" style="font-weight:700;font-size:1.1rem;color:#1f2937;cursor:pointer;text-decoration:underline;" onclick="toonDuifProfiel('${deelnemer.duif_id}')">${deelnemer.duiven.naam}</span>
                     </div>
                   </td>
@@ -2248,7 +2248,7 @@
           }
         }
       } catch (error) {
-        console.error('❌ Fout bij updaten deelnemers tabel:', error);
+        console.error('âŒ Fout bij updaten deelnemers tabel:', error);
       }
     }
 
@@ -2357,7 +2357,7 @@
                     style="position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,0.1);border:none;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#6b7280;transition:all 0.2s;" 
                     onmouseover="this.style.background='rgba(0,0,0,0.2)'" 
                     onmouseout="this.style.background='rgba(0,0,0,0.1)'">
-              ×
+              Ã—
             </button>
             
             <!-- Header met achtergrond -->
@@ -2365,11 +2365,11 @@
               <h2 style="margin:0 0 0.5rem 0;font-size:1.8rem;font-weight:700;color:#1f2937;">${duif.naam}</h2>
               <div style="display:flex;justify-content:center;gap:0.5rem;flex-wrap:wrap;">
                 <div style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:white;border-radius:20px;border:2px solid ${borderColor};color:${accentColor};font-weight:600;font-size:0.9rem;">
-                  <span style="font-size:1rem;">${isVrouw ? '♀' : '♂'}</span>
+                  <span style="font-size:1rem;">${isVrouw ? 'â™€' : 'â™‚'}</span>
                   ${isVrouw ? 'Vrouw' : 'Man'}
                 </div>
                 <div style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:white;border-radius:20px;border:2px solid ${borderColor};color:${accentColor};font-weight:600;font-size:0.9rem;">
-                  <span style="font-size:1rem;">📅</span>
+                  <span style="font-size:1rem;">ðŸ“…</span>
                   ${leeftijdJaren > 0 ? `${leeftijdJaren} Jaar en ${leeftijdMaanden} Maanden` : `${leeftijdMaanden} Maanden`}
                 </div>
               </div>
@@ -2384,7 +2384,7 @@
                 </button>
                 <button class="profiel-tab-btn" id="tab-trainingen" 
                         style="flex:1;padding:1rem;border:none;background:white;color:#6b7280;font-weight:600;cursor:pointer;transition:all 0.2s;border-bottom:3px solid transparent;">
-                  🕊️ Trainingen
+                  ðŸ•Šï¸ Trainingen
                 </button>
                 <button class="profiel-tab-btn" id="tab-wedstrijden" 
                         style="flex:1;padding:1rem;border:none;background:white;color:#6b7280;font-weight:600;cursor:pointer;transition:all 0.2s;border-bottom:3px solid transparent;">
@@ -2486,52 +2486,52 @@
           return `
             <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem;font-size:0.85rem;">
               <div style="background:#f8fafc;padding:0.5rem;border-radius:6px;text-align:center;">
-                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">❤️ Libido</div>
-                <div style="font-weight:600;color:#ec4899;font-size:1rem;">${'❤️'.repeat(duif.libido || 0) || '💔'}</div>
+                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">â¤ï¸ Libido</div>
+                <div style="font-weight:600;color:#ec4899;font-size:1rem;">${'â¤ï¸'.repeat(duif.libido || 0) || 'ðŸ’”'}</div>
               </div>
               
               <div style="background:#f8fafc;padding:0.5rem;border-radius:6px;text-align:center;">
-                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">⚡ Snelheid</div>
+                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">âš¡ Snelheid</div>
                 <div style="font-weight:600;color:#1f2937;font-size:1rem;">${duif.snelheid || 0}</div>
               </div>
               
               <div style="background:#f8fafc;padding:0.5rem;border-radius:6px;text-align:center;">
-                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">💪 Conditie</div>
+                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">ðŸ’ª Conditie</div>
                 <div style="font-weight:600;color:#1f2937;font-size:1rem;">${duif.conditie || 0}</div>
               </div>
               
               <div style="background:#f8fafc;padding:0.5rem;border-radius:6px;text-align:center;">
-                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">🧭 Oriëntatie</div>
-                <div style="font-weight:600;color:#1f2937;font-size:1rem;">${duif.oriëntatie || 0}</div>
+                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">ðŸ§­ OriÃ«ntatie</div>
+                <div style="font-weight:600;color:#1f2937;font-size:1rem;">${duif.oriÃ«ntatie || 0}</div>
               </div>
               
               <div style="background:#f8fafc;padding:0.5rem;border-radius:6px;text-align:center;">
-                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">⚙️ Techniek</div>
+                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">âš™ï¸ Techniek</div>
                 <div style="font-weight:600;color:#1f2937;font-size:1rem;">${duif.techniek || 0}</div>
               </div>
               
               <div style="background:#f8fafc;padding:0.5rem;border-radius:6px;text-align:center;">
-                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">⭐ Ervaring</div>
+                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">â­ Ervaring</div>
                 <div style="font-weight:600;color:#1f2937;font-size:1rem;">${duif.ervaring || 0}</div>
               </div>
               
               <div style="background:#f8fafc;padding:0.5rem;border-radius:6px;text-align:center;">
-                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">📈 Vormpeil</div>
+                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">ðŸ“ˆ Vormpeil</div>
                 <div style="font-weight:600;color:#1f2937;font-size:1rem;">${duif.vormpeil || '-'}</div>
               </div>
               
               <div style="background:#f8fafc;padding:0.5rem;border-radius:6px;text-align:center;">
-                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">🌪️ Aerodynamica</div>
+                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">ðŸŒªï¸ Aerodynamica</div>
                 <div style="font-weight:600;color:#1f2937;font-size:1rem;">${duif.aerodynamica || '-'}</div>
               </div>
               
               <div style="background:#f8fafc;padding:0.5rem;border-radius:6px;text-align:center;">
-                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">🧠 Intelligentie</div>
+                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">ðŸ§  Intelligentie</div>
                 <div style="font-weight:600;color:#1f2937;font-size:1rem;">${duif.intelligentie || '-'}</div>
               </div>
               
               <div style="background:#f8fafc;padding:0.5rem;border-radius:6px;text-align:center;">
-                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">🌙 Nachtvliegen</div>
+                <div style="color:#6b7280;font-size:0.75rem;margin-bottom:0.2rem;">ðŸŒ™ Nachtvliegen</div>
                 <div style="font-weight:600;color:#1f2937;font-size:1rem;">${duif.nachtvliegen || '-'}</div>
               </div>
 
@@ -2546,7 +2546,7 @@
           if (voltooideTrainingen.length === 0) {
             return `
               <div style="text-align:center;padding:2rem;color:#6b7280;">
-                <span style="font-size:2rem;margin-bottom:1rem;opacity:0.5;">🕊️</span>
+                <span style="font-size:2rem;margin-bottom:1rem;opacity:0.5;">ðŸ•Šï¸</span>
                 <p>Nog geen voltooide trainingsvluchten.</p>
               </div>
             `;
@@ -2640,7 +2640,7 @@
                   ${wedstrijdMedailles.map(p => `
                     <tr style="border-bottom:1px solid #e2e8f0;">
                       <td style="padding:0.5rem;text-align:center;font-size:1.2rem;">
-                        ${p.type === 'goud' ? '🥇' : p.type === 'zilver' ? '🥈' : '🥉'}
+                        ${p.type === 'goud' ? 'ðŸ¥‡' : p.type === 'zilver' ? 'ðŸ¥ˆ' : 'ðŸ¥‰'}
                       </td>
                       <td style="padding:0.5rem;font-weight:500;color:#1f2937;">${p.wedstrijd_naam || 'Onbekende wedstrijd'}</td>
                       <td style="padding:0.5rem;color:#6b7280;font-size:0.8rem;">${p.omschrijving || 'Prestatie medaille'}</td>
@@ -2670,7 +2670,7 @@
         
         activateTab('eigenschappen');
       } catch (err) {
-        console.error('❌ Fout bij laden profiel:', err);
+        console.error('âŒ Fout bij laden profiel:', err);
         profielDiv.innerHTML = `
           <div style="text-align:center;padding:3rem 2rem;color:#ef4444;">
             <i class="fas fa-exclamation-triangle" style="font-size:2rem;margin-bottom:1rem;"></i>
@@ -2713,7 +2713,7 @@
           .eq('trainingsvlucht_id', vluchtId);
           
         if (error) {
-          console.error('❌ Fout bij synchroniseren simulatie data:', error);
+          console.error('âŒ Fout bij synchroniseren simulatie data:', error);
           return;
         }
         
@@ -2726,7 +2726,7 @@
           updateDeelnemersTabelSync(gesorteerdeDeelnemers);
         }
       } catch (error) {
-        console.error('❌ Fout bij synchroniseren:', error);
+        console.error('âŒ Fout bij synchroniseren:', error);
       }
     }
     
@@ -2740,13 +2740,13 @@
             const percentage = ((deelnemer.huidige_afstand_gevlogen || 0) / (deelnemer.vlucht_afstand || 22)) * 100;
             const positie = index + 1;
             const medalClass = positie <= 3 ? `medal ${positie === 1 ? 'gold' : positie === 2 ? 'silver' : 'bronze'}` : '';
-            const medalIcon = positie === 1 ? '🥇' : positie === 2 ? '🥈' : positie === 3 ? '🥉' : '';
+            const medalIcon = positie === 1 ? 'ðŸ¥‡' : positie === 2 ? 'ðŸ¥ˆ' : positie === 3 ? 'ðŸ¥‰' : '';
             return `
               <tr style="border-bottom:1px solid #e2e8f0;transition:background-color 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
                 <td class="position ${medalClass}" style="padding:0.4rem 0.25rem;text-align:center;font-size:0.8rem;font-weight:600;">${medalIcon || positie}</td>
                 <td style="padding:0.4rem 0.25rem;">
                   <div class="duif-naam-cell" style="gap:0.3rem;display:flex;align-items:center;">
-                    <span class="duif-geslacht-cell ${deelnemer.duiven.geslacht}" style="font-size:0.9rem;">${deelnemer.duiven.geslacht === 'man' ? '♂' : '♀'}</span>
+                    <span class="duif-geslacht-cell ${deelnemer.duiven.geslacht}" style="font-size:0.9rem;">${deelnemer.duiven.geslacht === 'man' ? 'â™‚' : 'â™€'}</span>
                     <span class="duif-naam-link" style="font-weight:600;font-size:0.85rem;color:#1f2937;cursor:pointer;text-decoration:underline;" onclick="toonDuifProfiel('${deelnemer.duif_id}')">${deelnemer.duiven.naam}</span>
                   </div>
                 </td>

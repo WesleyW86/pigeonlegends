@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦅 Pigeon Legends - In Ontwikkeling</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦅</text></svg>">
+    <title>ðŸ¦… Pigeon Legends - In Ontwikkeling</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ¦…</text></svg>">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -220,7 +220,7 @@
                 <polygon points="53,29 56,30 53,31" fill="#fbbf24"/>
             </svg>
         </div>
-                    <h1 class="title">🦅 Pigeon Legends</h1>
+                    <h1 class="title">ðŸ¦… Pigeon Legends</h1>
         <p class="subtitle">Professioneel duivenbeheer systeem</p>
         
         <div class="status-badge">
@@ -233,7 +233,7 @@
                 <li><i class="fas fa-check"></i> Persoonlijk duivenbeheer per gebruiker</li>
                 <li><i class="fas fa-check"></i> Gedeelde trainingen en wedstrijden</li>
                 <li><i class="fas fa-check"></i> Duiventil management</li>
-                <li><i class="fas fa-check"></i> Financiële tracking</li>
+                <li><i class="fas fa-check"></i> FinanciÃ«le tracking</li>
                 <li><i class="fas fa-check"></i> Prestatie statistieken</li>
                 <li><i class="fas fa-check"></i> Weerbericht integratie</li>
             </ul>
@@ -254,10 +254,13 @@
         </div>
     </div>
 
-    <script src="config.js"></script>
+    
     <script>
         // Supabase configuratie
-        const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+                // Supabase configuratie
+        const supabaseUrl = 'https://ltwolxjbmdopjslnlkx.supabase.co';
+        const supabaseKey = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // Controleer of gebruiker al is ingelogd
         async function checkAuth() {
@@ -273,3 +276,4 @@
     </script>
 </body>
 </html>
+

@@ -499,13 +499,14 @@
 
     </div>
 
-    <script src="config.js"></script>
     <script type="module">
         import './training-background.js';
     import './competition-background.js';
         
-        // Supabase configuratie - gebruik config.js
-        const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+        // Supabase configuratie
+        const supabaseUrl = 'https://ltwolxjbmdopjslnlkx.supabase.co';
+        const supabaseKey = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // Controleer of gebruiker is ingelogd
         async function checkAuth() {
