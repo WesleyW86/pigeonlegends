@@ -439,9 +439,17 @@
         import './training-background.js';
     import './competition-background.js';
 
-        const SUPABASE_URL = 'SUPABASE_CONFIG.url';
-        const SUPABASE_KEY = 'SUPABASE_CONFIG.anonKey';
-        const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Check authenticatie
+const isAuthenticated = localStorage.getItem('user_authenticated');
+const userEmail = localStorage.getItem('user_email');
+
+if (isAuthenticated !== 'true' || !userEmail) {
+    window.location.href = 'login.html';
+}
+
+const SUPABASE_URL = 'https://ltwolxjbmdopjslnlkx.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
+const client = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // Namen voor duiven
         const manVoornamen = ['Wesje', 'Tomo', 'Max', 'Rocco', 'Boris', 'Finn', 'Jules', 'Mats', 'Daan', 'Lars', 'Niels', 'Raf', 'Jip', 'Tijn', 'Sem', 'Koen', 'Thijs', 'Bram', 'Joris', 'Tim'];

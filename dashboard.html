@@ -508,10 +508,10 @@
         const supabaseKey = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
         
         // Check of gebruiker is ingelogd
-        const token = localStorage.getItem('supabase_token');
+        const isAuthenticated = localStorage.getItem('user_authenticated');
         const userEmail = localStorage.getItem('user_email');
         
-        if (!token || !userEmail) {
+        if (isAuthenticated !== 'true' || !userEmail) {
             // Niet ingelogd, redirect naar login
             window.location.href = 'login.html';
         }
@@ -520,38 +520,22 @@
 
         // Controleer of gebruiker is ingelogd
         async function checkAuth() {
-            // Gebruik opgeslagen email
+            // Gebruik opgeslagen gegevens
             const email = localStorage.getItem('user_email');
+            const userName = localStorage.getItem('user_name');
+            const teamName = localStorage.getItem('team_name');
+            
             if (!email) {
                 window.location.href = 'login.html';
                 return;
             }
             
-            // Haal gebruiker informatie op uit database
-            try {
-                const { data: userInfo, error } = await supabase
-                    .from('users')
-                    .select('team_naam, naam')
-                    .eq('email', email)
-                    .single();
-                
-                if (error) {
-                    console.error('Fout bij ophalen gebruiker info:', error);
-                    // Fallback naar email
-                    document.getElementById('userEmail').textContent = user.email;
-                } else if (userInfo && userInfo.team_naam) {
-                    // Toon team naam
-                    document.getElementById('userEmail').textContent = userInfo.team_naam;
-                } else if (userInfo && userInfo.naam) {
-                    // Fallback naar naam
-                    document.getElementById('userEmail').textContent = userInfo.naam;
-                } else {
-                    // Fallback naar email
-                    document.getElementById('userEmail').textContent = email;
-                }
-            } catch (error) {
-                console.error('Fout bij ophalen gebruiker info:', error);
-                // Fallback naar email
+            // Toon gebruikersnaam
+            if (teamName) {
+                document.getElementById('userEmail').textContent = teamName;
+            } else if (userName) {
+                document.getElementById('userEmail').textContent = userName;
+            } else {
                 document.getElementById('userEmail').textContent = email;
             }
         }
@@ -559,9 +543,12 @@
         // Uitloggen
         window.logout = async function() {
             try {
-                // Verwijder opgeslagen data
-                localStorage.removeItem('supabase_token');
+                // Verwijder alle opgeslagen data
+                localStorage.removeItem('user_authenticated');
                 localStorage.removeItem('user_email');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('team_name');
+                localStorage.removeItem('login_timestamp');
                 
                 // Redirect naar login
                 window.location.href = 'login.html';

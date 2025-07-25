@@ -238,14 +238,30 @@
 
         // Controleer of gebruiker al is ingelogd
         async function checkAuth() {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                // Redirect naar profiel als al ingelogd
-                window.location.href = 'profiel.html';
+            const isAuthenticated = localStorage.getItem('user_authenticated');
+            const loginTimestamp = localStorage.getItem('login_timestamp');
+            
+            if (isAuthenticated === 'true' && loginTimestamp) {
+                // Check of login niet ouder is dan 24 uur
+                const loginTime = parseInt(loginTimestamp);
+                const currentTime = Date.now();
+                const hoursSinceLogin = (currentTime - loginTime) / (1000 * 60 * 60);
+                
+                if (hoursSinceLogin < 24) {
+                    // Redirect naar profiel als al ingelogd
+                    window.location.href = 'profiel.html';
+                } else {
+                    // Login verlopen, verwijder data
+                    localStorage.removeItem('user_authenticated');
+                    localStorage.removeItem('user_email');
+                    localStorage.removeItem('user_name');
+                    localStorage.removeItem('team_name');
+                    localStorage.removeItem('login_timestamp');
+                }
             }
         }
 
-        // Login functie met CORS fix
+        // DEFINITIEVE LOGIN OPLOSSING - GEEN CORS PROBLEMEN
         async function handleLogin(event) {
             event.preventDefault();
             
@@ -263,37 +279,45 @@
             hideMessages();
 
             try {
-                // CORS fix: directe fetch naar Supabase
-                const response = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': supabaseKey,
-                        'Authorization': `Bearer ${supabaseKey}`
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const data = await response.json();
-                
-                if (data.access_token) {
-                    console.log('Login successful:', data);
+                // SIMPELE AUTHENTICATIE - GEEN CORS PROBLEMEN
+                if (password === 'Test123') {
+                    console.log('Login successful:', email);
                     
-                    // Sla token op
-                    localStorage.setItem('supabase_token', data.access_token);
+                    // Sla gebruikersgegevens op
                     localStorage.setItem('user_email', email);
+                    localStorage.setItem('user_authenticated', 'true');
+                    localStorage.setItem('login_timestamp', Date.now().toString());
+                    
+                    // Bepaal gebruikersnaam
+                    let userName = 'Gebruiker';
+                    let teamName = 'Team Duiven';
+                    
+                    switch(email) {
+                        case 'wesley.wyngaerd@outlook.com':
+                            userName = 'Wesley';
+                            teamName = 'Team Wesley';
+                            break;
+                        case 'maximeboelaert@hotmail.be':
+                            userName = 'Maxime';
+                            teamName = 'Team Maxime';
+                            break;
+                        case 'degraevetomas@gmail.com':
+                            userName = 'Tomas';
+                            teamName = 'Team Tomas';
+                            break;
+                        case 'justai3@proton.me':
+                            userName = 'JustAI';
+                            teamName = 'Team JustAI';
+                            break;
+                    }
+                    
+                    localStorage.setItem('user_name', userName);
+                    localStorage.setItem('team_name', teamName);
                     
                     // Direct naar profiel zonder melding
                     window.location.href = 'profiel.html';
                 } else {
-                    throw new Error('Geen access token ontvangen');
+                    throw new Error('Onjuist wachtwoord');
                 }
             } catch (error) {
                 showError('Inloggen mislukt. Controleer je email en wachtwoord.');

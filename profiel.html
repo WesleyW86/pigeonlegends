@@ -285,10 +285,10 @@
         const supabaseKey = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
         
         // Check of gebruiker is ingelogd
-        const token = localStorage.getItem('supabase_token');
+        const isAuthenticated = localStorage.getItem('user_authenticated');
         const userEmail = localStorage.getItem('user_email');
         
-        if (!token || !userEmail) {
+        if (isAuthenticated !== 'true' || !userEmail) {
             // Niet ingelogd, redirect naar login
             window.location.href = 'login.html';
         }
