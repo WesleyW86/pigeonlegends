@@ -185,13 +185,22 @@
 <body>
     <div class="login-container">
         <div class="logo">
-            <img src="Duif1.png" alt="Pigeon" style="width: 60px; height: 60px; object-fit: cover;">
+            <img src="Duif1.png" alt="Pigeon" style="width: 80px; height: 80px; object-fit: contain;">
         </div>
         <h1 class="title">Pigeon Legends</h1>
         <p class="subtitle">Log in met je test account</p>
 
         <div class="error-message" id="errorMessage"></div>
         <div class="success-message" id="successMessage"></div>
+
+        <!-- Tijdelijke CORS oplossing -->
+        <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+            <p style="color: #92400e; margin: 0; font-size: 0.9rem;">
+                <strong>⚠️ CORS Fout Oplossing:</strong><br>
+                Gebruik de live website voor login:<br>
+                <a href="https://pigeonlegends.netlify.app" style="color: #3b82f6; text-decoration: underline;">https://pigeonlegends.netlify.app</a>
+            </p>
+        </div>
 
         <form class="login-form" id="loginForm">
             <div class="form-group">
@@ -223,7 +232,20 @@
         // Supabase configuratie
         const supabaseUrl = 'https://ltwolxjbmdopjslnlkx.supabase.co';
         const supabaseKey = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // CORS oplossing: gebruik fetch met credentials
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey, {
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true
+            },
+            global: {
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                }
+            }
+        });
 
         // Toegestane test accounts
         const allowedAccounts = [
