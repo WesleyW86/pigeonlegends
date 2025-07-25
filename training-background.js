@@ -16,7 +16,7 @@ class FlightSimulationAlgorithm {
       short: {
         snelheid: 4,        // ****
         conditie: 1,        // *
-        oriÃ«ntatie: 1,      // *
+        orientatie: 1,      // *
         techniek: 2,        // **
         ervaring: 1,        // *
         aerodynamica: 4,    // ****
@@ -25,14 +25,14 @@ class FlightSimulationAlgorithm {
       medium: {
         snelheid: 4,        // ****
         conditie: 4,        // ****
-        oriÃ«ntatie: 2,      // **
+        orientatie: 2,      // **
         ervaring: 2,        // **
         intelligentie: 2    // **
       },
       long: {
         snelheid: 2,        // **
         conditie: 4,        // ****
-        oriÃ«ntatie: 4,      // ****
+        orientatie: 4,      // ****
         techniek: 2,        // **
         ervaring: 4,        // ****
         aerodynamica: 2,    // **
