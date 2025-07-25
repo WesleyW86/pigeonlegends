@@ -463,7 +463,7 @@
             return {
                 naam: `${randomItem(voornamen)} ${randomItem(achternamen)}`,
                 geslacht: geslacht,
-                leeftijd_maanden: randomInt(1, 6),
+                leeftijd_maanden: 0, // Nieuwe duiven zijn 0 maanden oud
                 status: 'jong',
                 kooi_id: null,
                 ...eigenschappen,
@@ -480,6 +480,22 @@
         function renderLibido(libido) {
             const hearts = '❤️'.repeat(libido);
             return `<span class="libido-indicator">${hearts}</span>`;
+        }
+
+        function renderLeeftijd(maanden) {
+            if (maanden === 0) {
+                return '0 maanden';
+            } else if (maanden < 12) {
+                return `${maanden} maanden`;
+            } else {
+                const jaren = Math.floor(maanden / 12);
+                const restMaanden = maanden % 12;
+                if (restMaanden === 0) {
+                    return `${jaren} jaar`;
+                } else {
+                    return `${jaren} jaar ${restMaanden} maanden`;
+                }
+            }
         }
 
         function toonSuccessMelding(bericht) {
@@ -504,125 +520,20 @@
                     return;
                 }
                 
-                // SIMPELE OPLOSSING - Gebruik demo modus als database niet werkt
+                // SIMPELE OPLOSSING - Demo modus
                 console.log('Start duiven maken voor:', userEmail);
-                
-                // Toon demo duiven direct
                 toonDemoDuiven();
                 toonSuccessMelding('🎉 6 jonge duiven toegevoegd! Welkom bij Pigeon Legends!');
                 
                 // Verberg de knop na gebruik
-                const startBtn = document.getElementById('startDuivenBtn');
-                if (startBtn) {
-                    startBtn.style.display = 'none';
+                const startBtnElement = document.getElementById('startDuivenBtn');
+                if (startBtnElement) {
+                    startBtnElement.style.display = 'none';
                 }
                 
-                return;
-                
-                // OUDE CODE - Database connectie (uitgeschakeld vanwege CORS)
-                /*
-                // Haal eerst de user_id op basis van email
-                const { data: userData, error: userError } = await client
-                    .from('users')
-                    .select('id')
-                    .eq('email', userEmail)
-                    .single();
-                
-                if (userError || !userData) {
-                    console.error('Gebruiker niet gevonden:', userError);
-                    alert('Gebruiker niet gevonden in database. Probeer opnieuw in te loggen.');
-                    return;
-                }
-                
-                const userId = userData.id;
-                */
-                
-                // Controleer eerst of deze gebruiker al duiven heeft
-                const { data: bestaandeDuiven, error: checkError } = await client
-                    .from('duiven')
-                    .select('id')
-                    .eq('user_id', userId)
-                    .limit(1);
-                
-                if (checkError) {
-                    console.error('Database fout:', checkError);
-                    // Als er een CORS fout is, ga door met maken van duiven
-                    if (checkError.message.includes('NetworkError') || checkError.message.includes('CORS')) {
-                        console.log('CORS fout gedetecteerd, ga door met maken van duiven...');
-                    } else {
-                        alert('Fout bij controleren bestaande duiven: ' + checkError.message);
-                        return;
-                    }
-                }
-                
-                if (bestaandeDuiven && bestaandeDuiven.length > 0) {
-                    alert('Je hebt al duiven! Deze knop is alleen voor nieuwe spelers.');
-                    return;
-                }
-                
-                // Genereer 6 unieke jonge duiven voor deze gebruiker
-                const startDuiven = [];
-                for (let i = 0; i < 6; i++) {
-                    const nieuweDuif = genereerDuifProfiel();
-                    // Voeg user_id toe aan elke duif
-                    nieuweDuif.user_id = userId;
-                    startDuiven.push(nieuweDuif);
-                }
-                
-                console.log('Start duiven voor gebruiker:', userEmail, startDuiven);
-                
-                const { data, error } = await client.from('duiven').insert(startDuiven);
-                
-                if (error) {
-                    console.error('Database fout:', error);
-                    if (error.message.includes('NetworkError') || error.message.includes('CORS')) {
-                        // Simuleer succesvolle toevoeging voor demo
-                        console.log('CORS fout, maar duiven worden lokaal toegevoegd voor demo...');
-                        toonSuccessMelding('🎉 6 jonge duiven toegevoegd! Welkom bij Pigeon Legends!');
-                        
-                        // Verberg de knop na gebruik
-                        const startBtn = document.getElementById('startDuivenBtn');
-                        if (startBtn) {
-                            startBtn.style.display = 'none';
-                        }
-                        
-                        // Toon demo duiven
-                        toonDemoDuiven();
-                        return;
-                    } else {
-                        alert('Fout bij toevoegen start duiven: ' + error.message);
-                        return;
-                    }
-                }
-                
-                console.log('6 start duiven succesvol toegevoegd voor gebruiker:', userEmail);
-                toonSuccessMelding('🎉 6 jonge duiven toegevoegd! Welkom bij Pigeon Legends!');
-                
-                // Verberg de knop na gebruik
-                const startBtn = document.getElementById('startDuivenBtn');
-                if (startBtn) {
-                    startBtn.style.display = 'none';
-                }
-                
-                laadDuiven();
             } catch (error) {
-                console.error('Fout:', error);
-                if (error.message.includes('NetworkError') || error.message.includes('CORS')) {
-                    // Simuleer succesvolle toevoeging voor demo
-                    console.log('CORS fout, maar duiven worden lokaal toegevoegd voor demo...');
-                    toonSuccessMelding('🎉 6 jonge duiven toegevoegd! Welkom bij Pigeon Legends!');
-                    
-                    // Verberg de knop na gebruik
-                    const startBtn = document.getElementById('startDuivenBtn');
-                    if (startBtn) {
-                        startBtn.style.display = 'none';
-                    }
-                    
-                    // Toon demo duiven
-                    toonDemoDuiven();
-                } else {
-                    alert('Er is een fout opgetreden: ' + error.message);
-                }
+                console.error('Fout bij maken start duiven:', error);
+                alert('Er is een fout opgetreden: ' + error.message);
             }
         }
 
@@ -649,7 +560,7 @@
                         </div>
                         <div class="duif-info">
                             <h3>${demoDuif.naam}</h3>
-                            <p>${demoDuif.geslacht === 'man' ? 'Mannetje' : 'Vrouwtje'} • ${demoDuif.leeftijd_maanden} maanden • ${demoDuif.status}</p>
+                            <p>${demoDuif.geslacht === 'man' ? 'Mannetje' : 'Vrouwtje'} • ${renderLeeftijd(demoDuif.leeftijd_maanden)} • ${demoDuif.status}</p>
                         </div>
                     </div>
                     
@@ -718,147 +629,10 @@
                     return;
                 }
 
-                // SIMPELE OPLOSSING - Toon demo duiven direct
+                // SIMPELE OPLOSSING - Demo modus
                 console.log('Demo modus actief voor:', userEmail);
                 toonDemoDuiven();
-                return;
                 
-                // OUDE CODE - Database connectie (uitgeschakeld vanwege CORS)
-                /*
-                // Haal eerst de user_id op basis van email
-                const { data: userData, error: userError } = await client
-                    .from('users')
-                    .select('id')
-                    .eq('email', userEmail)
-                    .single();
-                
-                if (userError || !userData) {
-                    console.error('Gebruiker niet gevonden:', userError);
-                    lijst.innerHTML = '<div class="error">❌ Gebruiker niet gevonden. Probeer opnieuw in te loggen.</div>';
-                    return;
-                }
-                
-                const userId = userData.id;
-                */
-
-                const filterGeslacht = document.getElementById('filterGeslacht').value;
-                const filterStatus = document.getElementById('filterStatus').value;
-                const sortEigenschap = document.getElementById('sortEigenschap').value;
-
-                let query = client
-                    .from('duiven')
-                    .select('*')
-                    .eq('user_id', userId);
-
-                // Filters toepassen
-                if (filterGeslacht !== 'alle') {
-                    query = query.eq('geslacht', filterGeslacht);
-                }
-
-                if (filterStatus !== 'alle') {
-                    query = query.eq('status', filterStatus);
-                }
-
-                // Sortering toepassen
-                if (sortEigenschap === 'created_at') {
-                    query = query.order('created_at', { ascending: false });
-                } else {
-                    query = query.order(sortEigenschap, { ascending: false });
-                }
-
-                const { data: duiven, error } = await query;
-
-                if (error) {
-                    console.error('Database fout:', error);
-                    if (error.message.includes('NetworkError') || error.message.includes('CORS')) {
-                        // Toon demo duiven als database niet beschikbaar is
-                        lijst.innerHTML = '<div class="loading">Database niet beschikbaar - Demo modus actief</div>';
-                        setTimeout(() => {
-                            toonDemoDuiven();
-                        }, 1000);
-                        return;
-                    } else {
-                        throw error;
-                    }
-                }
-
-                if (!duiven || duiven.length === 0) {
-                    lijst.innerHTML = '<div class="loading">Geen duiven gevonden. Klik op "Start met 6 Duiven" om te beginnen!</div>';
-                    return;
-                }
-
-                lijst.innerHTML = '';
-
-                duiven.forEach(duif => {
-                    const totaalEigenschappen = berekenTotaalEigenschappen(duif);
-                    const card = document.createElement('div');
-                    card.className = `duif-card ${duif.geslacht}`;
-                    
-                    const geslachtIcon = duif.geslacht === 'man' ? '♂️' : '♀️';
-                    const libidoDisplay = duif.geslacht === 'man' ? renderLibido(duif.libido || 0) : '';
-                    const duifFoto = duif.geslacht === 'man' ? 'mannetje.png' : 'vrouwtje.png';
-                    
-                    card.innerHTML = `
-                        <div class="duif-header">
-                            <div class="duif-avatar">
-                                <img src="${duifFoto}" alt="${duif.geslacht === 'man' ? 'Mannetje' : 'Vrouwtje'} duif">
-                            </div>
-                            <div class="duif-info">
-                                <h3>${duif.naam}</h3>
-                                <p>${duif.geslacht === 'man' ? 'Mannetje' : 'Vrouwtje'} • ${duif.leeftijd_maanden} maanden • ${duif.status}</p>
-                            </div>
-                        </div>
-                        
-                        <div class="duif-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Vormpeil</span>
-                                <span class="stat-value">${duif.vormpeil || 0}</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Snelheid</span>
-                                <span class="stat-value">${duif.snelheid || 0}</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Conditie</span>
-                                <span class="stat-value">${duif.conditie || 0}</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Orientatie</span>
-                                <span class="stat-value">${duif.orientatie || 0}</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Techniek</span>
-                                <span class="stat-value">${duif.techniek || 0}</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Ervaring</span>
-                                <span class="stat-value">${duif.ervaring || 0}</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Aerodynamica</span>
-                                <span class="stat-value">${duif.aerodynamica || 0}</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Intelligentie</span>
-                                <span class="stat-value">${duif.intelligentie || 0}</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Nachtvliegen</span>
-                                <span class="stat-value">${duif.nachtvliegen || 0}</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Totaal</span>
-                                <span class="stat-value">${totaalEigenschappen}</span>
-                            </div>
-                        </div>
-                        
-                        ${libidoDisplay ? `<div style="margin-bottom: 1rem; text-align: center;">${libidoDisplay}</div>` : ''}
-                        
-
-                    `;
-                    
-                    lijst.appendChild(card);
-                });
             } catch (error) {
                 console.error('Fout bij laden duiven:', error);
                 lijst.innerHTML = `<div class="error">❌ Er is een fout opgetreden: ${error.message}</div>`;
@@ -875,50 +649,9 @@
                     return; // Niet ingelogd, knop blijft zichtbaar
                 }
                 
-                // Haal eerst de user_id op basis van email
-                const { data: userData, error: userError } = await client
-                    .from('users')
-                    .select('id')
-                    .eq('email', userEmail)
-                    .single();
+                // SIMPELE OPLOSSING - Knop blijft zichtbaar in demo modus
+                console.log('Demo modus - start knop blijft zichtbaar');
                 
-                if (userError || !userData) {
-                    console.error('Gebruiker niet gevonden:', userError);
-                    return; // Gebruiker niet gevonden, knop blijft zichtbaar
-                }
-                
-                const userId = userData.id;
-                
-                const { data: bestaandeDuiven, error } = await client
-                    .from('duiven')
-                    .select('id')
-                    .eq('user_id', userId)
-                    .limit(1);
-                
-                if (error) {
-                    console.error('Fout bij controleren start knop:', error);
-                    // Als CORS fout, toon de knop
-                    if (error.message.includes('NetworkError') || error.message.includes('CORS')) {
-                        const startBtn = document.getElementById('startDuivenBtn');
-                        if (startBtn) {
-                            startBtn.style.display = 'inline-flex';
-                        }
-                    }
-                    return;
-                }
-                
-                if (bestaandeDuiven && bestaandeDuiven.length > 0) {
-                    const startBtn = document.getElementById('startDuivenBtn');
-                    if (startBtn) {
-                        startBtn.style.display = 'none';
-                    }
-                } else {
-                    // Toon de knop als gebruiker geen duiven heeft
-                    const startBtn = document.getElementById('startDuivenBtn');
-                    if (startBtn) {
-                        startBtn.style.display = 'inline-flex';
-                    }
-                }
             } catch (error) {
                 console.error('Fout bij controleren start knop:', error);
             }
