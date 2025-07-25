@@ -220,6 +220,15 @@
             <i class="fas fa-arrow-left"></i>
             Terug naar hoofdpagina
         </a>
+
+        <!-- Logout optie als al ingelogd -->
+        <div id="logoutSection" style="display: none; margin-top: 20px; text-align: center;">
+            <p style="color: #6b7280; margin-bottom: 10px;">Je bent al ingelogd als:</p>
+            <p id="currentUser" style="font-weight: 600; color: #1f2937; margin-bottom: 15px;"></p>
+            <button onclick="logout()" class="logout-btn" style="background: #ef4444; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+                <i class="fas fa-sign-out-alt"></i> Uitloggen
+            </button>
+        </div>
     </div>
 
     <script>
@@ -249,11 +258,15 @@
                 const hoursSinceLogin = (currentTime - loginTime) / (1000 * 60 * 60);
                 
                 if (hoursSinceLogin < 24) {
-                    // Redirect naar dashboard als al ingelogd
-                    localStorage.setItem('redirecting', 'true');
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 100);
+                    // Toon logout optie in plaats van automatisch redirect
+                    const userEmail = localStorage.getItem('user_email');
+                    const userName = localStorage.getItem('user_name') || userEmail;
+                    
+                    document.getElementById('currentUser').textContent = userName;
+                    document.getElementById('logoutSection').style.display = 'block';
+                    
+                    // Verberg login form
+                    document.getElementById('loginForm').style.display = 'none';
                 } else {
                     // Login verlopen, verwijder data
                     localStorage.removeItem('user_authenticated');
@@ -370,6 +383,24 @@
 
         // Event listeners
         document.getElementById('loginForm').addEventListener('submit', handleLogin);
+
+        // Logout functie
+        function logout() {
+            localStorage.removeItem('user_authenticated');
+            localStorage.removeItem('user_email');
+            localStorage.removeItem('user_name');
+            localStorage.removeItem('team_name');
+            localStorage.removeItem('login_timestamp');
+            localStorage.removeItem('redirecting');
+            
+            // Toon login form weer
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('logoutSection').style.display = 'none';
+            
+            // Reset form
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        }
 
         // Check auth bij laden
         checkAuth();
