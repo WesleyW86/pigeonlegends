@@ -520,7 +520,7 @@
                     return;
                 }
                 
-                // CORS FIX: Probeer eerst Supabase, anders gebruik localStorage
+                // ONLINE MODUS - Probeer eerst Supabase
                 let userId = null;
                 
                 try {
@@ -559,17 +559,17 @@
                         console.log('Bestaande gebruiker gevonden voor start duiven:', userId);
                     }
                 } catch (error) {
-                    console.error('CORS of database fout bij start duiven:', error);
+                    console.error('Database fout bij start duiven:', error);
                     
-                    // CORS FALLBACK: Gebruik demo modus
+                    // FALLBACK: Gebruik demo modus
                     console.log('Gebruik demo modus voor start duiven');
                     toonDemoDuiven();
                     toonSuccessMelding('🎉 6 jonge duiven toegevoegd! Welkom bij Pigeon Legends!');
                     
                     // Verberg de knop na gebruik
-                    const startBtnElement = document.getElementById('startDuivenBtn');
-                    if (startBtnElement) {
-                        startBtnElement.style.display = 'none';
+                    const startBtn = document.getElementById('startDuivenBtn');
+                    if (startBtn) {
+                        startBtn.style.display = 'none';
                     }
                     return;
                 }
@@ -740,7 +740,7 @@
                     return;
                 }
 
-                // CORS FIX: Probeer eerst Supabase, anders gebruik localStorage
+                // ONLINE MODUS - Probeer eerst Supabase
                 let userId = null;
                 
                 try {
@@ -779,12 +779,10 @@
                         console.log('Bestaande gebruiker gevonden:', userId);
                     }
                 } catch (error) {
-                    console.error('CORS of database fout:', error);
+                    console.error('Database fout:', error);
                     
-                    // CORS FALLBACK: Gebruik localStorage data
-                    console.log('Gebruik localStorage fallback voor gebruiker:', userEmail);
-                    
-                    // Toon demo duiven als database niet beschikbaar is
+                    // FALLBACK: Gebruik demo modus als database niet beschikbaar is
+                    console.log('Gebruik demo modus voor gebruiker:', userEmail);
                     lijst.innerHTML = '<div class="loading">Database niet beschikbaar - Demo modus actief</div>';
                     setTimeout(() => {
                         toonDemoDuiven();
@@ -925,7 +923,7 @@
                     return; // Niet ingelogd, knop blijft zichtbaar
                 }
                 
-                // CORS FIX: Probeer eerst Supabase, anders gebruik localStorage
+                // ONLINE MODUS - Controleer database
                 try {
                     const { data: userData, error: userError } = await client
                         .from('users')
@@ -971,9 +969,9 @@
                         }
                     }
                 } catch (error) {
-                    console.error('CORS of database fout bij controleren start knop:', error);
+                    console.error('Database fout bij controleren start knop:', error);
                     
-                    // CORS FALLBACK: Toon de knop als database niet beschikbaar is
+                    // FALLBACK: Toon de knop als database niet beschikbaar is
                     const startBtn = document.getElementById('startDuivenBtn');
                     if (startBtn) {
                         startBtn.style.display = 'inline-flex';
