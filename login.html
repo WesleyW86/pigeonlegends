@@ -245,7 +245,7 @@
             }
         }
 
-        // Login functie
+        // Login functie met CORS fix
         async function handleLogin(event) {
             event.preventDefault();
             
@@ -263,20 +263,40 @@
             hideMessages();
 
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
+                // CORS fix: directe fetch naar Supabase
+                const response = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
                 });
-
-                if (error) {
-                    showError('Inloggen mislukt. Controleer je email en wachtwoord.');
-                    console.error('Login error:', error);
-                } else {
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.access_token) {
+                    console.log('Login successful:', data);
+                    
+                    // Sla token op
+                    localStorage.setItem('supabase_token', data.access_token);
+                    localStorage.setItem('user_email', email);
+                    
                     // Direct naar profiel zonder melding
                     window.location.href = 'profiel.html';
+                } else {
+                    throw new Error('Geen access token ontvangen');
                 }
             } catch (error) {
-                showError('Er is een fout opgetreden. Probeer het opnieuw.');
+                showError('Inloggen mislukt. Controleer je email en wachtwoord.');
                 console.error('Login error:', error);
             } finally {
                 setLoading(false);

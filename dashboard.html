@@ -503,18 +503,27 @@
         import './training-background.js';
     import './competition-background.js';
         
-        // Supabase configuratie
-        // Supabase configuratie - direct hardcoded voor Netlify
+        // Supabase configuratie met token check
         const supabaseUrl = 'https://ltwolxjbmdopjslnlkx.supabase.co';
         const supabaseKey = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
+        
+        // Check of gebruiker is ingelogd
+        const token = localStorage.getItem('supabase_token');
+        const userEmail = localStorage.getItem('user_email');
+        
+        if (!token || !userEmail) {
+            // Niet ingelogd, redirect naar login
+            window.location.href = 'login.html';
+        }
+        
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // Controleer of gebruiker is ingelogd
         async function checkAuth() {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                // Redirect naar login als niet ingelogd
-                window.location.href = 'index.html';
+            // Gebruik opgeslagen email
+            const email = localStorage.getItem('user_email');
+            if (!email) {
+                window.location.href = 'login.html';
                 return;
             }
             
@@ -523,7 +532,7 @@
                 const { data: userInfo, error } = await supabase
                     .from('users')
                     .select('team_naam, naam')
-                    .eq('email', user.email)
+                    .eq('email', email)
                     .single();
                 
                 if (error) {
@@ -538,24 +547,28 @@
                     document.getElementById('userEmail').textContent = userInfo.naam;
                 } else {
                     // Fallback naar email
-                    document.getElementById('userEmail').textContent = user.email;
+                    document.getElementById('userEmail').textContent = email;
                 }
             } catch (error) {
                 console.error('Fout bij ophalen gebruiker info:', error);
                 // Fallback naar email
-                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userEmail').textContent = email;
             }
         }
 
         // Uitloggen
         window.logout = async function() {
             try {
-                await supabase.auth.signOut();
-                window.location.href = 'index.html';
+                // Verwijder opgeslagen data
+                localStorage.removeItem('supabase_token');
+                localStorage.removeItem('user_email');
+                
+                // Redirect naar login
+                window.location.href = 'login.html';
             } catch (error) {
                 console.error('Fout bij uitloggen:', error);
                 // Force redirect zelfs als er een fout is
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             }
         }
 
