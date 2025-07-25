@@ -179,6 +179,14 @@
             font-size: 2rem;
             color: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .card-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
         }
 
         .card-icon.duiven { background: linear-gradient(135deg, #3b82f6, #2563eb); }
@@ -339,18 +347,17 @@
     <div class="container">
         <!-- Header -->
         <header class="header">
-                          <div class="logo">
-                  <img src="Duif1.png" alt="Pigeon" style="width: 30px; height: 30px; object-fit: contain; margin-right: 10px;">
-                  <span>Pigeon Legends</span>
-                  <img src="Duif2.png" alt="Pigeon" style="width: 30px; height: 30px; object-fit: contain; margin-left: 10px;">
-              </div>
+            <div class="logo">
+                <a href="index.html" class="back-button" style="background: #3b82f6; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; margin-right: 20px;">
+                    <i class="fas fa-arrow-left"></i> Terug
+                </a>
+                <img src="Duif1.png" alt="Pigeon" style="width: 30px; height: 30px; object-fit: contain; margin-right: 10px;">
+                <span>Pigeon Legends</span>
+                <img src="Duif2.png" alt="Pigeon" style="width: 30px; height: 30px; object-fit: contain; margin-left: 10px;">
+            </div>
             
             <div class="user-info">
-                <span class="user-email" id="userEmail">Laden...</span>
-                <a href="profiel.html" class="profile-btn" style="background: #3b82f6; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-user-cog"></i> Profiel
-                </a>
-                <button class="logout-btn" onclick="window.logout()">
+                <button class="logout-btn" onclick="window.logout()" style="background: #ef4444; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
                     <i class="fas fa-sign-out-alt"></i> Uitloggen
                 </button>
             </div>
@@ -380,7 +387,7 @@
             <div class="dashboard-card" onclick="location.href='duiven.html'">
                 <div class="card-header">
                     <div class="card-icon duiven">
-                        <img src="Duif1.png" alt="Duif" style="width: 40px; height: 40px; object-fit: contain;">
+                        <img src="Duif1.png" alt="Duif">
                     </div>
                     <div>
                         <h3 class="card-title">Duiven Beheer</h3>
@@ -400,7 +407,7 @@
             <div class="dashboard-card" onclick="location.href='duiventil.html'">
                 <div class="card-header">
                     <div class="card-icon til">
-                        <img src="duifjong.png" alt="Duif" style="width: 40px; height: 40px; object-fit: contain;">
+                        <img src="duifjong.png" alt="Duif">
                     </div>
                     <div>
                         <h3 class="card-title">Duiventil</h3>
@@ -420,7 +427,7 @@
             <div class="dashboard-card" onclick="location.href='training.html'">
                 <div class="card-header">
                     <div class="card-icon training">
-                        <img src="Duif2.png" alt="Duif" style="width: 40px; height: 40px; object-fit: contain;">
+                        <img src="Duif2.png" alt="Duif">
                     </div>
                     <div>
                         <h3 class="card-title">Training</h3>
@@ -440,7 +447,7 @@
             <div class="dashboard-card" onclick="location.href='wedstrijden.html'">
                 <div class="card-header">
                     <div class="card-icon wedstrijden">
-                        <img src="Duif2.png" alt="Duif" style="width: 40px; height: 40px; object-fit: contain;">
+                        <img src="Duif2.png" alt="Duif">
                     </div>
                     <div>
                         <h3 class="card-title">Wedstrijden</h3>
