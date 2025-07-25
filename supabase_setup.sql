@@ -1008,6 +1008,10 @@ DROP POLICY IF EXISTS "Users can update own data" ON public.users;
 CREATE POLICY "Users can update own data" ON public.users
     FOR UPDATE USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can insert own data" ON public.users;
+CREATE POLICY "Users can insert own data" ON public.users
+    FOR INSERT WITH CHECK (auth.uid() = id);
+
 -- Fix duiven policies
 DROP POLICY IF EXISTS "Users can view own pigeons" ON duiven;
 CREATE POLICY "Users can view own pigeons" ON duiven
@@ -1017,6 +1021,10 @@ DROP POLICY IF EXISTS "Users can update own pigeons" ON duiven;
 CREATE POLICY "Users can update own pigeons" ON duiven
     FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert own pigeons" ON duiven;
+CREATE POLICY "Users can insert own pigeons" ON duiven
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
 -- Fix kooien policies
 DROP POLICY IF EXISTS "Users can view own cages" ON kooien;
 CREATE POLICY "Users can view own cages" ON kooien
@@ -1025,6 +1033,10 @@ CREATE POLICY "Users can view own cages" ON kooien
 DROP POLICY IF EXISTS "Users can update own cages" ON kooien;
 CREATE POLICY "Users can update own cages" ON kooien
     FOR UPDATE USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can insert own cages" ON kooien;
+CREATE POLICY "Users can insert own cages" ON kooien
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- 27. FINALE VERIFICATIE
 SELECT '=== FINALE VERIFICATIE ===' as bericht;

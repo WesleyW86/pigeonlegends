@@ -578,8 +578,8 @@
                 const startDuiven = [];
                 for (let i = 0; i < 6; i++) {
                     const nieuweDuif = genereerDuifProfiel();
-                    // Voeg user_email toe aan elke duif
-                    nieuweDuif.user_email = userEmail;
+                    // Voeg user_id toe aan elke duif
+                    nieuweDuif.user_id = userId;
                     startDuiven.push(nieuweDuif);
                 }
                 
@@ -732,6 +732,21 @@
                     return;
                 }
 
+                // Haal eerst de user_id op basis van email
+                const { data: userData, error: userError } = await client
+                    .from('users')
+                    .select('id')
+                    .eq('email', userEmail)
+                    .single();
+                
+                if (userError || !userData) {
+                    console.error('Gebruiker niet gevonden:', userError);
+                    lijst.innerHTML = '<div class="error">❌ Gebruiker niet gevonden. Probeer opnieuw in te loggen.</div>';
+                    return;
+                }
+                
+                const userId = userData.id;
+
                 const filterGeslacht = document.getElementById('filterGeslacht').value;
                 const filterStatus = document.getElementById('filterStatus').value;
                 const sortEigenschap = document.getElementById('sortEigenschap').value;
@@ -739,7 +754,7 @@
                 let query = client
                     .from('duiven')
                     .select('*')
-                    .eq('user_email', userEmail);
+                    .eq('user_id', userId);
 
                 // Filters toepassen
                 if (filterGeslacht !== 'alle') {
@@ -866,10 +881,24 @@
                     return; // Niet ingelogd, knop blijft zichtbaar
                 }
                 
+                // Haal eerst de user_id op basis van email
+                const { data: userData, error: userError } = await client
+                    .from('users')
+                    .select('id')
+                    .eq('email', userEmail)
+                    .single();
+                
+                if (userError || !userData) {
+                    console.error('Gebruiker niet gevonden:', userError);
+                    return; // Gebruiker niet gevonden, knop blijft zichtbaar
+                }
+                
+                const userId = userData.id;
+                
                 const { data: bestaandeDuiven, error } = await client
                     .from('duiven')
                     .select('id')
-                    .eq('user_email', userEmail)
+                    .eq('user_id', userId)
                     .limit(1);
                 
                 if (error) {
