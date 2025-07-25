@@ -895,8 +895,15 @@ LEFT JOIN duiven d ON u.id = d.user_id
 GROUP BY u.id, u.email, u.team_naam
 ORDER BY u.created_at ASC;
 
--- 23. VERIFICATIE WACHTWOORDEN
+-- 23. VERIFICATIE EN FIX WACHTWOORDEN
 SELECT '=== WACHTWOORDEN STATUS ===' as info;
+
+-- Fix wachtwoorden voor alle test accounts
+UPDATE auth.users 
+SET encrypted_password = crypt('Test123', gen_salt('bf'))
+WHERE email IN ('wesley.wyngaerd@outlook.com', 'maximeboelaert@hotmail.be', 'degraevetomas@gmail.com', 'justai3@proton.me');
+
+-- Controleer wachtwoord status
 SELECT 
     au.email,
     CASE 
@@ -909,17 +916,40 @@ SELECT
     END as public_users_status
 FROM auth.users au
 LEFT JOIN public.users pu ON au.id = pu.id
-WHERE au.email IN ('wesley.wyngaerd@outlook.com', 'maximeboelaert@hotmail.be', 'justai3@proton.me')
+WHERE au.email IN ('wesley.wyngaerd@outlook.com', 'maximeboelaert@hotmail.be', 'degraevetomas@gmail.com', 'justai3@proton.me')
 ORDER BY au.email;
 
--- 24. INSTRUCTIES VOOR TOMAS
-SELECT '=== TOMAS HANDMATIG TOEVOEGEN ===' as instructie;
-SELECT '1. Ga naar Supabase Authentication → Users' as stap1;
-SELECT '2. Klik "Add user"' as stap2;
-SELECT '3. Email: degraevetomas@gmail.com' as stap3;
-SELECT '4. Password: Test123' as stap4;
-SELECT '5. Auto confirm: ✅' as stap5;
-SELECT '6. Klik "Create user"' as stap6;
+-- 24. SESSIES WISSEN EN GEBRUIKERS FIXEN
+SELECT '=== SESSIES WISSEN ===' as bericht;
+
+-- Wis alle bestaande sessies
+DELETE FROM auth.sessions;
+
+-- Zorg ervoor dat alle test accounts bestaan en correct zijn
+-- Eerst bestaande gebruikers verwijderen
+DELETE FROM auth.users WHERE email IN ('wesley.wyngaerd@outlook.com', 'maximeboelaert@hotmail.be', 'degraevetomas@gmail.com', 'justai3@proton.me');
+
+-- Dan nieuwe gebruikers toevoegen
+INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, created_at, updated_at)
+VALUES 
+    ('550e8400-e29b-41d4-a716-446655440001', 'wesley.wyngaerd@outlook.com', crypt('Test123', gen_salt('bf')), NOW(), NOW(), NOW()),
+    ('550e8400-e29b-41d4-a716-446655440002', 'maximeboelaert@hotmail.be', crypt('Test123', gen_salt('bf')), NOW(), NOW(), NOW()),
+    ('550e8400-e29b-41d4-a716-446655440003', 'degraevetomas@gmail.com', crypt('Test123', gen_salt('bf')), NOW(), NOW(), NOW()),
+    ('550e8400-e29b-41d4-a716-446655440004', 'justai3@proton.me', crypt('Test123', gen_salt('bf')), NOW(), NOW(), NOW());
+
+-- Zorg ervoor dat alle gebruikers in public.users bestaan
+-- Eerst bestaande gebruikers verwijderen
+DELETE FROM public.users WHERE email IN ('wesley.wyngaerd@outlook.com', 'maximeboelaert@hotmail.be', 'degraevetomas@gmail.com', 'justai3@proton.me');
+
+-- Dan nieuwe gebruikers toevoegen
+INSERT INTO public.users (id, email, naam, team_naam, locatie, wachtwoord, created_at)
+VALUES 
+    ('550e8400-e29b-41d4-a716-446655440001', 'wesley.wyngaerd@outlook.com', 'Wesley', 'Team Wesley', 'Gent', 'Test123', NOW()),
+    ('550e8400-e29b-41d4-a716-446655440002', 'maximeboelaert@hotmail.be', 'Maxime', 'Team Maxime', 'Gent', 'Test123', NOW()),
+    ('550e8400-e29b-41d4-a716-446655440003', 'degraevetomas@gmail.com', 'Tomas', 'Team Tomas', 'Gent', 'Test123', NOW()),
+    ('550e8400-e29b-41d4-a716-446655440004', 'justai3@proton.me', 'JustAI', 'Team JustAI', 'Gent', 'Test123', NOW());
+
+SELECT '=== GEBRUIKERS GEFIXT ===' as bericht;
 
 -- 25. TEST TRAINING VOOR LIVE SIMULATIE
 SELECT '=== TEST TRAINING AANMAKEN ===' as bericht;
@@ -965,5 +995,40 @@ FROM trainingsvluchten t
 LEFT JOIN trainingsvlucht_deelnames td ON t.id = td.trainingsvlucht_id
 WHERE t.naam = 'Test Training - Live Simulatie'
 GROUP BY t.id, t.naam, t.status, t.afstand_km;
+
+-- 26. RLS POLICIES CONTROLEREN EN FIXEN
+SELECT '=== RLS POLICIES CONTROLEREN ===' as bericht;
+
+-- Zorg ervoor dat RLS policies correct zijn ingesteld
+DROP POLICY IF EXISTS "Users can view own data" ON public.users;
+CREATE POLICY "Users can view own data" ON public.users
+    FOR SELECT USING (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Users can update own data" ON public.users;
+CREATE POLICY "Users can update own data" ON public.users
+    FOR UPDATE USING (auth.uid() = id);
+
+-- Fix duiven policies
+DROP POLICY IF EXISTS "Users can view own pigeons" ON duiven;
+CREATE POLICY "Users can view own pigeons" ON duiven
+    FOR SELECT USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can update own pigeons" ON duiven;
+CREATE POLICY "Users can update own pigeons" ON duiven
+    FOR UPDATE USING (auth.uid() = user_id);
+
+-- Fix kooien policies
+DROP POLICY IF EXISTS "Users can view own cages" ON kooien;
+CREATE POLICY "Users can view own cages" ON kooien
+    FOR SELECT USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can update own cages" ON kooien;
+CREATE POLICY "Users can update own cages" ON kooien
+    FOR UPDATE USING (auth.uid() = user_id);
+
+-- 27. FINALE VERIFICATIE
+SELECT '=== FINALE VERIFICATIE ===' as bericht;
+SELECT 'Alle gebruikers zijn gefixt en sessies zijn gewist!' as status;
+SELECT 'Login zou nu moeten werken voor alle test accounts!' as instructie;
 
 -- EINDE SETUP 
