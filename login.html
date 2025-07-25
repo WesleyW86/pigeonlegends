@@ -248,10 +248,10 @@
                 const hoursSinceLogin = (currentTime - loginTime) / (1000 * 60 * 60);
                 
                 if (hoursSinceLogin < 24) {
-                    // Redirect naar profiel als al ingelogd
+                    // Redirect naar dashboard als al ingelogd
                     localStorage.setItem('redirecting', 'true');
                     setTimeout(() => {
-                        window.location.href = 'profiel.html';
+                        window.location.href = 'dashboard.html';
                     }, 100);
                 } else {
                     // Login verlopen, verwijder data
@@ -317,10 +317,10 @@
                     localStorage.setItem('user_name', userName);
                     localStorage.setItem('team_name', teamName);
                     
-                    // Direct naar profiel zonder melding
+                    // Direct naar dashboard zonder melding
                     localStorage.setItem('redirecting', 'true');
                     setTimeout(() => {
-                        window.location.href = 'profiel.html';
+                        window.location.href = 'dashboard.html';
                     }, 500);
                 } else {
                     throw new Error('Onjuist wachtwoord');
