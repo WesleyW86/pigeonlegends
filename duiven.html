@@ -235,34 +235,7 @@
             color: #1f2937;
         }
 
-        .duif-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
 
-        .action-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn.primary {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .action-btn.secondary {
-            background: #e5e7eb;
-            color: #374151;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-        }
 
         .loading {
             text-align: center;
@@ -654,14 +627,7 @@
                     
                     ${libidoDisplay ? `<div style="margin-bottom: 1rem; text-align: center;">${libidoDisplay}</div>` : ''}
                     
-                    <div class="duif-actions">
-                        <button class="action-btn primary" onclick="alert('Demo modus - bewerken niet beschikbaar')">
-                            <i class="fas fa-edit"></i> Bewerken
-                        </button>
-                        <button class="action-btn secondary" onclick="alert('Demo modus - details niet beschikbaar')">
-                            <i class="fas fa-eye"></i> Details
-                        </button>
-                    </div>
+                    
                 `;
                 
                 lijst.appendChild(card);
@@ -791,14 +757,7 @@
                         
                         ${libidoDisplay ? `<div style="margin-bottom: 1rem; text-align: center;">${libidoDisplay}</div>` : ''}
                         
-                        <div class="duif-actions">
-                            <button class="action-btn primary" onclick="editDuif('${duif.id}')">
-                                <i class="fas fa-edit"></i> Bewerken
-                            </button>
-                            <button class="action-btn secondary" onclick="viewDetails('${duif.id}')">
-                                <i class="fas fa-eye"></i> Details
-                            </button>
-                        </div>
+
                     `;
                     
                     lijst.appendChild(card);
