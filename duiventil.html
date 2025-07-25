@@ -555,29 +555,7 @@ const SUPABASE_URL = 'https://ltwolxjbmdopjslnlkx.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
 const client = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Tijd en Weer Widget
-    function updateTime() {
-      const now = new Date();
-      const timeString = now.toLocaleTimeString('nl-NL', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        timeZone: 'Europe/Amsterdam'
-      });
-      const dateString = now.toLocaleDateString('nl-NL', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        timeZone: 'Europe/Amsterdam'
-      });
-      
-      document.getElementById('currentTime').textContent = timeString;
-      document.getElementById('currentDate').textContent = dateString;
-    }
 
-    // Update tijd elke seconde, weer elke 5 minuten
-    setInterval(updateTime, 1000);
-    updateTime();
     
     // Kooien beheer functies
     window.maakNieuweKooi = async function(type) {
