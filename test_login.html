@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Login - Pigeon Legends</title>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,17 +68,15 @@
         function testConfig() {
             const status = document.getElementById('config-status');
             try {
-                if (typeof SUPABASE_CONFIG !== 'undefined') {
-                    status.className = 'status success';
-                    status.innerHTML = `
-                        <strong>✅ Configuratie OK:</strong><br>
-                        URL: ${SUPABASE_CONFIG.url}<br>
-                        Key: ${SUPABASE_CONFIG.anonKey.substring(0, 20)}...
-                    `;
-                } else {
-                    status.className = 'status error';
-                    status.innerHTML = '<strong>❌ Configuratie Fout:</strong> SUPABASE_CONFIG niet gevonden';
-                }
+                const supabaseUrl = 'https://ltwolxjbmdopjslnlkx.supabase.co';
+                const supabaseKey = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
+                
+                status.className = 'status success';
+                status.innerHTML = `
+                    <strong>✅ Configuratie OK:</strong><br>
+                    URL: ${supabaseUrl}<br>
+                    Key: ${supabaseKey.substring(0, 20)}...
+                `;
             } catch (error) {
                 status.className = 'status error';
                 status.innerHTML = `<strong>❌ Configuratie Fout:</strong> ${error.message}`;
@@ -90,7 +87,9 @@
         async function testConnection() {
             const status = document.getElementById('connection-status');
             try {
-                const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+                const supabaseUrl = 'https://ltwolxjbmdopjslnlkx.supabase.co';
+                const supabaseKey = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
+                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
                 
                 // Test een eenvoudige query
                 const { data, error } = await supabase
@@ -117,7 +116,9 @@
             const results = document.getElementById('test-results');
             
             try {
-                const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+                const supabaseUrl = 'https://ltwolxjbmdopjslnlkx.supabase.co';
+                const supabaseKey = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
+                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
                 
                 // Test login met test account
                 const { data, error } = await supabase.auth.signInWithPassword({
