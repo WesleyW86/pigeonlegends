@@ -177,18 +177,22 @@ let flightAlgorithm = new FlightSimulationAlgorithm();
 const supabaseUrl = 'SUPABASE_CONFIG.url';
 const supabaseKey = 'SUPABASE_CONFIG.anonKey';
 
+// Supabase configuratie
+const SUPABASE_URL = 'https://ltwolxjbmdopjslnlkx.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e';
+
 // Wacht tot Supabase geladen is
 let supabase = null;
 
 async function initializeSupabase() {
   if (window.supabase) {
-    supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   } else {
     // Wacht tot Supabase beschikbaar is
     await new Promise(resolve => {
       const checkSupabase = () => {
         if (window.supabase) {
-          supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+          supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
           resolve();
         } else {
           setTimeout(checkSupabase, 100);

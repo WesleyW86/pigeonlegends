@@ -112,7 +112,7 @@
 <body>
 
   <div class="topbar">
-    <a class="back-button" href="index.html" id="back-link" data-translate="back">Hoofdmenu</a>
+            <a class="back-button" href="dashboard.html" id="back-link" data-translate="back">Dashboard</a>
     <h1>ðŸ† <span data-translate="competitions">Wedstrijden</span></h1>
     <div style="width: 80px;"></div>
   </div>
@@ -164,9 +164,8 @@
     setInterval(updateClock, 1000);
     updateClock();
     
-    // Add language selector and translate page
-    addLanguageSelector();
-    translatePage();
+    // Initialize page
+    console.log('Wedstrijden pagina geladen');
     
     // Update back link with language parameter
     const backLink = document.getElementById('back-link');

@@ -500,7 +500,7 @@
 
   <div class="container">
     <div class="header">
-      <a class="back-button" href="index.html" id="back-link">
+              <a class="back-button" href="dashboard.html" id="back-link">
         <i class="fas fa-arrow-left"></i> <span data-translate="back">Terug</span>
       </a>
       <h1>ðŸ  <span data-translate="pigeon_loft">Duiventil</span> Beheer</h1>
@@ -978,14 +978,10 @@ const client = createClient(SUPABASE_URL, SUPABASE_KEY);
     // Start de applicatie
     laadKooien();
     
-    // Add language selector and translate page
-    addLanguageSelector();
-    translatePage();
-    
-    // Update back link with language parameter
+    // Update back link to go to dashboard
     const backLink = document.getElementById('back-link');
     if (backLink) {
-      backLink.href = `index.html?lang=${getCurrentLanguage()}`;
+      backLink.href = 'dashboard.html';
     }
   </script>
 </body>
