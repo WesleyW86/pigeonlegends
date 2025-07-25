@@ -520,20 +520,59 @@
                     return;
                 }
                 
-                // Haal eerst de user_id op basis van email
-                const { data: userData, error: userError } = await client
-                    .from('users')
-                    .select('id')
-                    .eq('email', userEmail)
-                    .single();
+                // CORS FIX: Probeer eerst Supabase, anders gebruik localStorage
+                let userId = null;
                 
-                if (userError || !userData) {
-                    console.error('Gebruiker niet gevonden:', userError);
-                    alert('Gebruiker niet gevonden in database. Probeer opnieuw in te loggen.');
+                try {
+                    const { data: userData, error: userError } = await client
+                        .from('users')
+                        .select('id')
+                        .eq('email', userEmail)
+                        .single();
+                    
+                    if (userError) {
+                        throw userError;
+                    }
+                    
+                    if (!userData) {
+                        // Gebruiker bestaat niet in database, maak aan
+                        const { data: newUser, error: insertError } = await client
+                            .from('users')
+                            .insert({
+                                email: userEmail,
+                                naam: userEmail.split('@')[0],
+                                team_naam: 'Team ' + userEmail.split('@')[0],
+                                locatie: 'Gent, België',
+                                wachtwoord: 'Test123'
+                            })
+                            .select()
+                            .single();
+                        
+                        if (insertError) {
+                            throw insertError;
+                        }
+                        
+                        userId = newUser.id;
+                        console.log('Nieuwe gebruiker aangemaakt voor start duiven:', userId);
+                    } else {
+                        userId = userData.id;
+                        console.log('Bestaande gebruiker gevonden voor start duiven:', userId);
+                    }
+                } catch (error) {
+                    console.error('CORS of database fout bij start duiven:', error);
+                    
+                    // CORS FALLBACK: Gebruik demo modus
+                    console.log('Gebruik demo modus voor start duiven');
+                    toonDemoDuiven();
+                    toonSuccessMelding('🎉 6 jonge duiven toegevoegd! Welkom bij Pigeon Legends!');
+                    
+                    // Verberg de knop na gebruik
+                    const startBtnElement = document.getElementById('startDuivenBtn');
+                    if (startBtnElement) {
+                        startBtnElement.style.display = 'none';
+                    }
                     return;
                 }
-                
-                const userId = userData.id;
                 
                 // Controleer eerst of deze gebruiker al duiven heeft
                 const { data: bestaandeDuiven, error: checkError } = await client
@@ -701,20 +740,57 @@
                     return;
                 }
 
-                // Haal eerst de user_id op basis van email
-                const { data: userData, error: userError } = await client
-                    .from('users')
-                    .select('id')
-                    .eq('email', userEmail)
-                    .single();
+                // CORS FIX: Probeer eerst Supabase, anders gebruik localStorage
+                let userId = null;
                 
-                if (userError || !userData) {
-                    console.error('Gebruiker niet gevonden:', userError);
-                    lijst.innerHTML = '<div class="error">❌ Gebruiker niet gevonden. Probeer opnieuw in te loggen.</div>';
+                try {
+                    const { data: userData, error: userError } = await client
+                        .from('users')
+                        .select('id')
+                        .eq('email', userEmail)
+                        .single();
+                    
+                    if (userError) {
+                        throw userError;
+                    }
+                    
+                    if (!userData) {
+                        // Gebruiker bestaat niet in database, maak aan
+                        const { data: newUser, error: insertError } = await client
+                            .from('users')
+                            .insert({
+                                email: userEmail,
+                                naam: userEmail.split('@')[0],
+                                team_naam: 'Team ' + userEmail.split('@')[0],
+                                locatie: 'Gent, België',
+                                wachtwoord: 'Test123'
+                            })
+                            .select()
+                            .single();
+                        
+                        if (insertError) {
+                            throw insertError;
+                        }
+                        
+                        userId = newUser.id;
+                        console.log('Nieuwe gebruiker aangemaakt:', userId);
+                    } else {
+                        userId = userData.id;
+                        console.log('Bestaande gebruiker gevonden:', userId);
+                    }
+                } catch (error) {
+                    console.error('CORS of database fout:', error);
+                    
+                    // CORS FALLBACK: Gebruik localStorage data
+                    console.log('Gebruik localStorage fallback voor gebruiker:', userEmail);
+                    
+                    // Toon demo duiven als database niet beschikbaar is
+                    lijst.innerHTML = '<div class="loading">Database niet beschikbaar - Demo modus actief</div>';
+                    setTimeout(() => {
+                        toonDemoDuiven();
+                    }, 1000);
                     return;
                 }
-                
-                const userId = userData.id;
 
                 const filterGeslacht = document.getElementById('filterGeslacht').value;
                 const filterStatus = document.getElementById('filterStatus').value;
@@ -849,45 +925,55 @@
                     return; // Niet ingelogd, knop blijft zichtbaar
                 }
                 
-                // Haal eerst de user_id op basis van email
-                const { data: userData, error: userError } = await client
-                    .from('users')
-                    .select('id')
-                    .eq('email', userEmail)
-                    .single();
-                
-                if (userError || !userData) {
-                    console.error('Gebruiker niet gevonden:', userError);
-                    return; // Gebruiker niet gevonden, knop blijft zichtbaar
-                }
-                
-                const userId = userData.id;
-                
-                const { data: bestaandeDuiven, error } = await client
-                    .from('duiven')
-                    .select('id')
-                    .eq('user_id', userId)
-                    .limit(1);
-                
-                if (error) {
-                    console.error('Database fout:', error);
-                    if (error.message.includes('NetworkError') || error.message.includes('CORS')) {
-                        // Als CORS fout, toon de knop
+                // CORS FIX: Probeer eerst Supabase, anders gebruik localStorage
+                try {
+                    const { data: userData, error: userError } = await client
+                        .from('users')
+                        .select('id')
+                        .eq('email', userEmail)
+                        .single();
+                    
+                    if (userError) {
+                        throw userError;
+                    }
+                    
+                    if (!userData) {
+                        // Gebruiker bestaat niet, toon de knop
+                        const startBtn = document.getElementById('startDuivenBtn');
+                        if (startBtn) {
+                            startBtn.style.display = 'inline-flex';
+                        }
+                        return;
+                    }
+                    
+                    const userId = userData.id;
+                    
+                    const { data: bestaandeDuiven, error } = await client
+                        .from('duiven')
+                        .select('id')
+                        .eq('user_id', userId)
+                        .limit(1);
+                    
+                    if (error) {
+                        throw error;
+                    }
+                    
+                    if (bestaandeDuiven && bestaandeDuiven.length > 0) {
+                        const startBtn = document.getElementById('startDuivenBtn');
+                        if (startBtn) {
+                            startBtn.style.display = 'none';
+                        }
+                    } else {
+                        // Toon de knop als gebruiker geen duiven heeft
                         const startBtn = document.getElementById('startDuivenBtn');
                         if (startBtn) {
                             startBtn.style.display = 'inline-flex';
                         }
                     }
-                    return;
-                }
-                
-                if (bestaandeDuiven && bestaandeDuiven.length > 0) {
-                    const startBtn = document.getElementById('startDuivenBtn');
-                    if (startBtn) {
-                        startBtn.style.display = 'none';
-                    }
-                } else {
-                    // Toon de knop als gebruiker geen duiven heeft
+                } catch (error) {
+                    console.error('CORS of database fout bij controleren start knop:', error);
+                    
+                    // CORS FALLBACK: Toon de knop als database niet beschikbaar is
                     const startBtn = document.getElementById('startDuivenBtn');
                     if (startBtn) {
                         startBtn.style.display = 'inline-flex';

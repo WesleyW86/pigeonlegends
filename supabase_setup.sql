@@ -7,6 +7,13 @@
 -- Dit script maakt alle tabellen, constraints en policies voor een volledig duivenspel
 -- =====================================================
 
+-- CORS CONFIGURATIE - TOESTAAN VAN NETLIFY EN LOCALHOST
+-- Voeg CORS origins toe voor Netlify en lokale ontwikkeling
+INSERT INTO auth.config (id, value) 
+VALUES ('cors_origins', '["https://pigeonlegends.netlify.app", "http://localhost:3000", "http://127.0.0.1:5500", "http://localhost:5500"]')
+ON CONFLICT (id) DO UPDATE SET 
+value = '["https://pigeonlegends.netlify.app", "http://localhost:3000", "http://127.0.0.1:5500", "http://localhost:5500"]';
+
 -- 0. CONSTRAINT UPDATES - VOOR BESTAANDE DATABASES
 -- Update afstand_km constraints voor wedstrijden en trainingsvluchten
 DO $$
