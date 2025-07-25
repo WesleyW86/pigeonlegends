@@ -172,29 +172,7 @@
             margin: 0 auto;
         }
 
-        .duiven-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 2rem;
-            justify-content: center;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
 
-        .duiven-grid-wrapper {
-            flex: 1;
-        }
-
-        .prijs-image {
-            width: 200px;
-            height: auto;
-            object-fit: contain;
-            margin-top: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1rem;
-        }
 
         .duif-card {
             background: white;
@@ -346,15 +324,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .duiven-container {
-                flex-direction: column;
-                align-items: center;
-            }
 
-            .prijs-image {
-                width: 150px;
-                margin-top: 1rem;
-            }
         }
     </style>
 </head>
@@ -409,13 +379,8 @@
                 </div>
             </div>
 
-            <div class="duiven-container">
-                <div class="duiven-grid-wrapper">
-                    <div id="duiven-lijst" class="duiven-grid">
-                        <div class="loading">Laden...</div>
-                    </div>
-                </div>
-                <img src="duifprijs.png" alt="Duif Prijs" class="prijs-image">
+            <div id="duiven-lijst" class="duiven-grid">
+                <div class="loading">Laden...</div>
             </div>
 
             <!-- Success notification -->
