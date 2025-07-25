@@ -167,6 +167,33 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 2rem;
+            justify-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .duiven-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            justify-content: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .duiven-grid-wrapper {
+            flex: 1;
+        }
+
+        .prijs-image {
+            width: 200px;
+            height: auto;
+            object-fit: contain;
+            margin-top: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
         }
 
         .duif-card {
@@ -318,6 +345,16 @@
             .duiven-grid {
                 grid-template-columns: 1fr;
             }
+
+            .duiven-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .prijs-image {
+                width: 150px;
+                margin-top: 1rem;
+            }
         }
     </style>
 </head>
@@ -372,8 +409,13 @@
                 </div>
             </div>
 
-            <div id="duiven-lijst" class="duiven-grid">
-                <div class="loading">Laden...</div>
+            <div class="duiven-container">
+                <div class="duiven-grid-wrapper">
+                    <div id="duiven-lijst" class="duiven-grid">
+                        <div class="loading">Laden...</div>
+                    </div>
+                </div>
+                <img src="duifprijs.png" alt="Duif Prijs" class="prijs-image">
             </div>
 
             <!-- Success notification -->
@@ -494,11 +536,26 @@
                     return;
                 }
                 
+                // Haal eerst de user_id op basis van email
+                const { data: userData, error: userError } = await client
+                    .from('users')
+                    .select('id')
+                    .eq('email', userEmail)
+                    .single();
+                
+                if (userError || !userData) {
+                    console.error('Gebruiker niet gevonden:', userError);
+                    alert('Gebruiker niet gevonden in database. Probeer opnieuw in te loggen.');
+                    return;
+                }
+                
+                const userId = userData.id;
+                
                 // Controleer eerst of deze gebruiker al duiven heeft
                 const { data: bestaandeDuiven, error: checkError } = await client
                     .from('duiven')
                     .select('id')
-                    .eq('user_email', userEmail)
+                    .eq('user_id', userId)
                     .limit(1);
                 
                 if (checkError) {
