@@ -287,10 +287,18 @@
         // Check of gebruiker is ingelogd
         const isAuthenticated = localStorage.getItem('user_authenticated');
         const userEmail = localStorage.getItem('user_email');
+        const isRedirecting = localStorage.getItem('redirecting');
+        
+        // Verwijder redirect flag
+        localStorage.removeItem('redirecting');
         
         if (isAuthenticated !== 'true' || !userEmail) {
             // Niet ingelogd, redirect naar login
-            window.location.href = 'login.html';
+            if (!isRedirecting) {
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 100);
+            }
         }
         
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);

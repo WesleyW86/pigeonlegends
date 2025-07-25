@@ -444,7 +444,9 @@ const isAuthenticated = localStorage.getItem('user_authenticated');
 const userEmail = localStorage.getItem('user_email');
 
 if (isAuthenticated !== 'true' || !userEmail) {
-    window.location.href = 'login.html';
+    setTimeout(() => {
+        window.location.href = 'login.html';
+    }, 100);
 }
 
 const SUPABASE_URL = 'https://ltwolxjbmdopjslnlkx.supabase.co';
