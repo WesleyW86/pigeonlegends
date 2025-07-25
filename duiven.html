@@ -808,6 +808,20 @@ const client = createClient(SUPABASE_URL, SUPABASE_KEY);
             window.weatherManager.updateWeatherDisplay();
         }
 
+        // Logout functie
+        window.logout = function() {
+            localStorage.removeItem('user_authenticated');
+            localStorage.removeItem('user_email');
+            localStorage.removeItem('user_name');
+            localStorage.removeItem('team_name');
+            localStorage.removeItem('login_timestamp');
+            localStorage.removeItem('redirecting');
+            
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 100);
+        }
+
         // Start de applicatie
         laadDuiven();
         controleerStartKnop();
