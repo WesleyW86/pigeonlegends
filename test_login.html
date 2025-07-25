@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login - Pigeon Legends</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 Supabase Configuratie Test</h1>
+        
+        <div id="config-status" class="status info">
+            <strong>Configuratie:</strong> Laden...
+        </div>
+        
+        <div id="connection-status" class="status info">
+            <strong>Verbinding:</strong> Testen...
+        </div>
+        
+        <div id="auth-status" class="status info">
+            <strong>Authenticatie:</strong> Testen...
+        </div>
+        
+        <div id="test-results"></div>
+        
+        <button onclick="testConfig()">Test Configuratie</button>
+        <button onclick="testConnection()">Test Verbinding</button>
+        <button onclick="testAuth()">Test Login</button>
+        <button onclick="clearResults()">Wis Resultaten</button>
+    </div>
+
+    <script>
+        // Test configuratie
+        function testConfig() {
+            const status = document.getElementById('config-status');
+            try {
+                if (typeof SUPABASE_CONFIG !== 'undefined') {
+                    status.className = 'status success';
+                    status.innerHTML = `
+                        <strong>✅ Configuratie OK:</strong><br>
+                        URL: ${SUPABASE_CONFIG.url}<br>
+                        Key: ${SUPABASE_CONFIG.anonKey.substring(0, 20)}...
+                    `;
+                } else {
+                    status.className = 'status error';
+                    status.innerHTML = '<strong>❌ Configuratie Fout:</strong> SUPABASE_CONFIG niet gevonden';
+                }
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML = `<strong>❌ Configuratie Fout:</strong> ${error.message}`;
+            }
+        }
+
+        // Test verbinding
+        async function testConnection() {
+            const status = document.getElementById('connection-status');
+            try {
+                const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+                
+                // Test een eenvoudige query
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('count')
+                    .limit(1);
+                
+                if (error) {
+                    status.className = 'status error';
+                    status.innerHTML = `<strong>❌ Verbinding Fout:</strong> ${error.message}`;
+                } else {
+                    status.className = 'status success';
+                    status.innerHTML = '<strong>✅ Verbinding OK:</strong> Database bereikbaar';
+                }
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML = `<strong>❌ Verbinding Fout:</strong> ${error.message}`;
+            }
+        }
+
+        // Test authenticatie
+        async function testAuth() {
+            const status = document.getElementById('auth-status');
+            const results = document.getElementById('test-results');
+            
+            try {
+                const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+                
+                // Test login met test account
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: 'wesley.wyngaerd@outlook.com',
+                    password: 'Test123'
+                });
+                
+                if (error) {
+                    status.className = 'status error';
+                    status.innerHTML = `<strong>❌ Login Fout:</strong> ${error.message}`;
+                    
+                    results.innerHTML += `
+                        <div class="status error">
+                            <strong>Login Test Resultaat:</strong><br>
+                            Fout: ${error.message}<br>
+                            Type: ${error.name}<br>
+                            Status: ${error.status || 'Onbekend'}
+                        </div>
+                    `;
+                } else {
+                    status.className = 'status success';
+                    status.innerHTML = '<strong>✅ Login OK:</strong> Authenticatie werkt';
+                    
+                    results.innerHTML += `
+                        <div class="status success">
+                            <strong>Login Test Resultaat:</strong><br>
+                            Gebruiker: ${data.user.email}<br>
+                            ID: ${data.user.id}<br>
+                            Session: ${data.session ? 'Actief' : 'Geen'}
+                        </div>
+                    `;
+                    
+                    // Logout na test
+                    await supabase.auth.signOut();
+                }
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML = `<strong>❌ Login Fout:</strong> ${error.message}`;
+                
+                results.innerHTML += `
+                    <div class="status error">
+                        <strong>Login Test Resultaat:</strong><br>
+                        Exception: ${error.message}<br>
+                        Type: ${error.name || 'Onbekend'}
+                    </div>
+                `;
+            }
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '';
+        }
+
+        // Auto-test bij laden
+        window.onload = function() {
+            testConfig();
+            setTimeout(testConnection, 1000);
+        };
+    </script>
+</body>
+</html> 
