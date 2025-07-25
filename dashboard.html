@@ -534,9 +534,11 @@
             const teamName = localStorage.getItem('team_name');
             
             if (!email) {
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 100);
+                if (!isRedirecting) {
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 100);
+                }
                 return;
             }
             
@@ -559,13 +561,18 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('team_name');
                 localStorage.removeItem('login_timestamp');
+                localStorage.removeItem('redirecting');
                 
                 // Redirect naar login
-                window.location.href = 'login.html';
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 100);
             } catch (error) {
                 console.error('Fout bij uitloggen:', error);
                 // Force redirect zelfs als er een fout is
-                window.location.href = 'login.html';
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 100);
             }
         }
 

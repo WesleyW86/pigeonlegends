@@ -249,6 +249,7 @@
                 
                 if (hoursSinceLogin < 24) {
                     // Redirect naar profiel als al ingelogd
+                    localStorage.setItem('redirecting', 'true');
                     setTimeout(() => {
                         window.location.href = 'profiel.html';
                     }, 100);

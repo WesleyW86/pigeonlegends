@@ -842,7 +842,23 @@
     import './weather.js';
     import './training-background.js';
     
-    const supabase = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+            // Check authenticatie
+        const isAuthenticated = localStorage.getItem('user_authenticated');
+        const userEmail = localStorage.getItem('user_email');
+        const isRedirecting = localStorage.getItem('redirecting');
+
+        // Verwijder redirect flag
+        localStorage.removeItem('redirecting');
+
+        if (isAuthenticated !== 'true' || !userEmail) {
+            if (!isRedirecting) {
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 100);
+            }
+        }
+
+        const supabase = createClient('https://ltwolxjbmdopjslnlkx.supabase.co', 'sb_publishable_-hFbgnkMK4xn3uAaqJEuxA_C_9HAV6e');
 
     let vlucht = null;
     let trainingInterval = null;
