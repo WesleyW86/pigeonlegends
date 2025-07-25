@@ -185,8 +185,9 @@
         .card-icon img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             border-radius: 16px;
+            padding: 8px;
         }
 
         .card-icon.duiven { background: linear-gradient(135deg, #3b82f6, #2563eb); }
@@ -553,13 +554,16 @@
                 return;
             }
             
-            // Toon gebruikersnaam
-            if (teamName) {
-                document.getElementById('userEmail').textContent = teamName;
-            } else if (userName) {
-                document.getElementById('userEmail').textContent = userName;
-            } else {
-                document.getElementById('userEmail').textContent = email;
+            // Toon gebruikersnaam - alleen als element bestaat
+            const userEmailElement = document.getElementById('userEmail');
+            if (userEmailElement) {
+                if (teamName) {
+                    userEmailElement.textContent = teamName;
+                } else if (userName) {
+                    userEmailElement.textContent = userName;
+                } else {
+                    userEmailElement.textContent = email;
+                }
             }
         }
 
@@ -637,6 +641,14 @@
                 } else {
                     monitor.style.display = 'none';
                 }
+            }
+        }
+
+        // Controleer of elementen bestaan voordat we ze gebruiken
+        function safeUpdateElement(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = value;
             }
         }
 
