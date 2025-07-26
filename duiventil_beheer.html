@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pigeon Legends - Duiventil Beheer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #E3F2FD;
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: #2196F3;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 10px;
+        }
+
+        .back-btn:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-email {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: #f44336;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .page-title p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .loft-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .loft-section {
+            background: #F5F5F5;
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid #E0E0E0;
+        }
+
+        .loft-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #E0E0E0;
+        }
+
+        .loft-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .loft-capacity {
+            background: #2196F3;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .cage-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .cage-section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cage {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #CCC;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #666;
+            background: #F9F9F9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .cage:hover {
+            border-color: #2196F3;
+            background: #E3F2FD;
+        }
+
+        .cage.occupied {
+            border-color: #4CAF50;
+            background: #E8F5E8;
+            color: #2E7D32;
+        }
+
+        .cage.breeding {
+            border-color: #FF9800;
+            background: #FFF3E0;
+        }
+
+        .cage-id {
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+        }
+
+        .cage-pigeon {
+            font-size: 0.6rem;
+            text-align: center;
+        }
+
+        .cage-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: #45a049;
+        }
+
+        .action-btn.secondary {
+            background: #FF9800;
+            color: white;
+        }
+
+        .action-btn.secondary:hover {
+            background: #F57C00;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .shop-link {
+            background: #2196F3;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .shop-link:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+                padding: 1rem;
+            }
+            
+            .content-card {
+                padding: 1.5rem;
+            }
+            
+            .page-title h2 {
+                font-size: 1.5rem;
+            }
+            
+            .loft-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .cage-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-card {
+                padding: 1rem;
+            }
+            
+            .cage-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .cage {
+                width: 70px;
+                height: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <a href="dashboard.html" class="back-btn">
+                    Hoofdmenu
+                </a>
+                <a href="duiventil.html" class="back-btn">
+                    Duiventil Winkel
+                </a>
+            </div>
+            <div class="user-info">
+                <span class="user-email" id="userEmail">Gebruiker</span>
+                <button class="logout-btn" onclick="logout()">Uitloggen</button>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div class="page-title">
+                <h2>Duiventil Beheer</h2>
+                <p>Plaats je duiven in kooien en beheer je duiventillen</p>
+            </div>
+
+            <div id="loftContainer">
+                <!-- Duiventillen worden hier dynamisch geladen -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="config.js"></script>
+    <script>
+        // Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+        // Duiventil configuratie (zelfde als in duiventil.html)
+        const LOFT_TYPES = [
+            {
+                id: 1,
+                name: 'Starters Loft',
+                image: 'til1.png',
+                breedingCages: 4,
+                flightCages: 17,
+                totalCapacity: 25,
+                price: 0,
+                status: 'owned'
+            },
+            {
+                id: 2,
+                name: 'Hobby Loft',
+                image: 'til2.png',
+                breedingCages: 8,
+                flightCages: 34,
+                totalCapacity: 50,
+                price: 1000,
+                status: 'available'
+            },
+            {
+                id: 3,
+                name: 'Pro Loft',
+                image: 'til3.png',
+                breedingCages: 12,
+                flightCages: 51,
+                totalCapacity: 75,
+                price: 2500,
+                status: 'locked'
+            },
+            {
+                id: 4,
+                name: 'Master Loft',
+                image: 'til4.png',
+                breedingCages: 16,
+                flightCages: 68,
+                totalCapacity: 100,
+                price: 5000,
+                status: 'locked'
+            }
+        ];
+
+        // Check authenticatie
+        async function checkAuth() {
+            const isAuthenticated = localStorage.getItem('user_authenticated');
+            const demoMode = localStorage.getItem('demo_mode');
+            
+            if (!isAuthenticated && !demoMode) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Laad gebruiker info
+            await loadUserInfo();
+            
+            // Laad duiventillen
+            await loadLofts();
+        }
+
+        async function loadUserInfo() {
+            const userEmail = localStorage.getItem('user_email') || 'Demo Gebruiker';
+            
+            try {
+                // Probeer eerst database
+                const { data: userData, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('email', userEmail)
+                    .single();
+
+                if (error) throw error;
+                
+                if (userData) {
+                    const teamName = userData.team_name || userData.full_name || userEmail;
+                    document.getElementById('userEmail').textContent = teamName;
+                    return;
+                }
+            } catch (error) {
+                console.log('Database niet beschikbaar, gebruik localStorage:', error.message);
+            }
+            
+            // Fallback naar localStorage
+            const profileData = JSON.parse(localStorage.getItem('profile_data') || '{}');
+            const teamName = profileData.teamName || userEmail;
+            document.getElementById('userEmail').textContent = teamName;
+        }
+
+        async function loadLofts() {
+            const userEmail = localStorage.getItem('user_email');
+            const container = document.getElementById('loftContainer');
+            
+            // Voorlopig toon demo data
+            const ownedLofts = LOFT_TYPES.filter(loft => loft.status === 'owned');
+            
+            if (ownedLofts.length > 0) {
+                const loftsHTML = ownedLofts.map(loft => `
+                    <div class="loft-section">
+                        <div class="loft-header">
+                            <span class="loft-name">${loft.name}</span>
+                            <span class="loft-capacity">0/${loft.totalCapacity}</span>
+                        </div>
+                        
+                        <div class="cage-section">
+                            <div class="cage-section-title">
+                                🏠 Kweekkooien (${loft.breedingCages})
+                            </div>
+                            <div class="cage-grid">
+                                ${generateBreedingCages(loft.id, loft.breedingCages)}
+                            </div>
+                        </div>
+                        
+                        <div class="cage-section">
+                            <div class="cage-section-title">
+                                ✈️ Vliegkooien (${loft.flightCages})
+                            </div>
+                            <div class="cage-grid">
+                                ${generateFlightCages(loft.id, loft.flightCages)}
+                            </div>
+                        </div>
+                        
+                        <div class="cage-actions">
+                            <button class="action-btn primary" onclick="manageLoft(${loft.id})">Beheer Duiventil</button>
+                            <button class="action-btn secondary" onclick="viewLoftInfo(${loft.id})">Info</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                container.innerHTML = `<div class="loft-overview">${loftsHTML}</div>`;
+            } else {
+                showEmptyState();
+            }
+        }
+
+        function generateBreedingCages(loftId, count) {
+            let cagesHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const cageId = `B${loftId}-${i}`; // B voor Breeding
+                cagesHTML += `
+                    <div class="cage breeding" onclick="manageCage('${cageId}')">
+                        <div class="cage-id">${cageId}</div>
+                        <div class="cage-pigeon">2 duiven</div>
+                    </div>
+                `;
+            }
+            return cagesHTML;
+        }
+
+        function generateFlightCages(loftId, count) {
+            let cagesHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const cageId = `F${loftId}-${i}`; // F voor Flight
+                cagesHTML += `
+                    <div class="cage" onclick="manageCage('${cageId}')">
+                        <div class="cage-id">${cageId}</div>
+                        <div class="cage-pigeon">1 duif</div>
+                    </div>
+                `;
+            }
+            return cagesHTML;
+        }
+
+        function showEmptyState() {
+            const container = document.getElementById('loftContainer');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <h3>Nog geen duiventillen</h3>
+                    <p>Je hebt nog geen duiventillen om te beheren. Koop eerst een duiventil in de winkel!</p>
+                    <a href="duiventil.html" class="shop-link">Ga naar Duiventil Winkel</a>
+                </div>
+            `;
+        }
+
+        function manageCage(cageId) {
+            alert(`Beheer kooi ${cageId} - komt binnenkort!\n\nUnieke ID: ${cageId}\nDeze ID wordt gebruikt om duiven op te slaan.`);
+        }
+
+        function manageLoft(loftId) {
+            alert(`Beheer duiventil ${loftId} - komt binnenkort!`);
+        }
+
+        function viewLoftInfo(loftId) {
+            const loft = LOFT_TYPES.find(l => l.id === loftId);
+            if (loft) {
+                alert(`${loft.name}\n\nKweekkooien: ${loft.breedingCages}\nVliegkooien: ${loft.flightCages}\nTotale capaciteit: ${loft.totalCapacity} duiven`);
+            }
+        }
+        
+        function logout() {
+            // Verwijder alle localStorage data
+            localStorage.removeItem('user_email');
+            localStorage.removeItem('user_authenticated');
+            localStorage.removeItem('login_timestamp');
+            localStorage.removeItem('demo_mode');
+            localStorage.removeItem('profile_data');
+            
+            // Ga terug naar login pagina
+            window.location.href = 'index.html';
+        }
+        
+        // Start de applicatie
+        checkAuth();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pigeon Legends - Duiventil Winkel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #E3F2FD;
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: #2196F3;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 10px;
+        }
+
+        .back-btn:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-email {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: #f44336;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .page-title p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .loft-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .current-loft-section {
+            background: #E8F5E8;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid #4CAF50;
+        }
+
+        .current-loft-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .current-loft-image {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            margin: 1rem auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .current-loft-image:hover {
+            transform: scale(1.05);
+        }
+
+        .current-loft-details {
+            margin: 1rem 0;
+            text-align: left;
+        }
+
+        .current-loft-details h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .current-loft-details p {
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        .upgrade-section {
+            background: #E3F2FD;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .upgrade-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .upgrade-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .loft-option {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid #E0E0E0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .loft-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #2196F3;
+        }
+
+        .loft-option.owned {
+            border-color: #4CAF50;
+            background: #E8F5E8;
+        }
+
+        .loft-option img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        .loft-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .loft-capacity {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .loft-price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2196F3;
+            margin-bottom: 1rem;
+        }
+
+        .loft-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .loft-status.owned {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .loft-status.available {
+            background: #FF9800;
+            color: white;
+        }
+
+        .loft-status.locked {
+            background: #9E9E9E;
+            color: white;
+        }
+
+        /* Voeding Sectie */
+        .food-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #E0E0E0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title h3 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .food-item {
+            background: white;
+            border: 2px solid #E0E0E0;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .food-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #4CAF50;
+        }
+
+        .food-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        .food-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .food-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .food-price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .food-energy {
+            background: #FFF3E0;
+            color: #E65100;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .buy-food-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .buy-food-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* Modal voor grote foto's */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: #bbb;
+        }
+
+        .loft-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .loft-card {
+            background: #F5F5F5;
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid #E0E0E0;
+            transition: all 0.3s ease;
+        }
+
+        .loft-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .loft-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .loft-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .loft-capacity {
+            background: #2196F3;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .loft-location {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .pigeon-slots {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .slot {
+            width: 40px;
+            height: 40px;
+            border: 2px dashed #CCC;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #999;
+            background: #F9F9F9;
+        }
+
+        .slot.occupied {
+            border-color: #4CAF50;
+            background: #E8F5E8;
+            color: #2E7D32;
+        }
+
+        .loft-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: #45a049;
+        }
+
+        .action-btn.secondary {
+            background: #FF9800;
+            color: white;
+        }
+
+        .action-btn.secondary:hover {
+            background: #F57C00;
+        }
+
+
+
+
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+                padding: 1rem;
+            }
+            
+            .content-card {
+                padding: 1.5rem;
+            }
+            
+            .page-title h2 {
+                font-size: 1.5rem;
+            }
+            
+            .loft-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .pigeon-slots {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-card {
+                padding: 1rem;
+            }
+            
+            .loft-card {
+                padding: 1rem;
+            }
+            
+            .pigeon-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <a href="dashboard.html" class="back-btn">
+                    Hoofdmenu
+                </a>
+            </div>
+            <div class="user-info">
+                <span class="user-email" id="userEmail">Gebruiker</span>
+                <button class="logout-btn" onclick="logout()">Uitloggen</button>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div class="page-title">
+                <h2>Duiventil Winkel</h2>
+                <p>Bekijk duiventil informatie, koop upgrades en voeding</p>
+            </div>
+
+            <div class="loft-layout">
+                <div class="current-loft-section" id="currentLoftSection">
+                    <h3 class="current-loft-title">Huidige Duiventil</h3>
+                    <div id="currentLoftContent">
+                        <!-- Huidige duiventil wordt hier getoond -->
+                    </div>
+                </div>
+
+                <div class="upgrade-section">
+                    <h3 class="upgrade-title">Upgrade Opties</h3>
+                    <p>Koop betere duiventillen voor meer capaciteit</p>
+                    
+                    <div class="upgrade-grid" id="upgradeGrid">
+                        <!-- Upgrade opties worden hier dynamisch geladen -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voeding Sectie -->
+            <div class="food-section">
+                <div class="section-title">
+                    <h3>🛒 Voeding Winkel</h3>
+                    <p>Koop voeding voor je duiven</p>
+                </div>
+                
+                <div class="food-grid" id="foodContainer">
+                    <!-- Voeding wordt hier dynamisch geladen -->
+                </div>
+            </div>
+
+            <!-- Modal voor grote foto's -->
+            <div id="imageModal" class="modal">
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <div class="modal-content">
+                    <img id="modalImage" class="modal-image" src="" alt="Grote foto">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="config.js"></script>
+    <script>
+        // Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+        // Duiventil configuratie
+        const LOFT_TYPES = [
+            {
+                id: 1,
+                name: 'Starters Loft',
+                image: 'til1.png',
+                breedingCages: 4,
+                flightCages: 17,
+                totalCapacity: 25,
+                price: 0,
+                status: 'owned' // Gratis starter
+            },
+            {
+                id: 2,
+                name: 'Hobby Loft',
+                image: 'til2.png',
+                breedingCages: 8,
+                flightCages: 34,
+                totalCapacity: 50,
+                price: 1000,
+                status: 'available'
+            },
+            {
+                id: 3,
+                name: 'Pro Loft',
+                image: 'til3.png',
+                breedingCages: 12,
+                flightCages: 51,
+                totalCapacity: 75,
+                price: 2500,
+                status: 'locked'
+            },
+            {
+                id: 4,
+                name: 'Master Loft',
+                image: 'til4.png',
+                breedingCages: 16,
+                flightCages: 68,
+                totalCapacity: 100,
+                price: 5000,
+                status: 'locked'
+            }
+        ];
+
+        // Voeding configuratie
+        const FOOD_TYPES = [
+            {
+                id: 1,
+                name: 'Maïs',
+                image: 'mais.png',
+                pricePerKg: 2.50,
+                energyValue: 80,
+                description: 'Basis voeding voor duiven, rijk aan koolhydraten'
+            },
+            {
+                id: 2,
+                name: 'Tarwe',
+                image: 'tarwe.png',
+                pricePerKg: 3.00,
+                energyValue: 90,
+                description: 'Gezonde graansoort, goed voor energie'
+            },
+            {
+                id: 3,
+                name: 'Gerst',
+                image: 'gerst.png',
+                pricePerKg: 2.80,
+                energyValue: 85,
+                description: 'Licht verteerbaar, ideaal voor jonge duiven'
+            },
+            {
+                id: 4,
+                name: 'Pinda\'s',
+                image: 'pindas.png',
+                pricePerKg: 8.50,
+                energyValue: 120,
+                description: 'Premium voeding, hoog in eiwitten en vetten'
+            }
+        ];
+
+        // Check authenticatie
+        async function checkAuth() {
+            const isAuthenticated = localStorage.getItem('user_authenticated');
+            const demoMode = localStorage.getItem('demo_mode');
+            
+            if (!isAuthenticated && !demoMode) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Laad gebruiker info
+            await loadUserInfo();
+            
+            // Laad huidige duiventil
+            loadCurrentLoft();
+            
+            // Laad upgrade opties
+            loadUpgradeOptions();
+            
+            // Laad voeding winkel
+            loadFoodShop();
+        }
+
+        async function loadUserInfo() {
+            const userEmail = localStorage.getItem('user_email') || 'Demo Gebruiker';
+            
+            try {
+                // Probeer eerst database
+                const { data: userData, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('email', userEmail)
+                    .single();
+
+                if (error) throw error;
+                
+                if (userData) {
+                    const teamName = userData.team_name || userData.full_name || userEmail;
+                    document.getElementById('userEmail').textContent = teamName;
+                    return;
+                }
+            } catch (error) {
+                console.log('Database niet beschikbaar, gebruik localStorage:', error.message);
+            }
+            
+            // Fallback naar localStorage
+            const profileData = JSON.parse(localStorage.getItem('profile_data') || '{}');
+            const teamName = profileData.teamName || userEmail;
+            document.getElementById('userEmail').textContent = teamName;
+        }
+
+        function loadCurrentLoft() {
+            const container = document.getElementById('currentLoftContent');
+            
+            // Zoek de hoogste gekochte duiventil
+            const ownedLofts = LOFT_TYPES.filter(loft => loft.status === 'owned');
+            const currentLoft = ownedLofts[ownedLofts.length - 1] || LOFT_TYPES[0];
+            
+            const currentLoftHTML = `
+                <img src="${currentLoft.image}" alt="${currentLoft.name}" class="current-loft-image" 
+                     onclick="openModal('${currentLoft.image}')" onerror="this.src='Duifjong.png'">
+                <div class="current-loft-details">
+                    <h4>${currentLoft.name}</h4>
+                    <p><strong>Kweekkooien:</strong> ${currentLoft.breedingCages}</p>
+                    <p><strong>Vliegkooien:</strong> ${currentLoft.flightCages}</p>
+                    <p><strong>Totale capaciteit:</strong> ${currentLoft.totalCapacity} duiven</p>
+                    <p><strong>Status:</strong> <span class="loft-status owned">In Bezit</span></p>
+                </div>
+            `;
+            
+            container.innerHTML = currentLoftHTML;
+        }
+
+        function loadUpgradeOptions() {
+            const grid = document.getElementById('upgradeGrid');
+            
+            // Toon alleen beschikbare upgrades
+            const availableUpgrades = LOFT_TYPES.filter(loft => 
+                loft.status === 'available' || loft.status === 'locked'
+            );
+            
+            const optionsHTML = availableUpgrades.map(loft => `
+                <div class="loft-option ${loft.status === 'owned' ? 'owned' : ''}" onclick="handleLoftClick(${loft.id})">
+                    <img src="${loft.image}" alt="${loft.name}" 
+                         onclick="openModal('${loft.image}')" onerror="this.src='Duifjong.png'">
+                    <div class="loft-name">${loft.name}</div>
+                    <div class="loft-capacity">
+                        ${loft.breedingCages} kweekkooien<br>
+                        ${loft.flightCages} vliegkooien<br>
+                        <strong>Totaal: ${loft.totalCapacity} duiven</strong>
+                    </div>
+                    <div class="loft-price">
+                        ${loft.price === 0 ? 'Gratis' : `€${loft.price}`}
+                    </div>
+                    <div class="loft-status ${loft.status}">
+                        ${getStatusText(loft.status)}
+                    </div>
+                </div>
+            `).join('');
+            
+            grid.innerHTML = optionsHTML;
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'owned': return 'In Bezit';
+                case 'available': return 'Beschikbaar';
+                case 'locked': return 'Vergrendeld';
+                default: return 'Onbekend';
+            }
+        }
+
+        function handleLoftClick(loftId) {
+            const loft = LOFT_TYPES.find(l => l.id === loftId);
+            
+            if (loft.status === 'owned') {
+                alert(`Je bezit al ${loft.name}!`);
+                return;
+            }
+            
+            if (loft.status === 'locked') {
+                alert(`${loft.name} is nog vergrendeld. Koop eerst de vorige duiventil!`);
+                return;
+            }
+            
+            if (loft.status === 'available') {
+                const confirmed = confirm(`Wil je ${loft.name} kopen voor €${loft.price}?`);
+                if (confirmed) {
+                    purchaseLoft(loft);
+                }
+            }
+        }
+
+        function purchaseLoft(loft) {
+            // Voorlopig demo mode - later koppelen aan financiën
+            alert(`Gefeliciteerd! Je hebt ${loft.name} gekocht!`);
+            
+            // Update status naar owned
+            loft.status = 'owned';
+            
+            // Herlaad beide secties
+            loadCurrentLoft();
+            loadUpgradeOptions();
+        }
+
+        function openModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            
+            modalImage.src = imageSrc;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+        }
+
+        // Sluit modal als er buiten wordt geklikt
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+
+
+        function generateSlots(capacity) {
+            let slotsHTML = '';
+            for (let i = 1; i <= capacity; i++) {
+                slotsHTML += `<div class="slot">${i}</div>`;
+            }
+            return slotsHTML;
+        }
+
+
+
+
+
+        function managePigeons(loftId) {
+            alert(`Beheer duiven voor duiventil ${loftId} - komt binnenkort!`);
+        }
+
+        function editLoft(loftId) {
+            alert(`Bewerk duiventil ${loftId} - komt binnenkort!`);
+        }
+
+        function loadFoodShop() {
+            const container = document.getElementById('foodContainer');
+            
+            const foodHTML = FOOD_TYPES.map(food => `
+                <div class="food-item" onclick="handleFoodClick(${food.id})">
+                    <img src="${food.image}" alt="${food.name}" onerror="this.src='Duifjong.png'">
+                    <div class="food-name">${food.name}</div>
+                    <div class="food-description">${food.description}</div>
+                    <div class="food-price">€${food.pricePerKg.toFixed(2)} per kg</div>
+                    <div class="food-energy">⚡ ${food.energyValue} energie</div>
+                    <button class="buy-food-btn" onclick="event.stopPropagation(); buyFood(${food.id})">
+                        Koop Voeding
+                    </button>
+                </div>
+            `).join('');
+            
+            container.innerHTML = foodHTML;
+        }
+
+        function handleFoodClick(foodId) {
+            const food = FOOD_TYPES.find(f => f.id === foodId);
+            if (food) {
+                alert(`${food.name}\n\nPrijs: €${food.pricePerKg.toFixed(2)} per kg\nEnergie: ${food.energyValue}\n\n${food.description}`);
+            }
+        }
+
+        function buyFood(foodId) {
+            const food = FOOD_TYPES.find(f => f.id === foodId);
+            if (!food) return;
+            
+            const quantity = prompt(`Hoeveel kg ${food.name} wil je kopen?\n\nPrijs: €${food.pricePerKg.toFixed(2)} per kg\n\nVoer een aantal in:`, "1");
+            
+            if (quantity && !isNaN(quantity) && quantity > 0) {
+                const totalCost = food.pricePerKg * parseFloat(quantity);
+                const confirmed = confirm(`Je wilt ${quantity} kg ${food.name} kopen voor €${totalCost.toFixed(2)}?\n\nDit wordt later verrekend in je financiën.`);
+                
+                if (confirmed) {
+                    // Voorlopig demo mode - later koppelen aan database en financiën
+                    alert(`Gefeliciteerd! Je hebt ${quantity} kg ${food.name} gekocht voor €${totalCost.toFixed(2)}!\n\nDe voeding is toegevoegd aan je voorraad.`);
+                }
+            }
+        }
+        
+        function logout() {
+            // Verwijder alle localStorage data
+            localStorage.removeItem('user_email');
+            localStorage.removeItem('user_authenticated');
+            localStorage.removeItem('login_timestamp');
+            localStorage.removeItem('demo_mode');
+            localStorage.removeItem('profile_data');
+            
+            // Ga terug naar login pagina
+            window.location.href = 'index.html';
+        }
+        
+        // Start de applicatie
+        checkAuth();
+    </script>
+</body>
+</html> 

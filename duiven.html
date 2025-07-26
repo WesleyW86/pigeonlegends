@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pigeon Legends - Duiven Beheer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #E3F2FD;
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: #2196F3;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 10px;
+        }
+
+        .back-btn:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-email {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: #f44336;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .page-title p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .actions-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+
+
+        .filter-dropdowns {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            color: #333;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select {
+            padding: 8px 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .filter-group select:hover {
+            border-color: #2196F3;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .btn-warning {
+            background: #FF9800;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #F57C00;
+            transform: translateY(-2px);
+        }
+
+        .pigeons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .pigeon-card {
+            border-radius: 12px;
+            padding: 1rem;
+            border: 2px solid #E0E0E0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .pigeon-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .pigeon-card.male {
+            border-left: 6px solid #2196F3;
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+        }
+
+        .pigeon-card.female {
+            border-left: 6px solid #E91E63;
+            background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD9 100%);
+        }
+
+        .pigeon-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .pigeon-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            line-height: 1.2;
+            min-height: 2.4rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .pigeon-gender {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .pigeon-gender.male {
+            background: #2196F3;
+            color: white;
+        }
+
+        .pigeon-gender.female {
+            background: #E91E63;
+            color: white;
+        }
+
+        .pigeon-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.4rem 0.6rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+        }
+
+        .detail-label {
+            color: #555;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: bold;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 6px;
+            border-radius: 8px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .detail-value.male {
+            background: #2196F3;
+            color: white;
+        }
+
+        .detail-value.female {
+            background: #E91E63;
+            color: white;
+        }
+
+        .pigeon-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border-radius: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-edit {
+            background: #FF9800;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #F57C00;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+                padding: 1rem;
+            }
+            
+            .content-card {
+                padding: 1.5rem;
+            }
+            
+            .page-title h2 {
+                font-size: 1.5rem;
+            }
+            
+            .actions-section {
+                flex-direction: column;
+            }
+            
+            .pigeons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-card {
+                padding: 1rem;
+            }
+            
+            .pigeon-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <a href="dashboard.html" class="back-btn">
+                    Hoofdmenu
+                </a>
+            </div>
+            <div class="user-info">
+                <span class="user-email" id="userEmail">Gebruiker</span>
+                <button class="logout-btn" onclick="logout()">Uitloggen</button>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div class="page-title">
+                <h2>Duiven Beheer</h2>
+                <p>Beheer je duiven en bekijk hun eigenschappen</p>
+            </div>
+
+                    <div class="actions-section">
+            <button class="btn btn-success" id="startButton">
+                Start met 6 Duiven
+            </button>
+            <div class="filter-dropdowns">
+                <div class="filter-group">
+                    <label for="genderFilter">Gender:</label>
+                    <select id="genderFilter" onchange="filterByGender(this.value)">
+                        <option value="all">Alle Duiven</option>
+                        <option value="Mannetje">Mannetjes</option>
+                        <option value="Vrouwtje">Vrouwtjes</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="talentFilter">Talent:</label>
+                    <select id="talentFilter" onchange="filterByTalent(this.value)">
+                        <option value="all">Alle Talenten</option>
+                        <option value="Kooihanger">Kooihanger</option>
+                        <option value="Blunderduif">Blunderduif</option>
+                        <option value="Straatduif">Straatduif</option>
+                        <option value="Doolhofduif">Doolhofduif</option>
+                        <option value="Clubkampioen">Clubkampioen</option>
+                        <option value="Supersonische Raketduif">Supersonische Raketduif</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+            <div id="pigeonsContainer">
+                <div class="loading">Laden...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="config.js"></script>
+    <script>
+        console.log('JavaScript wordt geladen...'); // Test log
+        
+        // Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+        // Check authenticatie
+        async function checkAuth() {
+            const isAuthenticated = localStorage.getItem('user_authenticated');
+            const demoMode = localStorage.getItem('demo_mode');
+            
+            if (!isAuthenticated && !demoMode) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Toon gebruiker info
+            const userEmail = localStorage.getItem('user_email') || 'Demo Gebruiker';
+            const profileData = JSON.parse(localStorage.getItem('profile_data') || '{}');
+            const teamName = profileData.teamName || userEmail;
+            document.getElementById('userEmail').textContent = teamName;
+            
+            // Laad duiven
+            await loadPigeons();
+        }
+        
+        async function loadPigeons() {
+            const container = document.getElementById('pigeonsContainer');
+            container.innerHTML = '<div class="loading">Laden...</div>';
+            
+            try {
+                const userEmail = localStorage.getItem('user_email');
+                if (!userEmail) {
+                    loadDemoPigeons();
+                    return;
+                }
+                
+                const { data: userData, error: userError } = await supabase
+                    .from('users')
+                    .select('id')
+                    .eq('email', userEmail)
+                    .single();
+                
+                if (userError) throw userError;
+                
+                const { data: pigeons, error } = await supabase
+                    .from('pigeons')
+                    .select('*')
+                    .eq('user_id', userData.id)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                allPigeons = pigeons || [];
+                displayPigeons(allPigeons);
+                console.log('Duiven geladen uit database:', pigeons);
+                
+            } catch (error) {
+                console.log('Database niet beschikbaar, gebruik localStorage:', error.message);
+                loadDemoPigeons();
+            }
+        }
+        
+        function loadDemoPigeons() {
+            const demoPigeons = JSON.parse(localStorage.getItem('demo_pigeons') || '[]');
+            allPigeons = demoPigeons;
+            displayPigeons(demoPigeons);
+        }
+        
+        function displayPigeons(pigeons) {
+            const container = document.getElementById('pigeonsContainer');
+            
+            if (pigeons.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>Nog geen duiven</h3>
+                        <p>Voeg je eerste duif toe of start met 6 duiven!</p>
+                    </div>
+                `;
+                    return;
+                }
+
+            container.innerHTML = `
+                <div class="pigeons-grid">
+                    ${pigeons.map(pigeon => `
+                        <div class="pigeon-card ${pigeon.gender === 'Mannetje' ? 'male' : 'female'}" data-pigeon-id="${pigeon.id}">
+                            <div class="pigeon-header">
+                                <div class="pigeon-name">${pigeon.name}</div>
+                            </div>
+                            <div class="pigeon-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Talent:</span>
+                                    <span class="detail-value">${pigeon.talent || 'Onbekend'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Leeftijd:</span>
+                                    <span class="detail-value">${pigeon.age_years || 0}y ${pigeon.age_months || 0}m</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Energie:</span>
+                                    <span class="detail-value">${pigeon.energy || 100}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Vormpijl:</span>
+                                    <span class="detail-value">${pigeon.vormpijl || 0}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Snelheid:</span>
+                                    <span class="detail-value">${pigeon.snelheid || 0}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Conditie:</span>
+                                    <span class="detail-value">${pigeon.conditie || 0}</span>
+                            </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Techniek:</span>
+                                    <span class="detail-value">${pigeon.techniek || 0}</span>
+                        </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Oriëntatie:</span>
+                                    <span class="detail-value">${pigeon.orientatie || 0}</span>
+                            </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Ervaring:</span>
+                                    <span class="detail-value">${pigeon.ervaring || 0}</span>
+                            </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Aerodynamica:</span>
+                                    <span class="detail-value">${pigeon.aerodynamica || 0}</span>
+                            </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Intelligentie:</span>
+                                    <span class="detail-value">${pigeon.intelligentie || 0}</span>
+                            </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Nachtvliegen:</span>
+                                    <span class="detail-value">${pigeon.nachtvliegen || 0}</span>
+                            </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Libido:</span>
+                                    <span class="detail-value">${pigeon.libido || 1}/5</span>
+                            </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Gender:</span>
+                                    <span class="detail-value ${pigeon.gender === 'Mannetje' ? 'male' : 'female'}">${pigeon.gender}</span>
+                            </div>
+                            </div>
+                            <div class="pigeon-actions">
+                                <button class="btn btn-small btn-edit" onclick="editPigeon(${pigeon.id})">
+                                    ✏️ Bewerken
+                                </button>
+                                <button class="btn btn-small btn-delete" onclick="deletePigeon(${pigeon.id})">
+                                    🗑️ Verwijderen
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                        </div>
+                    `;
+        }
+        
+        function showAddPigeonForm() {
+            alert('Nieuwe duif toevoegen - komt binnenkort!');
+        }
+        
+        // Namen arrays
+        const maleNames = [
+            'Tomo', 'Wes', 'Max', 'Bram', 'Jens', 'Lars', 'Finn', 'Koen', 'Daan', 'Sem',
+            'Milan', 'Thijs', 'Jesse', 'Tim', 'Niels', 'Sven', 'Bart', 'Jeroen', 'Mark', 'Rob',
+            'Tom', 'Jan', 'Piet', 'Klaas', 'Henk', 'Gerard', 'Frans', 'Wim', 'Hans', 'Peter',
+            'Paul', 'Johan', 'Erik', 'Dirk', 'Rik', 'Bert', 'Ron', 'Ben', 'Sam', 'Alex',
+            'Nick', 'Rick', 'Mike', 'Luke', 'Jake', 'Ryan', 'Tyler', 'Dylan', 'Brandon', 'Kevin'
+        ];
+
+        const femaleNames = [
+            'Luna', 'Emma', 'Sophie', 'Lisa', 'Anna', 'Julia', 'Sara', 'Eva', 'Nora', 'Mila',
+            'Lotte', 'Fleur', 'Lieve', 'Lien', 'Lien', 'Lien', 'Lien', 'Lien', 'Lien', 'Lien',
+            'Marie', 'Clara', 'Isabella', 'Olivia', 'Ava', 'Mia', 'Zoe', 'Lily', 'Chloe', 'Grace',
+            'Ella', 'Scarlett', 'Victoria', 'Riley', 'Aria', 'Lily', 'Zoe', 'Chloe', 'Penelope', 'Layla',
+            'Riley', 'Zoey', 'Nora', 'Lily', 'Eleanor', 'Hannah', 'Lucy', 'Eliana', 'Ivy', 'Trinity'
+        ];
+
+        const lastNames = [
+            'de Verschrikkelijke', 'de Onverwoestbare', 'de Winderige', 'de Onverzadige', 'de Onverslaanbare',
+            'de Bliksemsnelle', 'de Onvermoeibare', 'de Onverstoorbare', 'de Onverwachte', 'de Onvergetelijke',
+            'de Onverwoestbare', 'de Onverzadigbare', 'de Onverstoorbare', 'de Onverwachte', 'de Onvergetelijke',
+            'de Onverwoestbare', 'de Onverzadigbare', 'de Onverstoorbare', 'de Onverwachte', 'de Onvergetelijke',
+            'de Onverwoestbare', 'de Onverzadigbare', 'de Onverstoorbare', 'de Onverwachte', 'de Onvergetelijke',
+            'de Onverwoestbare', 'de Onverzadigbare', 'de Onverstoorbare', 'de Onverwachte', 'de Onvergetelijke',
+            'de Onverwoestbare', 'de Onverzadigbare', 'de Onverstoorbare', 'de Onverwachte', 'de Onvergetelijke',
+            'de Onverwoestbare', 'de Onverzadigbare', 'de Onverstoorbare', 'de Onverwachte', 'de Onvergetelijke',
+            'de Onverwoestbare', 'de Onverzadigbare', 'de Onverstoorbare', 'de Onverwachte', 'de Onvergetelijke',
+            'de Onverwoestbare', 'de Onverzadigbare', 'de Onverstoorbare', 'de Onverwachte', 'de Onvergetelijke',
+            'de Onverwoestbare', 'de Onverzadigbare', 'de Onverstoorbare', 'de Onverwachte', 'de Onvergetelijke'
+        ];
+
+        const talents = [
+            'Kooihanger', 'Blunderduif', 'Straatduif', 'Doolhofduif', 'Clubkampioen', 'Supersonische Raketduif'
+        ];
+
+        function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function createRandomPigeon(id, gender) {
+            const firstName = gender === 'Mannetje' ? getRandomElement(maleNames) : getRandomElement(femaleNames);
+            const lastName = getRandomElement(lastNames);
+            const fullName = `${firstName} ${lastName}`;
+            
+            return {
+                id: id,
+                name: fullName,
+                gender: gender,
+                age_years: 0,
+                age_months: 0,
+                energy: 100,
+                vormpijl: 0,
+                snelheid: 0,
+                conditie: 0,
+                techniek: 0,
+                orientatie: 0,
+                ervaring: 0,
+                aerodynamica: 0,
+                intelligentie: 0,
+                nachtvliegen: 0,
+                libido: getRandomNumber(1, 5),
+                talent: getRandomElement(talents)
+            };
+        }
+
+        async function startWith6Pigeons() {
+            try {
+                const userEmail = localStorage.getItem('user_email');
+                
+                if (!userEmail) {
+                    // Demo mode - gebruik localStorage
+                    const demoPigeons = [
+                        createRandomPigeon(1, 'Mannetje'),
+                        createRandomPigeon(2, 'Vrouwtje'),
+                        createRandomPigeon(3, 'Mannetje'),
+                        createRandomPigeon(4, 'Vrouwtje'),
+                        createRandomPigeon(5, 'Mannetje'),
+                        createRandomPigeon(6, 'Vrouwtje')
+                    ];
+                    localStorage.setItem('demo_pigeons', JSON.stringify(demoPigeons));
+                    displayPigeons(demoPigeons);
+                    alert('6 duiven toegevoegd (demo mode)!');
+                    return;
+                }
+
+                // Database mode
+                const { data: userData, error: userError } = await supabase
+                    .from('users')
+                    .select('id')
+                    .eq('email', userEmail)
+                    .single();
+                
+                if (userError) throw userError;
+
+                // Verwijder bestaande duiven
+                await supabase
+                    .from('pigeons')
+                    .delete()
+                    .eq('user_id', userData.id);
+
+                // Voeg 6 nieuwe duiven toe
+                const newPigeons = [
+                    createRandomPigeon(1, 'Mannetje'),
+                    createRandomPigeon(2, 'Vrouwtje'),
+                    createRandomPigeon(3, 'Mannetje'),
+                    createRandomPigeon(4, 'Vrouwtje'),
+                    createRandomPigeon(5, 'Mannetje'),
+                    createRandomPigeon(6, 'Vrouwtje')
+                ];
+
+                const pigeonsToInsert = newPigeons.map(pigeon => ({
+                    user_id: userData.id,
+                    name: pigeon.name,
+                    gender: pigeon.gender,
+                    age_years: pigeon.age_years,
+                    age_months: pigeon.age_months,
+                    energy: pigeon.energy,
+                    vormpijl: pigeon.vormpijl,
+                    snelheid: pigeon.snelheid,
+                    conditie: pigeon.conditie,
+                    techniek: pigeon.techniek,
+                    orientatie: pigeon.orientatie,
+                    ervaring: pigeon.ervaring,
+                    aerodynamica: pigeon.aerodynamica,
+                    intelligentie: pigeon.intelligentie,
+                    nachtvliegen: pigeon.nachtvliegen,
+                    libido: pigeon.libido,
+                    talent: pigeon.talent
+                }));
+
+                const { data: insertedPigeons, error: insertError } = await supabase
+                    .from('pigeons')
+                    .insert(pigeonsToInsert)
+                    .select();
+
+                if (insertError) throw insertError;
+
+                displayPigeons(insertedPigeons);
+                alert('6 duiven toegevoegd aan je account!');
+                
+            } catch (error) {
+                console.error('Fout bij toevoegen duiven:', error);
+                alert('Er is een fout opgetreden. Probeer het opnieuw.');
+            }
+        }
+        
+        function refreshPigeons() {
+            loadPigeons();
+        }
+        
+        function editPigeon(id) {
+            alert(`Duif ${id} bewerken - komt binnenkort!`);
+        }
+        
+        async function deletePigeon(id) {
+            if (confirm('Weet je zeker dat je deze duif wilt verwijderen?')) {
+                try {
+                    const userEmail = localStorage.getItem('user_email');
+                    if (!userEmail) {
+                        // Demo modus - verwijder uit localStorage
+                        const demoPigeons = JSON.parse(localStorage.getItem('demo_pigeons') || '[]');
+                        const updatedPigeons = demoPigeons.filter(p => p.id !== id);
+                        localStorage.setItem('demo_pigeons', JSON.stringify(updatedPigeons));
+                        displayPigeons(updatedPigeons);
+                        alert('Duif verwijderd (demo mode)!');
+                        return;
+                    }
+
+                    // Database mode
+                    const { error } = await supabase
+                        .from('pigeons')
+                        .delete()
+                        .eq('id', id);
+
+                    if (error) throw error;
+
+                    // Herlaad duiven
+                    await loadPigeons();
+                    alert('Duif verwijderd!');
+                    
+                } catch (error) {
+                    console.error('Fout bij verwijderen duif:', error);
+                    alert('Er is een fout opgetreden. Probeer het opnieuw.');
+                }
+            }
+        }
+        
+        // Filter functies
+        function filterByGender(gender) {
+            const filteredPigeons = gender === 'all' ? allPigeons : 
+                allPigeons.filter(pigeon => pigeon.gender === gender);
+            displayPigeons(filteredPigeons);
+        }
+
+        function filterByTalent(talent) {
+            const filteredPigeons = talent === 'all' ? allPigeons : 
+                allPigeons.filter(pigeon => pigeon.talent === talent);
+            displayPigeons(filteredPigeons);
+        }
+
+        function logout() {
+            // Verwijder alle localStorage data
+            localStorage.removeItem('user_email');
+            localStorage.removeItem('user_authenticated');
+            localStorage.removeItem('login_timestamp');
+            localStorage.removeItem('demo_mode');
+            
+            // Ga terug naar login pagina
+            window.location.href = 'index.html';
+        }
+
+        // Event listener voor de start knop
+        document.addEventListener('DOMContentLoaded', function() {
+            const startButton = document.getElementById('startButton');
+            if (startButton) {
+                startButton.addEventListener('click', startWith6Pigeons);
+            }
+        });
+
+        // Start de applicatie
+        checkAuth();
+    </script>
+</body>
+</html>
