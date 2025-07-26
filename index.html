@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pigeon Legends</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #E3F2FD;
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .pigeon-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .pigeon-row img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .status-button {
+            background: #FF9800;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-button:hover {
+            background: #F57C00;
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .features-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .features-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .features-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #555;
+        }
+
+        .checkmark {
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .access-card {
+            background: #E3F2FD;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .access-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .access-text {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .login-button {
+            background: #2196F3;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .login-button:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+
+        .test-accounts {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .test-accounts h4 {
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .account-list {
+            font-size: 0.9rem;
+        }
+
+        .account-item {
+            padding: 0.3rem 0;
+            color: #555;
+        }
+
+        .login-form {
+            display: none;
+            margin-top: 1.5rem;
+        }
+
+        .login-form.show {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 50%;
+            padding: 10px 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .icon {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .content-card {
+                padding: 2rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .pigeon-row img {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .pigeon-row {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-card {
+                padding: 1.5rem;
+            }
+            
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .pigeon-row img {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .pigeon-row {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-card">
+            <div class="pigeon-row">
+                <img src="Duifjong.png" alt="Young Pigeon">
+                <img src="Duif1.png" alt="Pigeon">
+                <img src="Duif2.png" alt="Pigeon">
+                <img src="duifprijs.png" alt="Trophy">
+            </div>
+
+            <h1 class="title">Pigeon Legends</h1>
+            <p class="subtitle">Professioneel duivensimulatie spel</p>
+
+            <button class="status-button">
+                <span class="icon">🔧</span>
+                In Ontwikkeling
+            </button>
+
+            <div class="features-section">
+                <h2 class="features-title">
+                    Beschikbare Functies
+                </h2>
+                <ul class="features-list">
+                    <li><span class="checkmark">✓</span> Persoonlijk duivenbeheer per gebruiker</li>
+                    <li><span class="checkmark">✓</span> Gedeelde trainingen en wedstrijden</li>
+                    <li><span class="checkmark">✓</span> Duiventil management</li>
+                    <li><span class="checkmark">✓</span> Financiële tracking</li>
+                    <li><span class="checkmark">✓</span> Prestatie statistieken</li>
+                    <li><span class="checkmark">✓</span> Weerbericht integratie</li>
+                </ul>
+            </div>
+
+            <div class="access-card">
+                <h3 class="access-title">
+                    Toegang
+                </h3>
+                <p class="access-text">
+                    Deze applicatie is momenteel in ontwikkeling. 
+                    Registratie is tijdelijk uitgeschakeld.
+                </p>
+                <p class="access-text">
+                    Gebruikers kunnen inloggen met hun account gegevens.
+                </p>
+                
+
+                
+                <form class="login-form show" id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Wachtwoord</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="login-button">
+                        Inloggen
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="config.js"></script>
+    <script>
+        // Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+
+        function startDemo() {
+            // Demo modus - geen login nodig
+            localStorage.setItem('demo_mode', 'true');
+            localStorage.setItem('user_email', 'test@example.com');
+            localStorage.setItem('user_authenticated', 'true');
+            window.location.href = 'dashboard.html';
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Check test accounts
+            const testAccount = TEST_ACCOUNTS.find(account => 
+                account.email === email && account.password === password
+            );
+            
+            if (testAccount) {
+                try {
+                    // Probeer eerst database login
+                    const { data: userData, error } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('email', email)
+                        .single();
+                    
+                    if (error) throw error;
+                    
+                    if (userData) {
+                        // Database gebruiker gevonden
+                        console.log('Gebruiker gevonden in database:', userData);
+                        
+                        // Login succesvol
+                        localStorage.setItem('user_email', email);
+                        localStorage.setItem('user_authenticated', 'true');
+                        localStorage.setItem('login_timestamp', Date.now().toString());
+                        localStorage.setItem('user_id', userData.id);
+                        
+                        // Sla profiel data op
+                        const profileData = {
+                            fullName: userData.full_name,
+                            location: userData.location,
+                            teamName: userData.team_name,
+                            email: userData.email
+                        };
+                        localStorage.setItem('profile_data', JSON.stringify(profileData));
+                        
+                        // Ga naar dashboard
+                        window.location.href = 'dashboard.html';
+                        return;
+                    }
+                } catch (error) {
+                    console.log('Database fout, gebruik localStorage login:', error.message);
+                }
+                
+                // Fallback naar localStorage login
+                localStorage.setItem('user_email', email);
+                localStorage.setItem('user_authenticated', 'true');
+                localStorage.setItem('login_timestamp', Date.now().toString());
+                
+                // Sla profiel data op
+                const profileData = {
+                    fullName: testAccount.fullName,
+                    location: testAccount.location,
+                    teamName: testAccount.teamName,
+                    email: testAccount.email
+                };
+                localStorage.setItem('profile_data', JSON.stringify(profileData));
+                
+                // Ga naar dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Ongeldige email of wachtwoord. Gebruik een van de test accounts.');
+            }
+        });
+
+        // Check of gebruiker al ingelogd is
+        if (localStorage.getItem('user_authenticated') === 'true') {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html> 
