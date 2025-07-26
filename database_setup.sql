@@ -212,10 +212,10 @@ ALTER SEQUENCE user_food_id_seq RESTART WITH 1;
 
 -- Voeg duiventil types toe
 INSERT INTO loft_types (id, name, image, breeding_cages, flight_cages, total_capacity, price) VALUES
-(1, 'Starters Loft', 'til1.png', 4, 17, 25, 0),
-(2, 'Hobby Loft', 'til2.png', 8, 34, 50, 1000),
-(3, 'Pro Loft', 'til3.png', 12, 51, 75, 2500),
-(4, 'Master Loft', 'til4.png', 16, 68, 100, 5000);
+(1, 'Starters Loft', 'Til1.png', 4, 17, 25, 0),
+(2, 'Hobby Loft', 'Til2.png', 8, 34, 50, 1000),
+(3, 'Pro Loft', 'Til3.png', 12, 51, 75, 2500),
+(4, 'Master Loft', 'Til4.png', 16, 68, 100, 5000);
 
 -- Voeg voeding types toe
 INSERT INTO food_types (id, name, image, price_per_kg, energy_value, description) VALUES
