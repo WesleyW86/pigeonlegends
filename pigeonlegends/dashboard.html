@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Pigeon Legends</title>
+    <script src="config.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #34495e 0%, #2980b9 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .user-location {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .welcome-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #2980b9, #3498db);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .dashboard-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: block;
+            object-fit: contain;
+            border-radius: 50%;
+            box-shadow: 
+                inset 0 4px 8px rgba(0, 0, 0, 0.2),
+                0 8px 25px rgba(52, 152, 219, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .dashboard-card:hover .card-icon {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 
+                inset 0 6px 12px rgba(0, 0, 0, 0.25),
+                0 12px 35px rgba(52, 152, 219, 0.4);
+        }
+
+        .dashboard-card:hover .card-icon::before {
+            transform: translateX(100%);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: color 0.3s ease;
+        }
+
+        .card-description {
+            color: #6c757d;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+
+        .dashboard-card:hover .card-title {
+            color: #3498db;
+        }
+
+        .dashboard-card:hover .card-description {
+            color: #495057;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .user-info {
+                text-align: center;
+                margin-top: 15px;
+            }
+
+            .welcome-title {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .dashboard-card {
+                padding: 20px;
+            }
+
+            .card-icon {
+                width: 50px;
+                height: 50px;
+                padding: 10px;
+            }
+
+            .card-title {
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-section {
+                padding: 20px;
+            }
+
+            .welcome-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Pigeon Legends</div>
+            <div class="user-info">
+                <div class="user-name" id="userName">Gebruiker</div>
+                <div class="user-location" id="userLocation">Locatie</div>
+                <button class="logout-btn" onclick="logout()">Uitloggen</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="welcome-section">
+            <h1 class="welcome-title">Welkom bij Pigeon Legends</h1>
+            <p class="welcome-subtitle">Beheer je duiven en neem deel aan spannende wedstrijden</p>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalPigeons">0</div>
+                <div class="stat-label">Totaal Duiven</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activePigeons">0</div>
+                <div class="stat-label">Actieve Duiven</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalRaces">0</div>
+                <div class="stat-label">Wedstrijden</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalPrizes">0</div>
+                <div class="stat-label">Prijzen</div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid">
+            <a href="duiven.html" class="dashboard-card">
+                <img src="Duiven.png" alt="Duiven" class="card-icon">
+                <h3 class="card-title">Duiven</h3>
+                <p class="card-description">Beheer je duiven, bekijk hun eigenschappen en prestaties</p>
+            </a>
+
+            <a href="duiventil.html" class="dashboard-card">
+                <img src="Duiventil.png" alt="Duiventil" class="card-icon">
+                <h3 class="card-title">Duiventil</h3>
+                <p class="card-description">Beheer je kweek- en vliegkooien</p>
+            </a>
+
+            <a href="wedstrijd.html" class="dashboard-card">
+                <img src="Wedstrijd.png" alt="Wedstrijd" class="card-icon">
+                <h3 class="card-title">Wedstrijden</h3>
+                <p class="card-description">Neem deel aan spannende wedstrijden en competities</p>
+            </a>
+
+            <a href="training.html" class="dashboard-card">
+                <img src="Training.png" alt="Training" class="card-icon">
+                <h3 class="card-title">Training</h3>
+                <p class="card-description">Train je duiven en verbeter hun prestaties</p>
+            </a>
+
+            <a href="live-tracking.html" class="dashboard-card">
+                <img src="Training.png" alt="Live Tracking" class="card-icon">
+                <h3 class="card-title">Live Tracking</h3>
+                <p class="card-description">Volg trainingen en wedstrijden in real-time</p>
+            </a>
+
+            <a href="financien.html" class="dashboard-card">
+                <img src="Financiën.png" alt="Financiën" class="card-icon">
+                <h3 class="card-title">Financiën</h3>
+                <p class="card-description">Houd je inkomsten en uitgaven bij</p>
+            </a>
+
+            <a href="prijzenkast.html" class="dashboard-card">
+                <img src="Prijzenkast.png" alt="Prijzen" class="card-icon">
+                <h3 class="card-title">Prijzen</h3>
+                <p class="card-description">Bekijk je verzamelde medailles en trofeeën</p>
+            </a>
+
+            <a href="profiel.html" class="dashboard-card">
+                <img src="Profiel.png" alt="Profiel" class="card-icon">
+                <h3 class="card-title">Profiel</h3>
+                <p class="card-description">Beheer je account en persoonlijke gegevens</p>
+            </a>
+        </section>
+    </main>
+
+    <script>
+        // Eenvoudige user management met localStorage
+        function getCurrentUser() {
+            const email = localStorage.getItem('currentUserEmail');
+            const name = localStorage.getItem('currentUserName');
+            return email ? { email, name } : null;
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUserEmail');
+            localStorage.removeItem('currentUserName');
+            window.location.href = 'index.html';
+        }
+
+        // Check of gebruiker is ingelogd
+        function checkAuth() {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Laad gebruikersgegevens uit localStorage
+            const firstName = localStorage.getItem('userFirstName');
+            const lastName = localStorage.getItem('userLastName');
+            const savedLocation = localStorage.getItem('userLocation');
+            
+            // Bepaal de juiste naam - prioriteit aan individuele velden
+            let displayName = '';
+            if (firstName && lastName) {
+                displayName = `${firstName} ${lastName}`;
+            } else if (user.name) {
+                displayName = user.name;
+            } else {
+                displayName = user.email;
+            }
+            
+            // Update UI met gebruikersgegevens
+            const userNameElement = document.getElementById('userName');
+            if (userNameElement) {
+                userNameElement.textContent = displayName;
+            }
+            
+            // Toon echte locatie uit localStorage
+            const userLocationElement = document.getElementById('userLocation');
+            if (userLocationElement) {
+                if (savedLocation) {
+                    userLocationElement.textContent = savedLocation;
+                } else {
+                    userLocationElement.textContent = 'Locatie wordt gedetecteerd...';
+                }
+            }
+        }
+
+        // Demo statistieken - echte aantallen
+        function loadDemoStats() {
+            // Haal echte statistieken op uit localStorage
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            // Tel totaal duiven van deze gebruiker
+            const allPigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const userPigeons = allPigeons.filter(p => p.owner === user.email);
+            const totalPigeons = userPigeons.length;
+            
+            // Tel duiven in kooien
+            const allCages = JSON.parse(localStorage.getItem('cages') || '[]');
+            const userCages = allCages.filter(cage => cage.owner === user.email);
+            
+            let activePigeons = 0;
+            userCages.forEach(cage => {
+                if (cage.type === 'vlieg' && cage.pigeon) {
+                    activePigeons++; // 1 duif per vliegkooi
+                } else if (cage.type === 'kweek' && cage.malePigeon && cage.femalePigeon) {
+                    activePigeons += 2; // 2 duiven per kweekkooi
+                }
+            });
+            
+            // Tel kooien
+            const totalCages = userCages.length;
+            
+            // Tel trainingen en wedstrijden
+            const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+            const userTrainings = allTrainings.filter(t => t.owner === user.email);
+            const totalTrainings = userTrainings.length;
+            
+            const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+            const userWedstrijden = allWedstrijden.filter(w => w.owner === user.email);
+            const totalWedstrijden = userWedstrijden.length;
+            
+            // Update UI
+            document.getElementById('totalPigeons').textContent = totalPigeons;
+            document.getElementById('activePigeons').textContent = activePigeons;
+            document.getElementById('totalRaces').textContent = totalWedstrijden;
+            document.getElementById('totalPrizes').textContent = '0'; // Nog geen prijzen systeem
+            
+            // Sla op in localStorage voor andere pagina's
+            localStorage.setItem('totalPigeons', totalPigeons.toString());
+            localStorage.setItem('activePigeons', activePigeons.toString());
+            localStorage.setItem('totalCages', totalCages.toString());
+            localStorage.setItem('totalTrainings', totalTrainings.toString());
+            localStorage.setItem('totalRaces', totalWedstrijden.toString());
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadDemoStats();
+        });
+    </script>
+</body>
+</html> 

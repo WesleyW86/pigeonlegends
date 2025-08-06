@@ -1,0 +1,2688 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training - Pigeon Legends</title>
+    <script src="config.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #34495e 0%, #2980b9 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 3px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.85rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .training-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .history-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .history-card {
+            background: white;
+            border-radius: 15px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #27ae60;
+        }
+
+        /* Weer en Tijd Display */
+        .weather-time-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .weather-card, .time-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #3498db;
+            text-align: center;
+        }
+
+        .weather-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weather-icon img {
+            border-radius: 10px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .weather-details {
+            text-align: center;
+        }
+
+        .temperature {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .description {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            text-transform: capitalize;
+        }
+
+        .weather-stats {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #34495e;
+        }
+
+        .time-info {
+            text-align: center;
+        }
+
+        .current-time {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .weather-time-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .live-tracking {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .ranking-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .position {
+            font-weight: bold;
+            font-size: 1.2rem;
+            min-width: 30px;
+        }
+
+        .pigeon-info {
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .pigeon-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .pigeon-stats {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #fff;
+            transition: width 0.3s ease;
+        }
+
+        .training-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #3498db;
+        }
+
+        .training-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .training-header h3 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .training-status {
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .training-status.gepland {
+            background: #ecf0f1;
+            color: #7f8c8d;
+        }
+
+        .training-status.actief {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .training-status.voltooid {
+            background: #e8f5e8;
+            color: #27ae60;
+        }
+
+        .training-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+
+        .training-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .training-actions .btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 1200px;
+            max-height: 90vh;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: #3498db;
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .close {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .pigeon-option {
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            border: 1px solid transparent;
+            background: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .pigeon-option:hover {
+            background: #e3f2fd;
+            border-color: #3498db;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+        }
+
+        .pigeon-option.registered {
+            background: #f8fff9;
+            border-color: #27ae60;
+        }
+
+        .pigeon-option.registered:hover {
+            background: #d5f4e6;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            min-width: auto;
+            border-radius: 16px;
+        }
+
+        /* Responsive design voor vliegkooien grid */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 98%;
+                max-width: 95vw;
+                margin: 2% auto;
+            }
+            
+            .cage-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 6px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cage-grid {
+                grid-template-columns: 1fr !important;
+                gap: 8px !important;
+            }
+        }
+
+        /* CSS voor horizontale vliegkooien layout */
+        .cage-sections-container {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 12px !important;
+            margin-bottom: 15px !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .cage-section {
+            border: 1px solid #e0e0e0 !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            background: white !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            flex: 1 1 0% !important;
+            display: block !important;
+        }
+
+        .cage-header {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 8px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cage-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .cage-count {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+
+        .cage-pigeons {
+            padding: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .pigeon-item {
+            padding: 6px 8px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .pigeon-info {
+            flex: 1;
+        }
+
+        .pigeon-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.85rem;
+        }
+
+        .pigeon-details {
+            font-size: 0.7rem;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+
+        .btn-micro {
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            border-radius: 12px;
+            min-width: auto;
+        }
+
+        /* Forceer horizontale layout voor parent container */
+        #availablePigeonsList {
+            display: block !important;
+            width: 100% !important;
+        }
+
+        #availablePigeonsList > * {
+            display: block !important;
+            width: 100% !important;
+        }
+
+        @media (max-width: 768px) {
+            .cage-sections-container {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cage-sections-container {
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #27ae60;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .page-header {
+                padding: 30px 20px;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .content-card {
+                padding: 25px 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .training-actions {
+                flex-direction: column;
+            }
+
+            .training-actions .btn {
+                min-width: auto;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .training-details {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .modal-footer {
+                padding: 15px 20px;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Pigeon Legends</div>
+            <div class="nav-buttons">
+                <a href="dashboard.html" class="nav-btn">Dashboard</a>
+                <a href="duiven.html" class="nav-btn">Duiven</a>
+                <a href="duiventil.html" class="nav-btn">Duiventil</a>
+                <a href="live-tracking.html" class="nav-btn">Live Tracking</a>
+                <a href="index.html" class="nav-btn" onclick="logout()">Uitloggen</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="page-header">
+            <h1 class="page-title">Training</h1>
+            <p class="page-subtitle">Plan en beheer je duiven trainingen</p>
+        </section>
+
+        <!-- Weer en Tijd Display -->
+        <div class="weather-time-container">
+            <div class="weather-card">
+                <h4 style="margin-bottom: 15px; color: #2c3e50; font-size: 1.1rem;">🌤️ Weer Ukkel</h4>
+                <div id="weatherContainer">
+                    <div style="text-align: center; color: #7f8c8d;">Laden...</div>
+                </div>
+            </div>
+            <div class="time-card">
+                <h4 style="margin-bottom: 15px; color: #2c3e50; font-size: 1.1rem;">🕐 Huidige Tijd</h4>
+                <div id="timeContainer">
+                    <div style="text-align: center; color: #7f8c8d;">Laden...</div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-card">
+            <h3 style="margin-bottom: 15px; color: #2c3e50; font-size: 1.2rem;">Nieuwe Training</h3>
+            <form id="trainingForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startLocation">Start Locatie</label>
+                        <select id="startLocation" required>
+                            <option value="">Kies een start locatie...</option>
+                            <optgroup label="🇫🇷 Frankrijk - Korte afstanden">
+                                <option value="Lille, Frankrijk" data-lat="50.6292" data-lng="3.0573">Lille, Frankrijk (85 km)</option>
+                                <option value="Rijsel, Frankrijk" data-lat="50.6292" data-lng="3.0573">Rijsel, Frankrijk (85 km)</option>
+                                <option value="Arras, Frankrijk" data-lat="50.2933" data-lng="2.7781">Arras, Frankrijk (125 km)</option>
+                            </optgroup>
+                            <optgroup label="🇫🇷 Frankrijk - Middellange afstanden">
+                                <option value="Amiens, Frankrijk" data-lat="49.8941" data-lng="2.2958">Amiens, Frankrijk (176 km)</option>
+                                <option value="Reims, Frankrijk" data-lat="49.2583" data-lng="4.0317">Reims, Frankrijk (226 km)</option>
+                                <option value="Chalons-en-Champagne, Frankrijk" data-lat="48.9564" data-lng="4.3631">Chalons-en-Champagne, Frankrijk (275 km)</option>
+                                <option value="Troyes, Frankrijk" data-lat="48.2973" data-lng="4.0744">Troyes, Frankrijk (326 km)</option>
+                            </optgroup>
+                            <optgroup label="🇫🇷 Frankrijk - Lange afstanden">
+                                <option value="Auxerre, Frankrijk" data-lat="47.7986" data-lng="3.5733">Auxerre, Frankrijk (376 km)</option>
+                                <option value="Orléans, Frankrijk" data-lat="47.9029" data-lng="1.9093">Orléans, Frankrijk (425 km)</option>
+                                <option value="Tours, Frankrijk" data-lat="47.2184" data-lng="0.7055">Tours, Frankrijk (475 km)</option>
+                                <option value="Poitiers, Frankrijk" data-lat="46.5802" data-lng="0.3404">Poitiers, Frankrijk (526 km)</option>
+                                <option value="Limoges, Frankrijk" data-lat="45.8336" data-lng="1.2611">Limoges, Frankrijk (576 km)</option>
+                                <option value="Bordeaux, Frankrijk" data-lat="44.8378" data-lng="-0.5792">Bordeaux, Frankrijk (625 km)</option>
+                                <option value="Toulouse, Frankrijk" data-lat="43.6047" data-lng="1.4442">Toulouse, Frankrijk (675 km)</option>
+                                <option value="Perpignan, Frankrijk" data-lat="42.6887" data-lng="2.8948">Perpignan, Frankrijk (726 km)</option>
+                            </optgroup>
+                            <optgroup label="🇳🇱 Nederland - Korte afstanden">
+                                <option value="Breda, Nederland" data-lat="51.5719" data-lng="4.7683">Breda, Nederland (46 km)</option>
+                                <option value="Tilburg, Nederland" data-lat="51.5719" data-lng="5.0672">Tilburg, Nederland (55 km)</option>
+                                <option value="Eindhoven, Nederland" data-lat="51.4416" data-lng="5.4697">Eindhoven, Nederland (66 km)</option>
+                                <option value="Den Bosch, Nederland" data-lat="51.6978" data-lng="5.3037">Den Bosch, Nederland (75 km)</option>
+                                <option value="Rotterdam, Nederland" data-lat="51.9225" data-lng="4.4792">Rotterdam, Nederland (86 km)</option>
+                                <option value="Den Haag, Nederland" data-lat="52.0705" data-lng="4.3007">Den Haag, Nederland (95 km)</option>
+                            </optgroup>
+                            <optgroup label="🇳🇱 Nederland - Middellange afstanden">
+                                <option value="Nijmegen, Nederland" data-lat="51.8425" data-lng="5.8533">Nijmegen, Nederland (96 km)</option>
+                                <option value="Arnhem, Nederland" data-lat="51.9851" data-lng="5.8987">Arnhem, Nederland (105 km)</option>
+                                <option value="Utrecht, Nederland" data-lat="52.0907" data-lng="5.1214">Utrecht, Nederland (126 km)</option>
+                                <option value="Amsterdam, Nederland" data-lat="52.3676" data-lng="4.9041">Amsterdam, Nederland (145 km)</option>
+                            </optgroup>
+                            <optgroup label="🇩🇪 Duitsland - Middellange afstanden">
+                                <option value="Aken, Duitsland" data-lat="50.7753" data-lng="6.0839">Aken, Duitsland (126 km)</option>
+                                <option value="Düsseldorf, Duitsland" data-lat="51.2277" data-lng="6.7735">Düsseldorf, Duitsland (155 km)</option>
+                                <option value="Keulen, Duitsland" data-lat="50.9375" data-lng="6.9603">Keulen, Duitsland (176 km)</option>
+                                <option value="Essen, Duitsland" data-lat="51.4556" data-lng="7.0116">Essen, Duitsland (166 km)</option>
+                                <option value="Dortmund, Duitsland" data-lat="51.5136" data-lng="7.4653">Dortmund, Duitsland (185 km)</option>
+                                <option value="Münster, Duitsland" data-lat="51.9607" data-lng="7.6261">Münster, Duitsland (195 km)</option>
+                            </optgroup>
+                            <optgroup label="🇩🇪 Duitsland - Lange afstanden">
+                                <option value="Bielefeld, Duitsland" data-lat="52.0302" data-lng="8.5325">Bielefeld, Duitsland (226 km)</option>
+                                <option value="Hannover, Duitsland" data-lat="52.3759" data-lng="9.7320">Hannover, Duitsland (275 km)</option>
+                                <option value="Bremen, Duitsland" data-lat="53.0793" data-lng="8.8017">Bremen, Duitsland (326 km)</option>
+                                <option value="Hamburg, Duitsland" data-lat="53.5511" data-lng="9.9937">Hamburg, Duitsland (376 km)</option>
+                                <option value="Berlijn, Duitsland" data-lat="52.5200" data-lng="13.4050">Berlijn, Duitsland (425 km)</option>
+                            </optgroup>
+                            <optgroup label="🇪🇸 Spanje - Lange afstanden (Klassiekers)">
+                                <option value="Barcelona, Spanje" data-lat="41.3851" data-lng="2.1734">Barcelona, Spanje (1026 km)</option>
+                                <option value="Madrid, Spanje" data-lat="40.4168" data-lng="-3.7038">Madrid, Spanje (1126 km)</option>
+                                <option value="Valencia, Spanje" data-lat="39.4699" data-lng="-0.3763">Valencia, Spanje (1225 km)</option>
+                                <option value="Zaragoza, Spanje" data-lat="41.6488" data-lng="-0.8891">Zaragoza, Spanje (1326 km)</option>
+                                <option value="Bilbao, Spanje" data-lat="43.2627" data-lng="-2.9253">Bilbao, Spanje (1426 km)</option>
+                                <option value="San Sebastián, Spanje" data-lat="43.3223" data-lng="-1.9839">San Sebastián, Spanje (1525 km)</option>
+                                <option value="Pamplona, Spanje" data-lat="42.8167" data-lng="-1.6442">Pamplona, Spanje (1626 km)</option>
+                                <option value="Logroño, Spanje" data-lat="42.4627" data-lng="-2.4449">Logroño, Spanje (1725 km)</option>
+                                <option value="Vitoria-Gasteiz, Spanje" data-lat="42.8467" data-lng="-2.6722">Vitoria-Gasteiz, Spanje (1826 km)</option>
+                                <option value="Santander, Spanje" data-lat="43.4623" data-lng="-3.8099">Santander, Spanje (1926 km)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="endLocation">Eind Locatie</label>
+                        <input type="text" id="endLocation" readonly style="background-color: #f8f9fa;">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startTime">Start Tijd</label>
+                        <input type="datetime-local" id="startTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="distance">Afstand (km)</label>
+                        <input type="number" id="distance" readonly style="background-color: #f8f9fa;">
+                    </div>
+                </div>
+                <button type="submit" class="btn" style="margin-top: 10px;">Training Starten</button>
+            </form>
+        </section>
+
+        <section class="content-card">
+            <h3 style="margin-bottom: 15px; color: #2c3e50; font-size: 1.2rem;">Mijn Trainingen</h3>
+            <div id="trainingsContainer" class="training-grid">
+                <!-- Trainingen worden hier dynamisch toegevoegd -->
+            </div>
+        </section>
+
+        <section class="content-card">
+            <h3 style="margin-bottom: 15px; color: #2c3e50; font-size: 1.2rem;">Training Geschiedenis</h3>
+            <div id="trainingHistory" class="history-grid">
+                <!-- Voltooide trainingen worden hier getoond -->
+            </div>
+        </section>
+    </main>
+
+    <div id="notification" class="notification"></div>
+
+    <!-- Modal voor duiven inschrijving training -->
+    <div id="pigeonRegistrationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Duiven Inschrijven voor Training</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p style="color: #7f8c8d; margin-bottom: 12px; font-size: 0.8rem;">
+                    <strong>Instructies:</strong> Klik op "+" om duiven in te schrijven, "-" om uit te schrijven. Alleen duiven in vliegkooien kunnen deelnemen.
+                </p>
+                <div class="form-group">
+                    <label>Beschikbare duiven in vliegkooien:</label>
+                    <div class="pigeon-list" id="availablePigeonsList">
+                        <!-- Beschikbare duiven worden hier dynamisch geladen -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Ingeschreven duiven:</label>
+                    <div class="pigeon-list" id="registeredPigeonsList">
+                        <!-- Ingeschreven duiven worden hier getoond -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+
+
+        // Check of gebruiker is ingelogd
+        function checkAuth() {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+        }
+
+        // Render training geschiedenis
+        function renderTrainingHistory() {
+            const trainings = loadTrainings();
+            const completedTrainings = trainings.filter(t => t.status === 'voltooid');
+            const container = document.getElementById('trainingHistory');
+            
+            if (completedTrainings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <img src="Training.png" alt="Training" style="width: 60px; height: 60px; opacity: 0.7;">
+                        </div>
+                        <h3>Nog geen voltooide trainingen</h3>
+                        <p>Start een training om geschiedenis te zien!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            completedTrainings.forEach((training, index) => {
+                const historyCard = document.createElement('div');
+                historyCard.className = 'history-card';
+                
+                const completedTime = training.completedAt ? new Date(training.completedAt).toLocaleString('nl-NL') : 'Onbekend';
+                
+                historyCard.innerHTML = `
+                    <div class="training-header">
+                        <h3>${training.name}</h3>
+                        <div class="training-status voltooid">Voltooid</div>
+                    </div>
+                    <div class="training-details">
+                        <div class="detail-item">Start: ${training.startLocation}</div>
+                        <div class="detail-item">Eind: ${training.endLocation}</div>
+                        <div class="detail-item">Afstand: ${training.distance} km</div>
+                        <div class="detail-item">Voltooid: ${completedTime}</div>
+                        <div class="detail-item">Deelnemers: ${training.results ? training.results.length : 0}</div>
+                    </div>
+                    <div class="training-actions">
+                        <button class="btn btn-info" onclick="viewTrainingResults('${training.id}')">Resultaten Bekijken</button>
+                    </div>
+                `;
+                
+                container.appendChild(historyCard);
+            });
+        }
+
+        // Live tracking modal
+        function viewLiveTracking(trainingId) {
+            const trainings = loadTrainings();
+            const training = trainings.find(t => t.id === trainingId);
+            
+            if (!training || training.status !== 'actief') {
+                showNotification('Training niet gevonden of niet actief', 'error');
+                return;
+            }
+
+            // Simuleer live tracking data
+            const trackingData = generateLiveTrackingData(training);
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 90%; width: 1200px; max-height: 90vh;">
+                    <div class="modal-header">
+                        <h2>Live Training Tracking - ${training.name}</h2>
+                        <span class="close">&times;</span>
+                    </div>
+                    <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+                        <div class="live-tracking" style="background: linear-gradient(135deg, #3498db, #2980b9); padding: 20px; border-radius: 15px;">
+                            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                                <h4 style="margin: 0 0 10px 0; color: white;">Training Details</h4>
+                                <p style="margin: 5px 0; color: white; font-size: 0.9rem;">
+                                    <strong>Route:</strong> ${training.name}
+                                </p>
+                                <p style="margin: 5px 0; color: white; font-size: 0.9rem;">
+                                    <strong>Afstand:</strong> ${training.distance} km
+                                </p>
+                                <p style="margin: 5px 0; color: white; font-size: 0.9rem;">
+                                    <strong>Deelnemers:</strong> ${training.registeredPigeons ? training.registeredPigeons.length : 0} duiven
+                                </p>
+                            </div>
+                            <div class="ranking-table" id="liveRanking" style="max-height: 60vh; overflow-y: auto;">
+                                ${generateCompactTableHTML(trackingData)}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="closeLiveTrackingModal()">Sluiten</button>
+                        <button class="btn btn-primary" onclick="refreshLiveTracking('${trainingId}')">Vernieuwen</button>
+                        <button class="btn btn-success" onclick="registerForTraining('${trainingId}')">Inschrijven voor Training</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'block';
+            
+            // Auto-refresh elke 3 seconden
+            const refreshInterval = setInterval(() => {
+                refreshLiveTracking(trainingId);
+            }, 3000);
+            
+            // Stop interval bij sluiten
+            modal.querySelector('.close').onclick = () => {
+                clearInterval(refreshInterval);
+                document.body.removeChild(modal);
+            };
+            
+            // Sluit modal bij klik buiten modal
+            modal.onclick = (event) => {
+                if (event.target === modal) {
+                    clearInterval(refreshInterval);
+                    document.body.removeChild(modal);
+                }
+            };
+            
+            // Sluit modal bij Escape toets
+            document.addEventListener('keydown', function closeOnEscape(event) {
+                if (event.key === 'Escape') {
+                    clearInterval(refreshInterval);
+                    document.body.removeChild(modal);
+                    document.removeEventListener('keydown', closeOnEscape);
+                }
+            });
+        }
+
+        // Genereer verbeterde live tracking data
+        function generateLiveTrackingData(training) {
+            if (!training.registeredPigeons) return [];
+            
+            return training.registeredPigeons.map((pigeon, index) => {
+                // Bereken afstand voor specifieke gebruiker
+                const userDistance = calculateDistanceForUser(training, getPigeonOwnerData(pigeon));
+                
+                // Bereken realistische snelheid gebaseerd op duif eigenschappen
+                const baseSpeed = calculateRealisticSpeed(pigeon, userDistance);
+                
+                // Bereken progressie gebaseerd op starttijd van training
+                let progress = 0;
+                if (training.startedAt) {
+                    const startTime = new Date(training.startedAt);
+                    const now = new Date();
+                    const elapsedMinutes = (now - startTime) / (1000 * 60);
+                    
+                    // Training duurt 30-90 minuten
+                    const trainingDuration = training.endTime || 60;
+                    progress = Math.min(100, Math.max(0, (elapsedMinutes / trainingDuration) * 100));
+                }
+                
+                const distance = (userDistance * progress / 100).toFixed(1);
+                const remaining = (userDistance - distance).toFixed(1);
+                
+                // Voeg eigenaar informatie toe
+                const owner = getPigeonOwner(pigeon);
+                
+                return {
+                    position: index + 1,
+                    pigeon: pigeon,
+                    owner: owner,
+                    progress: progress,
+                    speed: baseSpeed.toFixed(1),
+                    distance: distance,
+                    remaining: remaining,
+                    estimatedFinish: ((remaining / baseSpeed) * 60).toFixed(0)
+                };
+            }).sort((a, b) => b.progress - a.progress);
+        }
+
+        // Haal eigenaar data van duif op
+        function getPigeonOwnerData(pigeon) {
+            // Gebruik de correcte email adressen uit de database
+            const users = [
+                { email: 'wesley.wyngaerd@outlook.com', name: 'Wesley Wyngaerd', location: 'Oostakker, België' },
+                { email: 'maximeboelaert@hotmail.be', name: 'Maxime Boelaert', location: 'Sas van Gent, Nederland' },
+                { email: 'degraevetomas@gmail.com', name: 'Tomas Degraeve', location: 'Mendonk, België' }
+            ];
+            
+            // Probeer eerst via pigeon.owner
+            if (pigeon.owner) {
+                const user = users.find(u => u.email === pigeon.owner);
+                if (user) return user;
+            }
+            
+            // Als dat niet werkt, probeer via pigeon.eigenaar_id of andere velden
+            if (pigeon.eigenaar_id) {
+                // Hier zou je de eigenaar kunnen opzoeken via ID
+                return users[0]; // Wesley als fallback
+            }
+            
+            // Als laatste fallback, gebruik de huidige gebruiker
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                const user = users.find(u => u.email === currentUser.email);
+                if (user) return user;
+            }
+            
+            return users[0]; // Wesley als default fallback
+        }
+
+        // Haal eigenaar naam van duif op (voor weergave)
+        function getPigeonOwner(pigeon) {
+            const userData = getPigeonOwnerData(pigeon);
+            return userData ? userData.name : 'Onbekend';
+        }
+
+        // Globale Haversine afstandsberekening functie
+        function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Aardradius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                     Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Bereken afstand voor specifieke gebruiker
+        function calculateDistanceForUser(training, user) {
+            if (!user || !user.location) {
+                return training.distance; // Fallback naar originele afstand
+            }
+            
+            // Gebruiker locaties met coördinaten - Gecorrigeerd voor correcte afstanden
+            const userLocations = {
+                'Oostakker, België': { lat: 51.0500, lng: 3.7500 },
+                'Sas van Gent, Nederland': { lat: 51.2275, lng: 3.7997 },
+                'Mendonk, België': { lat: 51.1500, lng: 3.8000 }
+            };
+            
+            const userCoords = userLocations[user.location];
+            if (!userCoords) {
+                return training.distance; // Fallback
+            }
+            
+            // Haal start locatie coördinaten op uit training
+            const startLocation = training.startLocation;
+            const popularFlights = getPopularFlights();
+            const flight = popularFlights.find(f => f.name === startLocation);
+            
+            if (!flight) {
+                return training.distance; // Fallback
+            }
+            
+            // Bereken afstand met Haversine formule
+            const distance = calculateHaversineDistance(
+                flight.lat, flight.lng,
+                userCoords.lat, userCoords.lng
+            );
+            
+            return Math.round(distance * 10) / 10; // Afgerond op 1 decimaal
+        }
+        
+        // Haal populaire vluchten op
+        function getPopularFlights() {
+            return [
+                { name: 'Lille, Frankrijk', lat: 50.6292, lng: 3.0573 },
+                { name: 'Arras, Frankrijk', lat: 50.2930, lng: 2.7789 },
+                { name: 'Amiens, Frankrijk', lat: 49.8941, lng: 2.2958 },
+                { name: 'Beauvais, Frankrijk', lat: 49.4333, lng: 2.0833 },
+                { name: 'Compiègne, Frankrijk', lat: 49.4077, lng: 2.8233 },
+                { name: 'Soissons, Frankrijk', lat: 49.3817, lng: 3.3236 },
+                { name: 'Reims, Frankrijk', lat: 49.2583, lng: 4.0317 },
+                { name: 'Châlons-en-Champagne, Frankrijk', lat: 48.9564, lng: 4.3631 },
+                { name: 'Troyes, Frankrijk', lat: 48.2973, lng: 4.0744 },
+                { name: 'Auxerre, Frankrijk', lat: 47.7986, lng: 3.5733 },
+                { name: 'Orléans, Frankrijk', lat: 47.9029, lng: 1.9093 },
+                { name: 'Tours, Frankrijk', lat: 47.2184, lng: 0.7055 },
+                { name: 'Poitiers, Frankrijk', lat: 46.5802, lng: 0.3404 },
+                { name: 'Limoges, Frankrijk', lat: 45.8336, lng: 1.2611 },
+                { name: 'Bordeaux, Frankrijk', lat: 44.8378, lng: -0.5792 },
+                { name: 'Toulouse, Frankrijk', lat: 43.6047, lng: 1.4442 },
+                { name: 'Perpignan, Frankrijk', lat: 42.6887, lng: 2.8948 },
+                { name: 'Breda, Nederland', lat: 51.5719, lng: 4.7683 },
+                { name: 'Tilburg, Nederland', lat: 51.5719, lng: 5.0672 },
+                { name: 'Eindhoven, Nederland', lat: 51.4416, lng: 5.4697 },
+                { name: 'Den Bosch, Nederland', lat: 51.6978, lng: 5.3037 },
+                { name: 'Rotterdam, Nederland', lat: 51.9225, lng: 4.4792 },
+                { name: 'Den Haag, Nederland', lat: 52.0705, lng: 4.3007 },
+                { name: 'Nijmegen, Nederland', lat: 51.8425, lng: 5.8533 },
+                { name: 'Arnhem, Nederland', lat: 51.9851, lng: 5.8987 },
+                { name: 'Utrecht, Nederland', lat: 52.0907, lng: 5.1214 },
+                { name: 'Amsterdam, Nederland', lat: 52.3676, lng: 4.9041 },
+                { name: 'Aken, Duitsland', lat: 50.7753, lng: 6.0839 },
+                { name: 'Düsseldorf, Duitsland', lat: 51.2277, lng: 6.7735 },
+                { name: 'Keulen, Duitsland', lat: 50.9375, lng: 6.9603 },
+                { name: 'Essen, Duitsland', lat: 51.4556, lng: 7.0116 },
+                { name: 'Dortmund, Duitsland', lat: 51.5136, lng: 7.4653 },
+                { name: 'Münster, Duitsland', lat: 51.9607, lng: 7.6261 },
+                { name: 'Bielefeld, Duitsland', lat: 52.0302, lng: 8.5325 },
+                { name: 'Hannover, Duitsland', lat: 52.3759, lng: 9.7320 },
+                { name: 'Bremen, Duitsland', lat: 53.0793, lng: 8.8017 },
+                { name: 'Hamburg, Duitsland', lat: 53.5511, lng: 9.9937 },
+                { name: 'Berlijn, Duitsland', lat: 52.5200, lng: 13.4050 },
+                { name: 'Barcelona, Spanje', lat: 41.3851, lng: 2.1734 },
+                { name: 'Madrid, Spanje', lat: 40.4168, lng: -3.7038 },
+                { name: 'Valencia, Spanje', lat: 39.4699, lng: -0.3763 },
+                { name: 'Zaragoza, Spanje', lat: 41.6488, lng: -0.8891 },
+                { name: 'Bilbao, Spanje', lat: 43.2627, lng: -2.9253 },
+                { name: 'San Sebastián, Spanje', lat: 43.3223, lng: -1.9839 },
+                { name: 'Pamplona, Spanje', lat: 42.8167, lng: -1.6442 },
+                { name: 'Logroño, Spanje', lat: 42.4627, lng: -2.4449 },
+                { name: 'Vitoria-Gasteiz, Spanje', lat: 42.8467, lng: -2.6722 },
+                { name: 'Santander, Spanje', lat: 43.4623, lng: -3.8099 }
+            ];
+        }
+
+        // Bereken realistische snelheid gebaseerd op duif eigenschappen
+        function calculateRealisticSpeed(pigeon, distance) {
+            // Basis snelheid voor duiven: 40-80 km/u
+            let baseSpeed = 40;
+            
+            // Snelheid eigenschap (0-100) beïnvloedt basis snelheid
+            const speedBonus = (pigeon.snelheid || 0) * 0.4; // Max 40 km/u bonus
+            
+            // Conditie is belangrijk voor langere vluchten
+            const conditionBonus = (pigeon.conditie || 0) * 0.3; // Max 30 km/u bonus
+            
+            // Vormpeil geeft algemene boost
+            const formBonus = (pigeon.vormpeil || 0) * 0.2; // Max 20 km/u bonus
+            
+            // Navigatie helpt bij efficiënte routes
+            const navigationBonus = (pigeon.navigatie || 0) * 0.1; // Max 10 km/u bonus
+            
+            // Vliegtechniek voor betere aerodynamica
+            const techniqueBonus = (pigeon.vliegtechniek || 0) * 0.15; // Max 15 km/u bonus
+            
+            // Ervaring helpt bij alle afstanden
+            const experienceBonus = (pigeon.ervaring || 0) * 0.25; // Max 25 km/u bonus
+            
+            // Aerodynamica voor betere prestaties
+            const aeroBonus = (pigeon.aerodynamica || 0) * 0.2; // Max 20 km/u bonus
+            
+            // Intelligentie voor slimme keuzes
+            const intelligenceBonus = (pigeon.intelligentie || 0) * 0.1; // Max 10 km/u bonus
+            
+            // Nachtvliegen voor langere vluchten
+            const nightBonus = (pigeon.nachtvliegen || 0) * 0.05; // Max 5 km/u bonus
+            
+            // Bereken totale snelheid
+            let totalSpeed = baseSpeed + speedBonus + conditionBonus + formBonus + 
+                           navigationBonus + techniqueBonus + experienceBonus + 
+                           aeroBonus + intelligenceBonus + nightBonus;
+            
+            // Afstand factor: korte vluchten zijn sneller, lange vluchten langzamer
+            if (distance <= 100) {
+                totalSpeed *= 1.2; // 20% sneller op korte vluchten
+            } else if (distance <= 300) {
+                totalSpeed *= 1.0; // Normale snelheid
+            } else if (distance <= 600) {
+                totalSpeed *= 0.9; // 10% langzamer op middellange vluchten
+            } else {
+                totalSpeed *= 0.8; // 20% langzamer op lange vluchten
+            }
+            
+            // Voeg wat willekeur toe voor realisme (±5%)
+            const randomFactor = 0.95 + (Math.random() * 0.1);
+            totalSpeed *= randomFactor;
+            
+            // Zorg dat snelheid binnen realistische grenzen blijft
+            return Math.max(30, Math.min(90, totalSpeed));
+        }
+
+        // Bereken gemiddelde snelheid
+        function calculateAverageSpeed(trackingData) {
+            if (trackingData.length === 0) return 0;
+            const totalSpeed = trackingData.reduce((sum, data) => sum + parseFloat(data.speed), 0);
+            return (totalSpeed / trackingData.length).toFixed(1);
+        }
+
+        // Bereken geschatte finish tijd
+        function calculateEstimatedFinish(training) {
+            const averageSpeed = 40; // km/u
+            const remainingDistance = training.distance * 0.3; // 30% resterend
+            return Math.round((remainingDistance / averageSpeed) * 60);
+        }
+
+        // Genereer compacte tabel HTML voor live tracking
+        function generateCompactTableHTML(trackingData) {
+            if (!trackingData || trackingData.length === 0) {
+                return `
+                    <div style="text-align: center; color: white; padding: 40px;">
+                        <p>Geen deelnemers gevonden</p>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div style="background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse; color: white; font-size: 0.85rem;">
+                        <thead>
+                            <tr style="background: rgba(255,255,255,0.2);">
+                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.3);">Pos</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.3);">Duif</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.3);">Eigenaar</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.3);">Snelheid</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.3);">Afgelegd</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.3);">Resterend</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.3);">Finish</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.3);">Voortgang</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${trackingData.map((data, index) => `
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); ${index % 2 === 0 ? 'background: rgba(255,255,255,0.05);' : ''}">
+                                    <td style="padding: 6px 8px; font-weight: bold; color: ${index === 0 ? '#f1c40f' : index === 1 ? '#bdc3c7' : index === 2 ? '#e67e22' : 'white'};">
+                                        ${index + 1}
+                                    </td>
+                                    <td style="padding: 6px 8px; font-weight: 600;">
+                                        ${data.pigeon.name}
+                                    </td>
+                                    <td style="padding: 6px 8px; font-size: 0.8rem; opacity: 0.9;">
+                                        ${data.owner}
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: center;">
+                                        ${data.speed} km/u
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: center;">
+                                        ${data.distance} km
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: center;">
+                                        ${data.remaining} km
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: center;">
+                                        ${data.estimatedFinish} min
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: center; width: 100px;">
+                                        <div style="background: rgba(255,255,255,0.3); height: 6px; border-radius: 3px; overflow: hidden;">
+                                            <div style="height: 100%; background: linear-gradient(90deg, #f1c40f, #f39c12); width: ${data.progress}%;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        // Registreer voor training (voor alle gebruikers)
+        function registerForTraining(trainingId) {
+            const currentUser = getCurrentUser();
+            if (!currentUser) {
+                showNotification('Je moet ingelogd zijn om in te schrijven', 'error');
+                return;
+            }
+
+            // Open inschrijving modal
+            openPigeonRegistration(trainingId);
+        }
+
+        // Close live tracking modal
+        function closeLiveTrackingModal() {
+            const modal = document.querySelector('.modal');
+            if (modal) {
+                document.body.removeChild(modal);
+            }
+        }
+
+        // Vernieuw live tracking
+        function refreshLiveTracking(trainingId) {
+            const trainings = loadTrainings();
+            const training = trainings.find(t => t.id === trainingId);
+            
+            if (!training) return;
+            
+            const trackingData = generateLiveTrackingData(training);
+            const rankingElement = document.getElementById('liveRanking');
+            
+            if (rankingElement) {
+                rankingElement.innerHTML = generateCompactTableHTML(trackingData);
+            }
+        }
+
+        // Beëindig training
+        function finishTraining(trainingId) {
+            if (confirm('Weet je zeker dat je deze training wilt beëindigen?')) {
+                const trainings = loadTrainings();
+                const trainingIndex = trainings.findIndex(t => t.id === trainingId);
+                
+                if (trainingIndex !== -1) {
+                    trainings[trainingIndex].status = 'voltooid';
+                    trainings[trainingIndex].completedAt = new Date().toISOString();
+                    trainings[trainingIndex].results = generateTrainingResults(trainings[trainingIndex]);
+                    
+                    localStorage.setItem('trainings', JSON.stringify(trainings));
+                    
+                    showNotification('Training succesvol beëindigd!', 'success');
+                    renderTrainings();
+                    renderTrainingHistory();
+                    updateDashboardStats();
+                }
+            }
+        }
+
+        // Genereer training resultaten
+        function generateTrainingResults(training) {
+            if (!training.registeredPigeons) return [];
+            
+            return training.registeredPigeons.map((pigeon, index) => {
+                const finishTime = Math.random() * 60 + 30; // 30-90 minuten
+                const averageSpeed = (training.distance / (finishTime / 60)).toFixed(1);
+                
+                return {
+                    position: index + 1,
+                    pigeon: pigeon,
+                    finishTime: finishTime.toFixed(1),
+                    averageSpeed: averageSpeed,
+                    distance: training.distance
+                };
+            }).sort((a, b) => parseFloat(a.finishTime) - parseFloat(b.finishTime));
+        }
+
+        // Bekijk training resultaten
+        function viewTrainingResults(trainingId) {
+            const trainings = loadTrainings();
+            const training = trainings.find(t => t.id === trainingId);
+            
+            if (!training) {
+                showNotification('Training niet gevonden', 'error');
+                return;
+            }
+
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Training Resultaten</h2>
+                        <span class="close">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <h3>${training.name}</h3>
+                        <p>Afstand: ${training.distance} km | Voltooid: ${new Date(training.completedAt).toLocaleString('nl-NL')}</p>
+                        <div class="ranking-list">
+                            ${generateResultsHTML(training.results || [])}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="closeModal()">Sluiten</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'block';
+        }
+
+        // Genereer resultaten HTML
+        function generateResultsHTML(results) {
+            if (results.length === 0) {
+                return '<p>Geen resultaten beschikbaar</p>';
+            }
+            
+            return results.map((result, index) => `
+                <div class="ranking-item">
+                    <div class="position">${index + 1}</div>
+                    <div class="pigeon-info">
+                        <div class="pigeon-name">${result.pigeon.name}</div>
+                        <div class="pigeon-stats">
+                            Tijd: ${result.finishTime} min | Gemiddelde snelheid: ${result.averageSpeed} km/u
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            setupTrainingForm();
+            renderTrainings(); // Laad en render trainingen bij het laden van de pagina
+            renderTrainingHistory(); // Render training geschiedenis
+            
+            // Initialiseer weer en tijd display
+            updateWeatherAndTime();
+            
+            // Update weer elke 30 minuten (1800000 ms), tijd elke seconde
+            setInterval(updateWeatherAndTime, 1800000);
+            
+            // Update tijd elke seconde
+            setInterval(() => {
+                const timeContainer = document.getElementById('timeContainer');
+                if (timeContainer) {
+                    const now = new Date();
+                    const timeString = now.toLocaleString('nl-NL', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZoneName: 'short'
+                    });
+                    
+                    // Hoofdletter voor dag
+                    const capitalizedTimeString = timeString.charAt(0).toUpperCase() + timeString.slice(1);
+                    
+                    timeContainer.innerHTML = `
+                        <div class="time-info">
+                            <div class="current-time">${capitalizedTimeString}</div>
+                        </div>
+                    `;
+                }
+            }, 1000);
+        });
+
+        // Setup training form met automatische afstandsberekening
+        function setupTrainingForm() {
+            const startLocationSelect = document.getElementById('startLocation');
+            const endLocationInput = document.getElementById('endLocation');
+            const distanceInput = document.getElementById('distance');
+            const trainingForm = document.getElementById('trainingForm');
+            const startTimeInput = document.getElementById('startTime');
+
+            // Vul huidige datum in
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const currentDate = `${year}-${month}-${day}`;
+            startTimeInput.value = currentDate + 'T00:00';
+
+            // Laad gebruiker locatie
+            const user = getCurrentUser();
+            let userLocation = 'Oostakker, België'; // Fallback
+            
+            // Bepaal eindlocatie op basis van huidige gebruiker
+            if (user) {
+                if (user.email === 'maximeboelaert@hotmail.be') {
+                    userLocation = 'Sas van Gent, Nederland';
+                } else if (user.email === 'degraevetomas@gmail.com') {
+                    userLocation = 'Mendonk, België';
+                } else if (user.email === 'wesley.wyngaerd@outlook.com') {
+                    userLocation = 'Oostakker, België';
+                }
+            }
+            
+            endLocationInput.value = userLocation;
+
+            // Gebruik de globale Haversine functie
+            function calculateDistance(lat1, lon1, lat2, lon2) {
+                return Math.round(calculateHaversineDistance(lat1, lon1, lat2, lon2) * 10) / 10; // Afgerond op 1 decimaal
+            }
+
+            // Get user coordinates based on location
+            function getUserCoordinates() {
+                const currentUser = getCurrentUser();
+                let userLocation = 'Oostakker, België'; // Fallback
+                
+                // Bepaal locatie op basis van huidige gebruiker
+                if (currentUser) {
+                    if (currentUser.email === 'maximeboelaert@hotmail.be') {
+                        userLocation = 'Sas van Gent, Nederland';
+                    } else if (currentUser.email === 'degraevetomas@gmail.com') {
+                        userLocation = 'Mendonk, België';
+                    } else if (currentUser.email === 'wesley.wyngaerd@outlook.com') {
+                        userLocation = 'Oostakker, België';
+                    }
+                }
+                
+                const locations = {
+                    'Oostakker, België': { lat: 51.0500, lng: 3.7500 },
+                    'Sas van Gent, Nederland': { lat: 51.2275, lng: 3.7997 },
+                    'Mendonk, België': { lat: 51.1500, lng: 3.8000 }
+                };
+                
+                // Als gebruiker niet in bekende locaties staat, probeer geolocatie
+                if (!locations[userLocation]) {
+                    // Probeer geolocatie te krijgen
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            const userCoords = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+                            // Update afstand met nieuwe coördinaten
+                            updateDistanceWithCoordinates(userCoords);
+                        }, function(error) {
+                            console.log('Geolocatie niet beschikbaar:', error);
+                            return locations['Oostakker, België'];
+                        });
+                    }
+                    return locations['Oostakker, België'];
+                }
+                return locations[userLocation] || locations['Oostakker, België'];
+            }
+
+            // Update afstand met specifieke coördinaten
+            function updateDistanceWithCoordinates(userCoords) {
+                const selectedOption = startLocationSelect.options[startLocationSelect.selectedIndex];
+                if (selectedOption && selectedOption.value) {
+                    const startLat = parseFloat(selectedOption.dataset.lat);
+                    const startLng = parseFloat(selectedOption.dataset.lng);
+                    
+                    const distance = calculateDistance(startLat, startLng, userCoords.lat, userCoords.lng);
+                    distanceInput.value = distance;
+                }
+            }
+
+            // Update afstand wanneer start locatie verandert
+            startLocationSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption.value) {
+                    const startLat = parseFloat(selectedOption.dataset.lat);
+                    const startLng = parseFloat(selectedOption.dataset.lng);
+                    const userCoords = getUserCoordinates();
+                    
+                    const distance = calculateDistance(startLat, startLng, userCoords.lat, userCoords.lng);
+                    distanceInput.value = distance;
+                } else {
+                    distanceInput.value = '';
+                }
+            });
+
+            // Form submit handler
+            trainingForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const startLocation = startLocationSelect.value;
+                const startTime = document.getElementById('startTime').value;
+                const distance = distanceInput.value;
+
+                if (!startLocation || !startTime) {
+                    showNotification('Vul alle velden in', 'error');
+                    return;
+                }
+
+                // Genereer automatisch training naam met gebruiker-specifieke eindlocatie
+                let userEndLocation = userLocation; // Fallback
+                
+                // Bepaal eindlocatie op basis van gebruiker
+                if (user) {
+                    if (user.email === 'maximeboelaert@hotmail.be') {
+                        userEndLocation = 'Sas van Gent, Nederland';
+                    } else if (user.email === 'degraevetomas@gmail.com') {
+                        userEndLocation = 'Mendonk, België';
+                    } else if (user.email === 'wesley.wyngaerd@outlook.com') {
+                        userEndLocation = 'Oostakker, België';
+                    }
+                }
+                
+                const trainingName = `Training ${startLocation} → ${userEndLocation}`;
+
+                // Maak training object
+                const training = {
+                    id: Date.now().toString(), // Eenvoudige ID
+                    name: trainingName,
+                    startLocation: startLocation,
+                    endLocation: userEndLocation,
+                    distance: parseFloat(distance),
+                    startTime: startTime,
+                    status: 'gepland',
+                    owner: getCurrentUser().email,
+                    createdAt: new Date().toISOString()
+                };
+
+                // Sla training op
+                saveTraining(training);
+                
+                showNotification(`Training "${trainingName}" gepland! Afstand: ${distance} km`, 'success');
+                
+                // Reset form
+                trainingForm.reset();
+                distanceInput.value = '';
+                
+                // Herstel de juiste eindlocatie na reset
+                let resetUserLocation = 'Oostakker, België'; // Fallback
+                
+                if (user) {
+                    if (user.email === 'maximeboelaert@hotmail.be') {
+                        resetUserLocation = 'Sas van Gent, Nederland';
+                    } else if (user.email === 'degraevetomas@gmail.com') {
+                        resetUserLocation = 'Mendonk, België';
+                    } else if (user.email === 'wesley.wyngaerd@outlook.com') {
+                        resetUserLocation = 'Oostakker, België';
+                    }
+                }
+                
+                endLocationInput.value = resetUserLocation;
+                
+                // Herstel de huidige datum
+                startTimeInput.value = currentDate + 'T00:00';
+                
+                // Render trainingen opnieuw
+                renderTrainings();
+            });
+        }
+
+        // Weer API functie voor Ukkel met realistische temperatuurveranderingen
+        // Gebruik localStorage om weerdata te delen tussen pagina's
+        async function getUkkelWeather() {
+            try {
+                // OpenWeatherMap API voor Ukkel (Brussel)
+                // Gebruik een gratis API key voor demo doeleinden
+                const apiKey = '1234567890abcdef'; // Demo API key - vervang door echte key voor productie
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Ukkel,BE&appid=${apiKey}&units=metric&lang=nl`);
+                
+                if (!response.ok) {
+                    throw new Error('API response niet OK');
+                }
+                
+                const data = await response.json();
+                
+                return {
+                    temperature: Math.round(data.main.temp),
+                    description: data.weather[0].description,
+                    humidity: data.main.humidity,
+                    windSpeed: Math.round(data.wind.speed * 3.6), // m/s naar km/h
+                    icon: data.weather[0].icon
+                };
+            } catch (error) {
+                console.log('Weer API niet beschikbaar, gebruik realistische demo data voor Ukkel');
+                
+                const currentHour = new Date().getHours();
+                const currentMonth = new Date().getMonth(); // 0-11
+                const currentTime = new Date().getTime();
+                
+                // Haal opgeslagen weerdata op uit localStorage
+                const storedWeatherData = localStorage.getItem('lastWeatherData');
+                const storedWeatherTime = localStorage.getItem('lastWeatherTime');
+                
+                // Als we al eerder weer data hebben, gebruik logische temperatuurveranderingen
+                if (storedWeatherData && storedWeatherTime) {
+                    const lastWeatherData = JSON.parse(storedWeatherData);
+                    const lastWeatherTime = parseInt(storedWeatherTime);
+                    const timeDiff = currentTime - lastWeatherTime;
+                    const halfHourInMs = 30 * 60 * 1000; // 30 minuten
+                    
+                    // Alleen nieuwe weer data genereren als er 30 minuten zijn verstreken
+                    if (timeDiff < halfHourInMs) {
+                        return lastWeatherData;
+                    }
+                }
+                
+                // Realistische demo weer data voor Ukkel, België - December 2024
+                let demoWeather;
+                
+                if (currentMonth === 11) { // December
+                    if (currentHour >= 6 && currentHour <= 18) { // Dag
+                        demoWeather = [
+                            { temp: 8, desc: 'bewolkt', humidity: 75, wind: 18, icon: '03d' },
+                            { temp: 6, desc: 'licht bewolkt', humidity: 65, wind: 15, icon: '02d' },
+                            { temp: 4, desc: 'regenachtig', humidity: 85, wind: 20, icon: '10d' },
+                            { temp: 7, desc: 'licht bewolkt', humidity: 70, wind: 12, icon: '02d' },
+                            { temp: 5, desc: 'bewolkt', humidity: 80, wind: 16, icon: '03d' }
+                        ];
+                    } else { // Nacht
+                        demoWeather = [
+                            { temp: 2, desc: 'heldere nacht', humidity: 80, wind: 8, icon: '01n' },
+                            { temp: 0, desc: 'bewolkte nacht', humidity: 85, wind: 12, icon: '02n' },
+                            { temp: -1, desc: 'vorst', humidity: 75, wind: 6, icon: '13n' },
+                            { temp: 1, desc: 'bewolkte nacht', humidity: 82, wind: 10, icon: '02n' },
+                            { temp: 3, desc: 'heldere nacht', humidity: 78, wind: 7, icon: '01n' }
+                        ];
+                    }
+                } else if (currentMonth >= 3 && currentMonth <= 8) { // Lente/Zomer
+                    if (currentHour >= 6 && currentHour <= 18) { // Dag
+                        demoWeather = [
+                            { temp: 22, desc: 'zonnig', humidity: 55, wind: 12, icon: '01d' },
+                            { temp: 20, desc: 'licht bewolkt', humidity: 60, wind: 15, icon: '02d' },
+                            { temp: 18, desc: 'bewolkt', humidity: 65, wind: 18, icon: '03d' },
+                            { temp: 16, desc: 'lichte regen', humidity: 75, wind: 20, icon: '10d' },
+                            { temp: 24, desc: 'zonnig', humidity: 50, wind: 10, icon: '01d' },
+                            { temp: 19, desc: 'bewolkt', humidity: 70, wind: 16, icon: '03d' }
+                        ];
+                    } else { // Nacht
+                        demoWeather = [
+                            { temp: 15, desc: 'heldere nacht', humidity: 70, wind: 8, icon: '01n' },
+                            { temp: 13, desc: 'bewolkte nacht', humidity: 75, wind: 10, icon: '02n' },
+                            { temp: 11, desc: 'regenachtige nacht', humidity: 80, wind: 12, icon: '10n' },
+                            { temp: 17, desc: 'heldere nacht', humidity: 65, wind: 6, icon: '01n' },
+                            { temp: 14, desc: 'bewolkte nacht', humidity: 72, wind: 9, icon: '02n' }
+                        ];
+                    }
+                } else { // Herfst/Winter (Jan, Feb, Sep, Oct, Nov)
+                    if (currentHour >= 6 && currentHour <= 18) { // Dag
+                        demoWeather = [
+                            { temp: 8, desc: 'bewolkt', humidity: 75, wind: 18, icon: '03d' },
+                            { temp: 5, desc: 'lichte regen', humidity: 85, wind: 20, icon: '10d' },
+                            { temp: 12, desc: 'licht bewolkt', humidity: 65, wind: 15, icon: '02d' },
+                            { temp: 3, desc: 'mistig', humidity: 90, wind: 5, icon: '50d' }
+                        ];
+                    } else { // Nacht
+                        demoWeather = [
+                            { temp: 2, desc: 'heldere nacht', humidity: 80, wind: 8, icon: '01n' },
+                            { temp: 0, desc: 'bewolkte nacht', humidity: 85, wind: 12, icon: '02n' },
+                            { temp: -1, desc: 'vorst', humidity: 75, wind: 6, icon: '13n' }
+                        ];
+                    }
+                }
+                
+                const randomWeather = demoWeather[Math.floor(Math.random() * demoWeather.length)];
+                
+                // Sla de nieuwe weer data op in localStorage voor logische veranderingen
+                const newWeatherData = {
+                    temperature: randomWeather.temp,
+                    description: randomWeather.desc,
+                    humidity: randomWeather.humidity,
+                    windSpeed: randomWeather.wind,
+                    icon: randomWeather.icon
+                };
+                
+                localStorage.setItem('lastWeatherData', JSON.stringify(newWeatherData));
+                localStorage.setItem('lastWeatherTime', currentTime.toString());
+                
+                return newWeatherData;
+            }
+        }
+
+        // Update weer en tijd display
+        function updateWeatherAndTime() {
+            const weatherContainer = document.getElementById('weatherContainer');
+            const timeContainer = document.getElementById('timeContainer');
+            
+            if (weatherContainer) {
+                getUkkelWeather().then(weather => {
+                    weatherContainer.innerHTML = `
+                        <div class="weather-info">
+                            <div class="weather-icon">
+                                <img src="https://openweathermap.org/img/wn/${weather.icon}@2x.png" alt="Weer" style="width: 50px; height: 50px;">
+                            </div>
+                            <div class="weather-details">
+                                <div class="temperature">${weather.temperature}°C</div>
+                                <div class="description">${weather.description}</div>
+                                <div class="weather-stats">
+                                    <span>💧 ${weather.humidity}%</span>
+                                    <span>💨 ${weather.windSpeed} km/h</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            if (timeContainer) {
+                const now = new Date();
+                const timeString = now.toLocaleString('nl-NL', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    timeZoneName: 'short'
+                });
+                
+                // Hoofdletter voor dag
+                const capitalizedTimeString = timeString.charAt(0).toUpperCase() + timeString.slice(1);
+                
+                timeContainer.innerHTML = `
+                    <div class="time-info">
+                        <div class="current-time">${capitalizedTimeString}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Laad trainingen uit localStorage
+        function loadTrainings() {
+            const trainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+            // Alle gebruikers kunnen alle trainingen zien
+            return trainings;
+        }
+
+        // Sla training op in localStorage
+        function saveTraining(training) {
+            const trainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+            trainings.push(training);
+            localStorage.setItem('trainings', JSON.stringify(trainings));
+            
+            // Update dashboard statistieken
+            updateDashboardStats();
+        }
+
+        // Render trainingen
+        function renderTrainings() {
+            const trainings = loadTrainings();
+            const container = document.getElementById('trainingsContainer');
+            
+            if (trainings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <img src="Training.png" alt="Training" style="width: 80px; height: 80px; opacity: 0.7;">
+                        </div>
+                        <h3>Nog geen trainingen gepland</h3>
+                        <p>Maak je eerste training aan om je duiven te trainen!</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('startLocation').focus()">Eerste Training Plannen</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            trainings.forEach((training, index) => {
+                const trainingCard = document.createElement('div');
+                trainingCard.className = 'training-card';
+                
+                let statusClass = '';
+                let statusText = '';
+                let statusIcon = '';
+                let actionButtons = '';
+                
+                // Controleer of huidige gebruiker admin is (Wesley)
+                const currentUser = getCurrentUser();
+                const isAdmin = currentUser && currentUser.email === 'wesley.wyngaerd@outlook.com';
+                
+                switch(training.status) {
+                    case 'gepland':
+                        statusClass = 'gepland';
+                        statusText = 'Gepland';
+                        statusIcon = '';
+                        actionButtons = `
+                            <button class="btn btn-secondary" onclick="openPigeonRegistration('${training.id}')">Duiven Inschrijven</button>
+                        `;
+                        if (isAdmin) {
+                            actionButtons += `
+                                <button class="btn btn-success" onclick="startTraining('${training.id}')">Start Training</button>
+                            `;
+                        }
+                        break;
+                    case 'actief':
+                        statusClass = 'actief';
+                        statusText = 'Actief';
+                        statusIcon = '';
+                        actionButtons = `
+                            <button class="btn btn-primary" onclick="viewLiveTracking('${training.id}')">Live Volgen</button>
+                        `;
+                        if (isAdmin) {
+                            actionButtons += `
+                                <button class="btn btn-warning" onclick="finishTraining('${training.id}')">Training Beëindigen</button>
+                            `;
+                        }
+                        break;
+                    case 'voltooid':
+                        statusClass = 'voltooid';
+                        statusText = 'Voltooid';
+                        statusIcon = '';
+                        actionButtons = `
+                            <button class="btn btn-secondary" onclick="viewTrainingResults('${training.id}')">Bekijk Resultaten</button>
+                        `;
+                        break;
+                }
+                
+                const startTime = new Date(training.startTime).toLocaleString('nl-NL', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                trainingCard.innerHTML = `
+                    <div class="training-header">
+                        <h3>${training.name}</h3>
+                        <span class="training-status ${statusClass}">${statusIcon} ${statusText}</span>
+                    </div>
+                    <div class="training-details">
+                        <div class="detail-item">
+                            <strong>Start:</strong> ${training.startLocation}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Eind:</strong> ${training.endLocation}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Afstand:</strong> ${training.distance} km
+                        </div>
+                        <div class="detail-item">
+                            <strong>Start tijd:</strong> ${startTime}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Ingeschreven duiven:</strong> ${training.registeredPigeons ? training.registeredPigeons.length : 0}
+                        </div>
+                    </div>
+                    <div class="training-actions">
+                        ${actionButtons}
+                        ${isAdmin ? `<button class="btn btn-danger" onclick="deleteTraining('${training.id}')">Verwijderen</button>` : ''}
+                    </div>
+                `;
+                
+                container.appendChild(trainingCard);
+            });
+        }
+
+        // Start training
+        function startTraining(trainingId) {
+            const trainings = loadTrainings();
+            const training = trainings.find(t => t.id === trainingId);
+            
+            if (training) {
+                training.status = 'actief';
+                training.startedAt = new Date().toISOString();
+                
+                // Bepaal eindtijd (30-90 minuten)
+                const endTimeMinutes = 30 + Math.random() * 60;
+                training.endTime = endTimeMinutes;
+                
+                // Update localStorage
+                const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+                const trainingIndex = allTrainings.findIndex(t => t.id === trainingId);
+                if (trainingIndex !== -1) {
+                    allTrainings[trainingIndex] = training;
+                    localStorage.setItem('trainings', JSON.stringify(allTrainings));
+                }
+                
+                showNotification(`Training "${training.name}" gestart! Eindigt over ${Math.round(endTimeMinutes)} minuten.`, 'success');
+                renderTrainings();
+                updateDashboardStats();
+            }
+        }
+
+        // Verwijder training
+        function deleteTraining(trainingId) {
+            if (confirm('Weet je zeker dat je deze training wilt verwijderen?')) {
+                const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+                const filteredTrainings = allTrainings.filter(t => t.id !== trainingId);
+                localStorage.setItem('trainings', JSON.stringify(filteredTrainings));
+                
+                showNotification('Training verwijderd', 'success');
+                renderTrainings();
+                updateDashboardStats();
+            }
+        }
+
+        // Laad duiven uit localStorage
+        function loadPigeons() {
+            const pigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            return pigeons.filter(pigeon => pigeon.owner === getCurrentUser().email);
+        }
+
+        // Laad kooien uit localStorage
+        function loadCages() {
+            const cages = JSON.parse(localStorage.getItem('cages') || '[]');
+            const user = getCurrentUser();
+            return cages.filter(cage => cage.owner === user.email);
+        }
+
+        // Haal duiven op die in vliegkooien zitten
+        function getPigeonsInFlightCages() {
+            const cages = loadCages();
+            const pigeons = loadPigeons();
+            
+            const flightCages = cages.filter(cage => cage.type === 'vlieg' && cage.status === 'occupied');
+            const pigeonsInCages = flightCages.map(cage => {
+                const pigeon = pigeons.find(p => p.id === cage.pigeon.id);
+                return pigeon;
+            }).filter(pigeon => pigeon);
+            
+            return pigeonsInCages;
+        }
+
+        // Open duiven inschrijving modal
+        function openPigeonRegistration(trainingId) {
+            const modal = document.getElementById('pigeonRegistrationModal');
+            const training = loadTrainings().find(t => t.id === trainingId);
+            
+            if (!training) {
+                showNotification('Training niet gevonden', 'error');
+                return;
+            }
+            
+            // Gebruik de updatePigeonRegistrationModal functie voor consistente layout
+            updatePigeonRegistrationModal(trainingId);
+            
+            // Store training ID for form submission
+            modal.dataset.trainingId = trainingId;
+            modal.style.display = 'block';
+            
+            // Zorg ervoor dat de close button werkt
+            const closeBtn = modal.querySelector('.close');
+            if (closeBtn) {
+                closeBtn.onclick = function() {
+                    closeModal();
+                };
+            }
+        }
+
+        // Haal duiven op per vliegkooi
+        function getPigeonsPerCage() {
+            const flightCages = JSON.parse(localStorage.getItem('flightCages') || '[]');
+            const pigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const user = getCurrentUser();
+            
+            const userFlightCages = flightCages.filter(cage => cage.owner === user.email);
+            const userPigeons = pigeons.filter(pigeon => pigeon.owner === user.email);
+            
+            const pigeonsPerCage = {};
+            
+            userFlightCages.forEach(cage => {
+                const cagePigeons = userPigeons.filter(pigeon => pigeon.vliegkooi_id === cage.id);
+                if (cagePigeons.length > 0) {
+                    pigeonsPerCage[cage.id] = {
+                        name: `Vliegkooi ${cage.number}`,
+                        pigeons: cagePigeons
+                    };
+                }
+            });
+            
+            return pigeonsPerCage;
+        }
+
+        // Selecteer alle duiven voor training
+        function selectAllPigeonsForTraining(trainingId) {
+            const pigeonsPerCage = getPigeonsPerCage();
+            const training = loadTrainings().find(t => t.id === trainingId);
+            
+            if (!training) return;
+            
+            let registeredCount = 0;
+            
+            Object.values(pigeonsPerCage).forEach(cage => {
+                cage.pigeons.forEach(pigeon => {
+                    if (!training.registeredPigeons || 
+                        !training.registeredPigeons.some(p => p.name === pigeon.name)) {
+                        
+                        if (!training.registeredPigeons) {
+                            training.registeredPigeons = [];
+                        }
+                        
+                        training.registeredPigeons.push(pigeon);
+                        registeredCount++;
+                    }
+                });
+            });
+            
+            if (registeredCount > 0) {
+                // Update localStorage
+                const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+                const trainingIndex = allTrainings.findIndex(t => t.id === trainingId);
+                if (trainingIndex !== -1) {
+                    allTrainings[trainingIndex] = training;
+                    localStorage.setItem('trainings', JSON.stringify(allTrainings));
+                }
+                
+                showNotification(`${registeredCount} duiven ingeschreven voor training!`, 'success');
+                updatePigeonRegistrationModal(trainingId);
+            } else {
+                showNotification('Alle duiven zijn al ingeschreven!', 'info');
+            }
+        }
+
+        // Selecteer alle duiven van een specifieke kooi
+        function selectCagePigeonsForTraining(cageId, trainingId) {
+            const pigeonsPerCage = getPigeonsPerCage();
+            const training = loadTrainings().find(t => t.id === trainingId);
+            
+            if (!training || !pigeonsPerCage[cageId]) return;
+            
+            const cage = pigeonsPerCage[cageId];
+            let registeredCount = 0;
+            
+            cage.pigeons.forEach(pigeon => {
+                if (!training.registeredPigeons || 
+                    !training.registeredPigeons.some(p => p.name === pigeon.name)) {
+                    
+                    if (!training.registeredPigeons) {
+                        training.registeredPigeons = [];
+                    }
+                    
+                    training.registeredPigeons.push(pigeon);
+                    registeredCount++;
+                }
+            });
+            
+            if (registeredCount > 0) {
+                // Update localStorage
+                const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+                const trainingIndex = allTrainings.findIndex(t => t.id === trainingId);
+                if (trainingIndex !== -1) {
+                    allTrainings[trainingIndex] = training;
+                    localStorage.setItem('trainings', JSON.stringify(allTrainings));
+                }
+                
+                showNotification(`${registeredCount} duiven uit ${cage.name} ingeschreven!`, 'success');
+                updatePigeonRegistrationModal(trainingId);
+            } else {
+                showNotification(`Alle duiven uit ${cage.name} zijn al ingeschreven!`, 'info');
+            }
+        }
+
+        // Registreer duif voor training
+        function registerPigeonForTraining(pigeonName, trainingId) {
+            const trainings = loadTrainings();
+            const training = trainings.find(t => t.id === trainingId);
+            
+            if (!training) return;
+            
+            // Initialiseer registeredPigeons array als het nog niet bestaat
+            if (!training.registeredPigeons) {
+                training.registeredPigeons = [];
+            }
+            
+            // Voeg duif toe als deze nog niet is ingeschreven
+            if (!training.registeredPigeons.some(p => p.name === pigeonName)) {
+                const pigeon = loadPigeons().find(p => p.name === pigeonName);
+                if (pigeon) {
+                    training.registeredPigeons.push(pigeon);
+                    
+                    // Update localStorage
+                    const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+                    const trainingIndex = allTrainings.findIndex(t => t.id === trainingId);
+                    if (trainingIndex !== -1) {
+                        allTrainings[trainingIndex] = training;
+                        localStorage.setItem('trainings', JSON.stringify(allTrainings));
+                    }
+                    
+                    showNotification(`Duif ${pigeon.name} ingeschreven voor training`);
+                    
+                    // Update modal zonder te sluiten
+                    updatePigeonRegistrationModal(trainingId);
+                } else {
+                    showNotification(`Duif met naam "${pigeonName}" niet gevonden.`, 'error');
+                }
+            } else {
+                showNotification(`Duif ${pigeonName} is al ingeschreven voor deze training.`, 'info');
+            }
+        }
+
+        // Update modal zonder te sluiten
+        function updatePigeonRegistrationModal(trainingId) {
+            const training = loadTrainings().find(t => t.id === trainingId);
+            
+            if (!training) {
+                showNotification('Training niet gevonden', 'error');
+                return;
+            }
+            
+            // Update beschikbare duiven lijst
+            const availablePigeonsList = document.getElementById('availablePigeonsList');
+            availablePigeonsList.innerHTML = '';
+            
+            const pigeonsPerCage = getPigeonsPerCage();
+            
+            if (Object.keys(pigeonsPerCage).length === 0) {
+                availablePigeonsList.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 10px;">🕊️</div>
+                        <p style="margin: 0;">Geen duiven in vliegkooien beschikbaar</p>
+                        <p style="font-size: 0.9rem; margin-top: 5px;">Plaats eerst duiven in vliegkooien via de Duiventil</p>
+                    </div>
+                `;
+            } else {
+                // Selecteer alle duiven knop
+                const selectAllButton = document.createElement('div');
+                selectAllButton.style.cssText = 'margin-bottom: 15px; padding: 10px 12px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-radius: 8px; border: 1px solid #2196f3;';
+                selectAllButton.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="font-size: 0.95rem; color: #1976d2;">Alle Duiven</strong>
+                            <div style="font-size: 0.75rem; color: #666; margin-top: 2px;">
+                                Schrijf alle duiven in
+                            </div>
+                        </div>
+                        <button class="btn btn-micro btn-primary" onclick="selectAllPigeonsForTraining('${trainingId}')">
+                            Alle
+                        </button>
+                    </div>
+                `;
+                availablePigeonsList.appendChild(selectAllButton);
+                
+                // Container voor horizontale vliegkooien layout
+                const cageSectionsContainer = document.createElement('div');
+                cageSectionsContainer.className = 'cage-sections-container';
+                cageSectionsContainer.style.cssText = `
+                    display: grid !important;
+                    grid-template-columns: repeat(3, 1fr) !important;
+                    gap: 15px !important;
+                    margin-top: 10px !important;
+                    width: 100% !important;
+                    min-width: 0 !important;
+                    flex-direction: row !important;
+                    flex-wrap: nowrap !important;
+                `;
+                
+                // Per vliegkooi secties
+                Object.keys(pigeonsPerCage).forEach(cageId => {
+                    const cage = pigeonsPerCage[cageId];
+                    const cagePigeons = cage.pigeons.filter(pigeon => {
+                        return !training.registeredPigeons || 
+                               !training.registeredPigeons.some(p => p.name === pigeon.name);
+                    });
+                    
+                    if (cagePigeons.length > 0) {
+                        const cageSection = document.createElement('div');
+                        cageSection.className = 'cage-section';
+                        cageSection.style.cssText = `
+                            background: #f8f9fa;
+                            border: 1px solid #dee2e6;
+                            border-radius: 8px;
+                            padding: 8px;
+                            margin-bottom: 10px;
+                        `;
+                        cageSection.innerHTML = `
+                            <div class="cage-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #dee2e6;">
+                                <div>
+                                    <div class="cage-title" style="font-weight: bold; font-size: 0.85rem; color: #495057;">${cage.name}</div>
+                                    <div class="cage-count" style="font-size: 0.7rem; color: #6c757d;">${cagePigeons.length} duiven</div>
+                                </div>
+                                <button class="btn btn-micro btn-success" onclick="selectCagePigeonsForTraining('${cageId}', '${trainingId}')" style="padding: 2px 6px; font-size: 0.65rem; border-radius: 4px;">
+                                    Kooi
+                                </button>
+                            </div>
+                            <div class="cage-pigeons">
+                                ${cagePigeons.map(pigeon => `
+                                    <div class="pigeon-item" style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 4px 6px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="pigeon-info">
+                                            <div class="pigeon-name" style="font-size: 0.75rem; font-weight: 500; color: #495057;">${pigeon.name}</div>
+                                            <div class="pigeon-details" style="display: flex; gap: 4px; align-items: center; margin-top: 2px;">
+                                                <span style="background: ${pigeon.geslacht === 'man' ? '#e3f2fd' : '#fce4ec'}; padding: 1px 4px; border-radius: 8px; font-size: 0.65rem;">
+                                                    ${pigeon.geslacht === 'man' ? '♂' : '♀'}
+                                                </span>
+                                                <span style="font-size: 0.65rem; color: #6c757d;">${pigeon.leeftijd || '0j 0m'}</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-micro btn-success" onclick="registerPigeonForTraining('${pigeon.name}', '${trainingId}')" style="padding: 1px 4px; font-size: 0.6rem; border-radius: 3px;">
+                                            +
+                                        </button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                        cageSectionsContainer.appendChild(cageSection);
+                    }
+                });
+                
+                availablePigeonsList.appendChild(cageSectionsContainer);
+            }
+            
+            // Update ingeschreven duiven lijst
+            renderRegisteredPigeons(trainingId);
+        }
+
+        // Verwijder duif uit training
+        function unregisterPigeonFromTraining(pigeonName, trainingId) {
+            const trainings = loadTrainings();
+            const training = trainings.find(t => t.id === trainingId);
+            
+            if (!training || !training.registeredPigeons) {
+                showNotification('Training niet gevonden', 'error');
+                return;
+            }
+            
+            // Verwijder duif uit ingeschreven lijst
+            const pigeonIndex = training.registeredPigeons.findIndex(p => p.name === pigeonName);
+            if (pigeonIndex !== -1) {
+                training.registeredPigeons.splice(pigeonIndex, 1);
+                
+                // Update localStorage
+                const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+                const trainingIndex = allTrainings.findIndex(t => t.id === trainingId);
+                if (trainingIndex !== -1) {
+                    allTrainings[trainingIndex] = training;
+                    localStorage.setItem('trainings', JSON.stringify(allTrainings));
+                }
+                
+                showNotification(`Duif ${pigeonName} uitgeschreven van training`);
+                
+                // Update modal zonder te sluiten
+                updatePigeonRegistrationModal(trainingId);
+            } else {
+                showNotification(`Duif ${pigeonName} was niet ingeschreven voor deze training.`, 'info');
+            }
+        }
+
+        // Verwijder hele kooi uit training
+        function unregisterCageFromTraining(cageId, trainingId) {
+            const training = loadTrainings().find(t => t.id === trainingId);
+            const pigeonsPerCage = getPigeonsPerCage();
+            const cage = pigeonsPerCage[cageId];
+            
+            if (!training || !training.registeredPigeons || !cage) {
+                showNotification('Training of kooi niet gevonden', 'error');
+                return;
+            }
+            
+            // Verwijder alle duiven uit deze kooi uit de training
+            const cagePigeonNames = cage.pigeons.map(p => p.name);
+            const originalCount = training.registeredPigeons.length;
+            
+            training.registeredPigeons = training.registeredPigeons.filter(pigeon => 
+                !cagePigeonNames.includes(pigeon.name)
+            );
+            
+            const removedCount = originalCount - training.registeredPigeons.length;
+            
+            if (removedCount > 0) {
+                // Update localStorage
+                const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+                const trainingIndex = allTrainings.findIndex(t => t.id === trainingId);
+                if (trainingIndex !== -1) {
+                    allTrainings[trainingIndex] = training;
+                    localStorage.setItem('trainings', JSON.stringify(allTrainings));
+                }
+                
+                showNotification(`${removedCount} duiven uit ${cage.name} uitgeschreven van training`);
+                
+                // Update modal zonder te sluiten
+                updatePigeonRegistrationModal(trainingId);
+            } else {
+                showNotification(`Geen duiven uit ${cage.name} waren ingeschreven voor deze training.`, 'info');
+            }
+        }
+
+        // Render ingeschreven duiven
+        function renderRegisteredPigeons(trainingId) {
+            const training = loadTrainings().find(t => t.id === trainingId);
+            const registeredPigeonsList = document.getElementById('registeredPigeonsList');
+            
+            registeredPigeonsList.innerHTML = '';
+            
+            if (!training || !training.registeredPigeons || training.registeredPigeons.length === 0) {
+                registeredPigeonsList.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 10px;">📝</div>
+                        <p style="margin: 0;">Nog geen duiven ingeschreven</p>
+                        <p style="font-size: 0.9rem; margin-top: 5px;">Schrijf duiven in om deel te nemen aan de training</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Groepeer ingeschreven duiven per kooi
+            const pigeonsPerCage = getPigeonsPerCage();
+            const registeredPigeonsPerCage = {};
+            
+            training.registeredPigeons.forEach(pigeon => {
+                // Zoek in welke kooi deze duif zit
+                for (const [cageId, cage] of Object.entries(pigeonsPerCage)) {
+                    if (cage.pigeons.some(p => p.name === pigeon.name)) {
+                        if (!registeredPigeonsPerCage[cageId]) {
+                            registeredPigeonsPerCage[cageId] = {
+                                cage: cage,
+                                pigeons: []
+                            };
+                        }
+                        registeredPigeonsPerCage[cageId].pigeons.push(pigeon);
+                        break;
+                    }
+                }
+            });
+            
+            // Maak een container voor horizontale weergave
+            const cageSectionsContainer = document.createElement('div');
+            cageSectionsContainer.className = 'cage-sections-container';
+            cageSectionsContainer.style.cssText = `
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 15px !important;
+                margin-top: 10px !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+            `;
+            
+            // Toon ingeschreven duiven gegroepeerd per kooi in horizontale layout
+            Object.keys(registeredPigeonsPerCage).forEach(cageId => {
+                const cageData = registeredPigeonsPerCage[cageId];
+                const cageSection = document.createElement('div');
+                cageSection.className = 'cage-section';
+                cageSection.style.cssText = `
+                    background: #f8f9fa;
+                    border: 1px solid #dee2e6;
+                    border-radius: 8px;
+                    padding: 8px;
+                    margin-bottom: 10px;
+                `;
+                cageSection.innerHTML = `
+                    <div class="cage-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #dee2e6;">
+                        <div>
+                            <div class="cage-title" style="font-weight: bold; font-size: 0.85rem; color: #495057;">${cageData.cage.name}</div>
+                            <div class="cage-count" style="font-size: 0.7rem; color: #6c757d;">${cageData.pigeons.length} ingeschreven</div>
+                        </div>
+                        <button class="btn btn-micro btn-danger" onclick="unregisterCageFromTraining('${cageId}', '${trainingId}')" style="padding: 2px 6px; font-size: 0.65rem; border-radius: 4px;">
+                            Kooi
+                        </button>
+                    </div>
+                    <div class="cage-pigeons">
+                        ${cageData.pigeons.map(pigeon => `
+                            <div class="pigeon-item" style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 6px; padding: 4px 6px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+                                <div class="pigeon-info">
+                                    <div class="pigeon-name" style="font-size: 0.75rem; font-weight: 500; color: #495057;">${pigeon.name}</div>
+                                    <div class="pigeon-details" style="display: flex; gap: 4px; align-items: center; margin-top: 2px;">
+                                        <span style="background: ${pigeon.geslacht === 'man' ? '#e3f2fd' : '#fce4ec'}; padding: 1px 4px; border-radius: 8px; font-size: 0.65rem;">
+                                            ${pigeon.geslacht === 'man' ? '♂' : '♀'}
+                                        </span>
+                                        <span style="font-size: 0.65rem; color: #6c757d;">${pigeon.leeftijd || '0j 0m'}</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-micro btn-danger" onclick="unregisterPigeonFromTraining('${pigeon.name}', '${trainingId}')" style="padding: 1px 4px; font-size: 0.6rem; border-radius: 3px;">
+                                    -
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                cageSectionsContainer.appendChild(cageSection);
+            });
+            
+            registeredPigeonsList.appendChild(cageSectionsContainer);
+        }
+
+        // Bekijk training voortgang
+        function viewTrainingProgress(trainingId) {
+            showNotification('Training voortgang wordt ontwikkeld', 'success');
+        }
+
+        // Bekijk training resultaten
+        function viewTrainingResults(trainingId) {
+            const trainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+            const training = trainings.find(t => t.id === trainingId);
+            
+            if (!training) {
+                showNotification('Training niet gevonden', 'error');
+                return;
+            }
+
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Training Resultaten</h2>
+                        <span class="close">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <h3>${training.name}</h3>
+                        <p>Afstand: ${training.distance} km | Voltooid: ${training.completedAt ? new Date(training.completedAt).toLocaleString('nl-NL') : 'Niet voltooid'}</p>
+                        <div class="ranking-list">
+                            ${generateResultsHTML(training.results || [])}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="closeModal()">Sluiten</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'block';
+            
+            // Event listeners voor modal sluiting
+            const closeBtn = modal.querySelector('.close');
+            const closeButton = modal.querySelector('.btn-secondary');
+            
+            closeBtn.onclick = function() {
+                document.body.removeChild(modal);
+            }
+            
+            closeButton.onclick = function() {
+                document.body.removeChild(modal);
+            }
+            
+            // Sluit bij klik buiten modal
+            modal.onclick = function(event) {
+                if (event.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const placeModal = document.getElementById('placePigeonModal');
+            const breedingModal = document.getElementById('breedingModal');
+            const registrationModal = document.getElementById('pigeonRegistrationModal');
+            
+            if (event.target === placeModal || event.target === breedingModal || event.target === registrationModal) {
+                closeModal();
+            }
+        }
+
+        // Close modal with X button - gebruik event delegation
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('close')) {
+                closeModal();
+            }
+        });
+
+        // Update dashboard statistieken
+        function updateDashboardStats() {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            // Tel totaal duiven van deze gebruiker
+            const allPigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const userPigeons = allPigeons.filter(p => p.owner === user.email);
+            const totalPigeons = userPigeons.length;
+            
+            // Tel duiven in kooien
+            const allCages = JSON.parse(localStorage.getItem('cages') || '[]');
+            const userCages = allCages.filter(cage => cage.owner === user.email);
+            
+            let activePigeons = 0;
+            userCages.forEach(cage => {
+                if (cage.type === 'vlieg' && cage.pigeon) {
+                    activePigeons++; // 1 duif per vliegkooi
+                } else if (cage.type === 'kweek' && cage.malePigeon && cage.femalePigeon) {
+                    activePigeons += 2; // 2 duiven per kweekkooi
+                }
+            });
+            
+            // Tel kooien
+            const totalCages = userCages.length;
+            
+            // Tel trainingen en wedstrijden
+            const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+            const userTrainings = allTrainings.filter(t => t.owner === user.email);
+            const totalTrainings = userTrainings.length;
+            
+            const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+            const userWedstrijden = allWedstrijden.filter(w => w.owner === user.email);
+            const totalWedstrijden = userWedstrijden.length;
+            
+            // Sla op in localStorage voor dashboard
+            localStorage.setItem('totalPigeons', totalPigeons.toString());
+            localStorage.setItem('activePigeons', activePigeons.toString());
+            localStorage.setItem('totalCages', totalCages.toString());
+            localStorage.setItem('totalTrainings', totalTrainings.toString());
+            localStorage.setItem('totalRaces', totalWedstrijden.toString());
+            localStorage.setItem('totalPrizes', '0');
+        }
+
+        // Close modal functie
+        function closeModal() {
+            const placeModal = document.getElementById('placePigeonModal');
+            const registrationModal = document.getElementById('pigeonRegistrationModal');
+            
+            if (placeModal) placeModal.style.display = 'none';
+            if (registrationModal) registrationModal.style.display = 'none';
+        }
+
+        // Logout functie
+        function logout() {
+            localStorage.removeItem('currentUserEmail');
+            localStorage.removeItem('currentUserName');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html> 

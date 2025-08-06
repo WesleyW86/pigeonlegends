@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedstrijd - Pigeon Legends</title>
+
+    <script src="config.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #34495e 0%, #2980b9 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            z-index: 1000;
+            font-weight: bold;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #27ae60;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .page-header {
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .content-card {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .live-tracking {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .wedstrijd-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #e74c3c;
+        }
+
+        .wedstrijd-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .wedstrijd-header h3 {
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .wedstrijd-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .wedstrijd-status.gepland {
+            background: #ecf0f1;
+            color: #7f8c8d;
+        }
+
+        .wedstrijd-status.actief {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .wedstrijd-status.voltooid {
+            background: #e8f5e8;
+            color: #27ae60;
+        }
+
+        .wedstrijd-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+
+        .wedstrijd-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Weer en Tijd Display */
+        .weather-time-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .weather-card, .time-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #3498db;
+            text-align: center;
+        }
+
+        .weather-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weather-icon img {
+            border-radius: 10px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .weather-details {
+            text-align: center;
+        }
+
+        .temperature {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .description {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            text-transform: capitalize;
+        }
+
+        .weather-stats {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #34495e;
+        }
+
+        .time-info {
+            text-align: center;
+        }
+
+        .current-time {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .weather-time-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Pigeon selection styling */
+        .pigeon-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ecf0f1;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .pigeon-item {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pigeon-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .pigeon-item.selected {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .pigeon-item:last-child {
+            border-bottom: none;
+        }
+
+        .pigeon-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .pigeon-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .pigeon-details {
+            font-size: 0.8rem;
+            color: inherit;
+            opacity: 0.8;
+        }
+
+        .pigeon-status {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .pigeon-status.registered {
+            background-color: #e74c3c;
+        }
+
+        /* Medal styling */
+        .medal {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+        }
+
+        .medal.gold {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #b8860b;
+        }
+
+        .medal.silver {
+            background: linear-gradient(45deg, #c0c0c0, #e5e5e5);
+            color: #696969;
+        }
+
+        .medal.bronze {
+            background: linear-gradient(45deg, #cd7f32, #daa520);
+            color: #8b4513;
+        }
+
+        /* Compact form styling */
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Modal styling voor horizontale layout */
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 1200px;
+            width: 95%;
+            margin: 5% auto;
+            position: relative;
+        }
+
+        .modal-body {
+            padding: 15px;
+        }
+
+        /* CSS voor horizontale vliegkooien layout */
+        .cage-sections-container {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 12px !important;
+            margin-bottom: 15px !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .cage-section {
+            border: 1px solid #e0e0e0 !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            background: white !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            flex: 1 1 0% !important;
+            display: block !important;
+        }
+
+        .cage-header {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 8px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cage-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .cage-count {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+
+        .cage-pigeons {
+            padding: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .pigeon-item {
+            padding: 6px 8px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .pigeon-info {
+            flex: 1;
+        }
+
+        .pigeon-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.85rem;
+        }
+
+        .pigeon-details {
+            font-size: 0.7rem;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+
+        .btn-micro {
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            border-radius: 12px;
+            min-width: auto;
+        }
+
+        /* Forceer horizontale layout voor parent container */
+        #availablePigeonsList {
+            display: block !important;
+            width: 100% !important;
+        }
+
+        #availablePigeonsList > * {
+            display: block !important;
+            width: 100% !important;
+        }
+
+        @media (max-width: 768px) {
+            .cage-sections-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cage-sections-container {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
+        .pigeon-option {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid transparent;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pigeon-option:hover {
+            border-color: #2196f3;
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
+        }
+
+        .pigeon-option.selected {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: 16px;
+        }
+
+        /* CSS voor horizontale vliegkooien layout */
+        .cage-sections-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 98%;
+                max-width: 95vw;
+                margin: 2% auto;
+            }
+            
+            .cage-sections-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cage-sections-container {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Pigeon Legends</div>
+            <div class="nav-buttons">
+                <a href="dashboard.html" class="nav-btn">Dashboard</a>
+                <a href="duiven.html" class="nav-btn">Duiven</a>
+                <a href="duiventil.html" class="nav-btn">Duiventil</a>
+                <a href="training.html" class="nav-btn">Training</a>
+                <a href="live-tracking.html" class="nav-btn">Live Tracking</a>
+                <a href="index.html" class="nav-btn" onclick="logout()">Uitloggen</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="page-header">
+            <h1 class="page-title">Wedstrijden</h1>
+            <p class="page-subtitle">Neem deel aan spannende duivenwedstrijden</p>
+        </section>
+
+        <!-- Weer en Tijd Display -->
+        <div class="weather-time-container">
+            <div class="weather-card">
+                <h4 style="margin-bottom: 15px; color: #2c3e50; font-size: 1.1rem;">🌤️ Weer Ukkel</h4>
+                <div id="weatherContainer">
+                    <div style="text-align: center; color: #7f8c8d;">Laden...</div>
+                </div>
+            </div>
+            <div class="time-card">
+                <h4 style="margin-bottom: 15px; color: #2c3e50; font-size: 1.1rem;">🕐 Huidige Tijd</h4>
+                <div id="timeContainer">
+                    <div style="text-align: center; color: #7f8c8d;">Laden...</div>
+                </div>
+            </div>
+        </div>
+        <section class="controls-section">
+            <div class="controls-content">
+                <div>
+                    <h2>Wedstrijd Beheer</h2>
+                    <p>Plan en start wedstrijden voor je duiven</p>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <button class="btn" onclick="showPlanWedstrijdModal()">Wedstrijd Plannen</button>
+                </div>
+            </div>
+        </section>
+
+
+
+        <section class="content-card">
+            <h3 style="margin-bottom: 20px; color: #2c3e50;">Nieuwe Wedstrijd</h3>
+            <form id="wedstrijdForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startLocation">Start Locatie</label>
+                        <select id="startLocation" required>
+                            <option value="">Kies een start locatie...</option>
+                            <optgroup label="Frankrijk - Korte afstanden">
+                                <option value="Lille, Frankrijk" data-lat="50.6292" data-lng="3.0573">Lille, Frankrijk (85 km)</option>
+                                <option value="Rijsel, Frankrijk" data-lat="50.6292" data-lng="3.0573">Rijsel, Frankrijk (85 km)</option>
+                                <option value="Arras, Frankrijk" data-lat="50.2933" data-lng="2.7781">Arras, Frankrijk (125 km)</option>
+                            </optgroup>
+                            <optgroup label="Frankrijk - Middellange afstanden">
+                                <option value="Amiens, Frankrijk" data-lat="49.8941" data-lng="2.2958">Amiens, Frankrijk (176 km)</option>
+                                <option value="Reims, Frankrijk" data-lat="49.2583" data-lng="4.0317">Reims, Frankrijk (226 km)</option>
+                                <option value="Chalons-en-Champagne, Frankrijk" data-lat="48.9564" data-lng="4.3631">Chalons-en-Champagne, Frankrijk (275 km)</option>
+                                <option value="Troyes, Frankrijk" data-lat="48.2973" data-lng="4.0744">Troyes, Frankrijk (326 km)</option>
+                            </optgroup>
+                            <optgroup label="Frankrijk - Lange afstanden">
+                                <option value="Auxerre, Frankrijk" data-lat="47.7986" data-lng="3.5733">Auxerre, Frankrijk (376 km)</option>
+                                <option value="Orléans, Frankrijk" data-lat="47.9029" data-lng="1.9093">Orléans, Frankrijk (425 km)</option>
+                                <option value="Tours, Frankrijk" data-lat="47.2184" data-lng="0.7055">Tours, Frankrijk (475 km)</option>
+                                <option value="Poitiers, Frankrijk" data-lat="46.5802" data-lng="0.3404">Poitiers, Frankrijk (526 km)</option>
+                                <option value="Limoges, Frankrijk" data-lat="45.8336" data-lng="1.2611">Limoges, Frankrijk (576 km)</option>
+                                <option value="Bordeaux, Frankrijk" data-lat="44.8378" data-lng="-0.5792">Bordeaux, Frankrijk (625 km)</option>
+                                <option value="Toulouse, Frankrijk" data-lat="43.6047" data-lng="1.4442">Toulouse, Frankrijk (675 km)</option>
+                                <option value="Perpignan, Frankrijk" data-lat="42.6887" data-lng="2.8948">Perpignan, Frankrijk (726 km)</option>
+                            </optgroup>
+                            <optgroup label="Nederland - Korte afstanden">
+                                <option value="Breda, Nederland" data-lat="51.5719" data-lng="4.7683">Breda, Nederland (46 km)</option>
+                                <option value="Tilburg, Nederland" data-lat="51.5719" data-lng="5.0672">Tilburg, Nederland (55 km)</option>
+                                <option value="Eindhoven, Nederland" data-lat="51.4416" data-lng="5.4697">Eindhoven, Nederland (66 km)</option>
+                                <option value="Den Bosch, Nederland" data-lat="51.6978" data-lng="5.3037">Den Bosch, Nederland (75 km)</option>
+                                <option value="Rotterdam, Nederland" data-lat="51.9225" data-lng="4.4792">Rotterdam, Nederland (86 km)</option>
+                                <option value="Den Haag, Nederland" data-lat="52.0705" data-lng="4.3007">Den Haag, Nederland (95 km)</option>
+                            </optgroup>
+                            <optgroup label="Nederland - Middellange afstanden">
+                                <option value="Nijmegen, Nederland" data-lat="51.8425" data-lng="5.8533">Nijmegen, Nederland (96 km)</option>
+                                <option value="Arnhem, Nederland" data-lat="51.9851" data-lng="5.8987">Arnhem, Nederland (105 km)</option>
+                                <option value="Utrecht, Nederland" data-lat="52.0907" data-lng="5.1214">Utrecht, Nederland (126 km)</option>
+                                <option value="Amsterdam, Nederland" data-lat="52.3676" data-lng="4.9041">Amsterdam, Nederland (145 km)</option>
+                            </optgroup>
+                            <optgroup label="Duitsland - Middellange afstanden">
+                                <option value="Aken, Duitsland" data-lat="50.7753" data-lng="6.0839">Aken, Duitsland (126 km)</option>
+                                <option value="Düsseldorf, Duitsland" data-lat="51.2277" data-lng="6.7735">Düsseldorf, Duitsland (155 km)</option>
+                                <option value="Keulen, Duitsland" data-lat="50.9375" data-lng="6.9603">Keulen, Duitsland (176 km)</option>
+                                <option value="Essen, Duitsland" data-lat="51.4556" data-lng="7.0116">Essen, Duitsland (166 km)</option>
+                                <option value="Dortmund, Duitsland" data-lat="51.5136" data-lng="7.4653">Dortmund, Duitsland (185 km)</option>
+                                <option value="Münster, Duitsland" data-lat="51.9607" data-lng="7.6261">Münster, Duitsland (195 km)</option>
+                            </optgroup>
+                            <optgroup label="Duitsland - Lange afstanden">
+                                <option value="Bielefeld, Duitsland" data-lat="52.0302" data-lng="8.5325">Bielefeld, Duitsland (226 km)</option>
+                                <option value="Hannover, Duitsland" data-lat="52.3759" data-lng="9.7320">Hannover, Duitsland (275 km)</option>
+                                <option value="Bremen, Duitsland" data-lat="53.0793" data-lng="8.8017">Bremen, Duitsland (326 km)</option>
+                                <option value="Hamburg, Duitsland" data-lat="53.5511" data-lng="9.9937">Hamburg, Duitsland (376 km)</option>
+                                <option value="Berlijn, Duitsland" data-lat="52.5200" data-lng="13.4050">Berlijn, Duitsland (425 km)</option>
+                            </optgroup>
+                            <optgroup label="Spanje - Lange afstanden (Klassiekers)">
+                                <option value="Barcelona, Spanje" data-lat="41.3851" data-lng="2.1734">Barcelona, Spanje (1026 km)</option>
+                                <option value="Madrid, Spanje" data-lat="40.4168" data-lng="-3.7038">Madrid, Spanje (1126 km)</option>
+                                <option value="Valencia, Spanje" data-lat="39.4699" data-lng="-0.3763">Valencia, Spanje (1225 km)</option>
+                                <option value="Zaragoza, Spanje" data-lat="41.6488" data-lng="-0.8891">Zaragoza, Spanje (1326 km)</option>
+                                <option value="Bilbao, Spanje" data-lat="43.2627" data-lng="-2.9253">Bilbao, Spanje (1426 km)</option>
+                                <option value="San Sebastián, Spanje" data-lat="43.3223" data-lng="-1.9839">San Sebastián, Spanje (1525 km)</option>
+                                <option value="Pamplona, Spanje" data-lat="42.8167" data-lng="-1.6442">Pamplona, Spanje (1626 km)</option>
+                                <option value="Logroño, Spanje" data-lat="42.4627" data-lng="-2.4449">Logroño, Spanje (1725 km)</option>
+                                <option value="Vitoria-Gasteiz, Spanje" data-lat="42.8467" data-lng="-2.6722">Vitoria-Gasteiz, Spanje (1826 km)</option>
+                                <option value="Santander, Spanje" data-lat="43.4623" data-lng="-3.8099">Santander, Spanje (1926 km)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="endLocation">Eind Locatie (Je woonplaats)</label>
+                        <input type="text" id="endLocation" readonly style="background-color: #f8f9fa;">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startTime">Start Tijd</label>
+                        <input type="datetime-local" id="startTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="distance">Afstand (km) - Automatisch berekend</label>
+                        <input type="number" id="distance" readonly style="background-color: #f8f9fa;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="prizeMoney">Prijsgeld (€)</label>
+                    <input type="number" id="prizeMoney" value="1000" min="100" step="100" required>
+                </div>
+                <button type="submit" class="btn">Wedstrijd Plannen</button>
+            </form>
+        </section>
+
+        <section class="content-card">
+            <h3 style="margin-bottom: 20px; color: #2c3e50;">Geplande Wedstrijden</h3>
+            <div id="wedstrijdenContainer">
+                <!-- Wedstrijden worden hier dynamisch toegevoegd -->
+            </div>
+        </section>
+
+        <div id="liveTracking" class="live-tracking" style="display: none;">
+            <div class="tracking-header">
+                <h3 class="tracking-title">Live Tracking</h3>
+                <button class="btn btn-secondary" onclick="updateLiveTracking()">Vernieuwen</button>
+            </div>
+            <table class="tracking-table">
+                <thead>
+                    <tr>
+                        <th>Positie</th>
+                        <th>Duif</th>
+                        <th>Eigenaar</th>
+                        <th>Gem. Snelheid</th>
+                        <th>Huidige Snelheid</th>
+                        <th>KM Gevlogen</th>
+                        <th>KM Restant</th>
+                        <th>Prijs</th>
+                    </tr>
+                </thead>
+                <tbody id="trackingTableBody">
+                    <!-- Live tracking data wordt hier dynamisch toegevoegd -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Duiven Inschrijven Modal -->
+    <div id="pigeonRegistrationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Duiven Inschrijven voor Wedstrijd</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: #7f8c8d; margin-bottom: 12px; font-size: 0.8rem;">
+                    <strong>Instructies:</strong> Klik op "+" om duiven in te schrijven, "-" om uit te schrijven. Alleen duiven in vliegkooien kunnen deelnemen.
+                </p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #2c3e50;">Beschikbare Duiven</h4>
+                        <div id="availablePigeonsList">
+                            <!-- Beschikbare duiven worden hier dynamisch geladen -->
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #2c3e50;">Ingeschreven Duiven</h4>
+                        <div id="registeredPigeonsList">
+                            <!-- Ingeschreven duiven worden hier dynamisch geladen -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wedstrijd Resultaten Modal -->
+    <div id="wedstrijdResultsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Wedstrijd Resultaten</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="wedstrijdResultsContent">
+                    <!-- Resultaten worden hier dynamisch toegevoegd -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // User management functies
+        function getCurrentUser() {
+            const email = localStorage.getItem('currentUserEmail');
+            const firstName = localStorage.getItem('userFirstName');
+            const lastName = localStorage.getItem('userLastName');
+            const location = localStorage.getItem('userLocation');
+            return email ? { email, firstName, lastName, location } : null;
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            if (notification) {
+                notification.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        // Check of gebruiker is ingelogd
+        function checkAuth() {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+        }
+
+        // Weer API functie voor Ukkel met realistische temperatuurveranderingen
+        // Gebruik localStorage om weerdata te delen tussen pagina's
+        async function getUkkelWeather() {
+            try {
+                // OpenWeatherMap API voor Ukkel (Brussel)
+                // Gebruik een gratis API key voor demo doeleinden
+                const apiKey = '1234567890abcdef'; // Demo API key - vervang door echte key voor productie
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Ukkel,BE&appid=${apiKey}&units=metric&lang=nl`);
+                
+                if (!response.ok) {
+                    throw new Error('API response niet OK');
+                }
+                
+                const data = await response.json();
+                
+                return {
+                    temperature: Math.round(data.main.temp),
+                    description: data.weather[0].description,
+                    humidity: data.main.humidity,
+                    windSpeed: Math.round(data.wind.speed * 3.6), // m/s naar km/h
+                    icon: data.weather[0].icon
+                };
+            } catch (error) {
+                console.log('Weer API niet beschikbaar, gebruik realistische demo data voor Ukkel');
+                
+                const currentHour = new Date().getHours();
+                const currentMonth = new Date().getMonth(); // 0-11
+                const currentTime = new Date().getTime();
+                
+                // Haal opgeslagen weerdata op uit localStorage
+                const storedWeatherData = localStorage.getItem('lastWeatherData');
+                const storedWeatherTime = localStorage.getItem('lastWeatherTime');
+                
+                // Als we al eerder weer data hebben, gebruik logische temperatuurveranderingen
+                if (storedWeatherData && storedWeatherTime) {
+                    const lastWeatherData = JSON.parse(storedWeatherData);
+                    const lastWeatherTime = parseInt(storedWeatherTime);
+                    const timeDiff = currentTime - lastWeatherTime;
+                    const halfHourInMs = 30 * 60 * 1000; // 30 minuten
+                    
+                    // Alleen nieuwe weer data genereren als er 30 minuten zijn verstreken
+                    if (timeDiff < halfHourInMs) {
+                        return lastWeatherData;
+                    }
+                }
+                
+                // Realistische demo weer data voor Ukkel, België - December 2024
+                let demoWeather;
+                
+                if (currentMonth === 11) { // December
+                    if (currentHour >= 6 && currentHour <= 18) { // Dag
+                        demoWeather = [
+                            { temp: 8, desc: 'bewolkt', humidity: 75, wind: 18, icon: '03d' },
+                            { temp: 6, desc: 'licht bewolkt', humidity: 65, wind: 15, icon: '02d' },
+                            { temp: 4, desc: 'regenachtig', humidity: 85, wind: 20, icon: '10d' },
+                            { temp: 7, desc: 'licht bewolkt', humidity: 70, wind: 12, icon: '02d' },
+                            { temp: 5, desc: 'bewolkt', humidity: 80, wind: 16, icon: '03d' }
+                        ];
+                    } else { // Nacht
+                        demoWeather = [
+                            { temp: 2, desc: 'heldere nacht', humidity: 80, wind: 8, icon: '01n' },
+                            { temp: 0, desc: 'bewolkte nacht', humidity: 85, wind: 12, icon: '02n' },
+                            { temp: -1, desc: 'vorst', humidity: 75, wind: 6, icon: '13n' },
+                            { temp: 1, desc: 'bewolkte nacht', humidity: 82, wind: 10, icon: '02n' },
+                            { temp: 3, desc: 'heldere nacht', humidity: 78, wind: 7, icon: '01n' }
+                        ];
+                    }
+                } else if (currentMonth >= 3 && currentMonth <= 8) { // Lente/Zomer
+                    if (currentHour >= 6 && currentHour <= 18) { // Dag
+                        demoWeather = [
+                            { temp: 22, desc: 'zonnig', humidity: 55, wind: 12, icon: '01d' },
+                            { temp: 20, desc: 'licht bewolkt', humidity: 60, wind: 15, icon: '02d' },
+                            { temp: 18, desc: 'bewolkt', humidity: 65, wind: 18, icon: '03d' },
+                            { temp: 16, desc: 'lichte regen', humidity: 75, wind: 20, icon: '10d' },
+                            { temp: 24, desc: 'zonnig', humidity: 50, wind: 10, icon: '01d' },
+                            { temp: 19, desc: 'bewolkt', humidity: 70, wind: 16, icon: '03d' }
+                        ];
+                    } else { // Nacht
+                        demoWeather = [
+                            { temp: 15, desc: 'heldere nacht', humidity: 70, wind: 8, icon: '01n' },
+                            { temp: 13, desc: 'bewolkte nacht', humidity: 75, wind: 10, icon: '02n' },
+                            { temp: 11, desc: 'regenachtige nacht', humidity: 80, wind: 12, icon: '10n' },
+                            { temp: 17, desc: 'heldere nacht', humidity: 65, wind: 6, icon: '01n' },
+                            { temp: 14, desc: 'bewolkte nacht', humidity: 72, wind: 9, icon: '02n' }
+                        ];
+                    }
+                } else { // Herfst/Winter (Jan, Feb, Sep, Oct, Nov)
+                    if (currentHour >= 6 && currentHour <= 18) { // Dag
+                        demoWeather = [
+                            { temp: 8, desc: 'bewolkt', humidity: 75, wind: 18, icon: '03d' },
+                            { temp: 5, desc: 'lichte regen', humidity: 85, wind: 20, icon: '10d' },
+                            { temp: 12, desc: 'licht bewolkt', humidity: 65, wind: 15, icon: '02d' },
+                            { temp: 3, desc: 'mistig', humidity: 90, wind: 5, icon: '50d' }
+                        ];
+                    } else { // Nacht
+                        demoWeather = [
+                            { temp: 2, desc: 'heldere nacht', humidity: 80, wind: 8, icon: '01n' },
+                            { temp: 0, desc: 'bewolkte nacht', humidity: 85, wind: 12, icon: '02n' },
+                            { temp: -1, desc: 'vorst', humidity: 75, wind: 6, icon: '13n' }
+                        ];
+                    }
+                }
+                
+                const randomWeather = demoWeather[Math.floor(Math.random() * demoWeather.length)];
+                
+                // Sla de nieuwe weer data op in localStorage voor logische veranderingen
+                const newWeatherData = {
+                    temperature: randomWeather.temp,
+                    description: randomWeather.desc,
+                    humidity: randomWeather.humidity,
+                    windSpeed: randomWeather.wind,
+                    icon: randomWeather.icon
+                };
+                
+                localStorage.setItem('lastWeatherData', JSON.stringify(newWeatherData));
+                localStorage.setItem('lastWeatherTime', currentTime.toString());
+                
+                return newWeatherData;
+            }
+        }
+
+        // Update weer en tijd display
+        function updateWeatherAndTime() {
+            const weatherContainer = document.getElementById('weatherContainer');
+            const timeContainer = document.getElementById('timeContainer');
+            
+            if (weatherContainer) {
+                getUkkelWeather().then(weather => {
+                    weatherContainer.innerHTML = `
+                        <div class="weather-info">
+                            <div class="weather-icon">
+                                <img src="https://openweathermap.org/img/wn/${weather.icon}@2x.png" alt="Weer" style="width: 50px; height: 50px;">
+                            </div>
+                            <div class="weather-details">
+                                <div class="temperature">${weather.temperature}°C</div>
+                                <div class="description">${weather.description}</div>
+                                <div class="weather-stats">
+                                    <span>💧 ${weather.humidity}%</span>
+                                    <span>💨 ${weather.windSpeed} km/h</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            if (timeContainer) {
+                const now = new Date();
+                const timeString = now.toLocaleString('nl-NL', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    timeZoneName: 'short'
+                });
+                
+                // Hoofdletter voor dag
+                const capitalizedTimeString = timeString.charAt(0).toUpperCase() + timeString.slice(1);
+                
+                timeContainer.innerHTML = `
+                    <div class="time-info">
+                        <div class="current-time">${capitalizedTimeString}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            setupWedstrijdForm();
+            loadWedstrijden();
+            renderWedstrijden();
+            
+            // Initialiseer weer en tijd display
+            updateWeatherAndTime();
+            
+            // Update weer elke 30 minuten (1800000 ms), tijd elke seconde
+            setInterval(updateWeatherAndTime, 1800000);
+            
+            // Update tijd elke seconde
+            setInterval(() => {
+                const timeContainer = document.getElementById('timeContainer');
+                if (timeContainer) {
+                    const now = new Date();
+                    const timeString = now.toLocaleString('nl-NL', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZoneName: 'short'
+                    });
+                    
+                    // Hoofdletter voor dag
+                    const capitalizedTimeString = timeString.charAt(0).toUpperCase() + timeString.slice(1);
+                    
+                    timeContainer.innerHTML = `
+                        <div class="time-info">
+                            <div class="current-time">${capitalizedTimeString}</div>
+                        </div>
+                    `;
+                }
+            }, 1000);
+        });
+
+        // Laad duiven uit localStorage
+        function loadPigeons() {
+            const pigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const user = getCurrentUser();
+            return pigeons.filter(pigeon => pigeon.owner === user.email);
+        }
+
+        // Laad wedstrijden uit localStorage
+        function loadWedstrijden() {
+            const wedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+            // Alle gebruikers kunnen alle wedstrijden zien
+            return wedstrijden;
+        }
+
+        // Sla wedstrijd op in localStorage
+        function saveWedstrijd(wedstrijd) {
+            const wedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+            wedstrijden.push(wedstrijd);
+            localStorage.setItem('wedstrijden', JSON.stringify(wedstrijden));
+            updateDashboardStats();
+        }
+
+        // Render wedstrijden
+        function renderWedstrijden() {
+            const wedstrijden = loadWedstrijden();
+            const container = document.getElementById('wedstrijdenContainer');
+            const currentUser = getCurrentUser();
+            const isAdmin = currentUser.email === 'wesley.wyngaerd@outlook.com';
+            
+            if (wedstrijden.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #7f8c8d; margin-top: 20px;">Nog geen wedstrijden gepland</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            wedstrijden.forEach(wedstrijd => {
+                const wedstrijdName = `Wedstrijd ${wedstrijd.startLocation}`;
+                const registeredPigeons = wedstrijd.registeredPigeons ? wedstrijd.registeredPigeons.length : 0;
+                
+                const wedstrijdCard = document.createElement('div');
+                wedstrijdCard.className = 'wedstrijd-card';
+                wedstrijdCard.innerHTML = `
+                    <div class="wedstrijd-header">
+                        <h3>${wedstrijdName}</h3>
+                        <span class="wedstrijd-status ${wedstrijd.status}">${wedstrijd.status}</span>
+                    </div>
+                    <div class="wedstrijd-details">
+                        <div class="detail-item">
+                            <strong>Start:</strong> ${wedstrijd.startLocation}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Eind:</strong> ${wedstrijd.endLocation}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Afstand:</strong> ${wedstrijd.distance} km
+                        </div>
+                        <div class="detail-item">
+                            <strong>Type:</strong> ${wedstrijd.type}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Prijsgeld:</strong> €${wedstrijd.prizeMoney}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Deelnemers:</strong> ${registeredPigeons}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Start tijd:</strong> ${new Date(wedstrijd.startTime).toLocaleString('nl-NL')}
+                        </div>
+                    </div>
+                    <div class="wedstrijd-actions">
+                        <button class="btn btn-secondary" onclick="openPigeonRegistration('${wedstrijd.id}')">Duiven Inschrijven</button>
+                        ${wedstrijd.status === 'actief' ? '<button class="btn btn-secondary" onclick="viewLiveTracking(\'' + wedstrijd.id + '\')">Live Tracking</button>' : ''}
+                        ${wedstrijd.status === 'voltooid' ? '<button class="btn btn-secondary" onclick="viewWedstrijdResults(\'' + wedstrijd.id + '\')">Resultaten Bekijken</button>' : ''}
+                        ${isAdmin && wedstrijd.status === 'gepland' ? '<button class="btn btn-secondary" onclick="startWedstrijd(\'' + wedstrijd.id + '\')">Start Wedstrijd</button>' : ''}
+                        ${isAdmin ? '<button class="btn btn-danger" onclick="deleteWedstrijd(\'' + wedstrijd.id + '\')">Verwijderen</button>' : ''}
+                    </div>
+                `;
+                container.appendChild(wedstrijdCard);
+            });
+        }
+
+        // Start wedstrijd
+        function startWedstrijd(wedstrijdId) {
+            const wedstrijden = loadWedstrijden();
+            const wedstrijd = wedstrijden.find(w => w.id === wedstrijdId);
+            
+            if (wedstrijd) {
+                wedstrijd.status = 'actief';
+                wedstrijd.startedAt = new Date().toISOString();
+                wedstrijd.endTime = new Date(Date.now() + (30 + Math.random() * 60) * 60000).toISOString(); // 30-90 minuten
+                
+                // Update localStorage
+                const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+                const wedstrijdIndex = allWedstrijden.findIndex(w => w.id === wedstrijdId);
+                if (wedstrijdIndex !== -1) {
+                    allWedstrijden[wedstrijdIndex] = wedstrijd;
+                    localStorage.setItem('wedstrijden', JSON.stringify(allWedstrijden));
+                }
+                
+                showNotification(`Wedstrijd "${wedstrijd.startLocation}" gestart!`, 'success');
+                renderWedstrijden();
+                updateDashboardStats();
+            }
+        }
+
+        // Verwijder wedstrijd
+        function deleteWedstrijd(wedstrijdId) {
+            if (confirm('Weet je zeker dat je deze wedstrijd wilt verwijderen?')) {
+                const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+                const filteredWedstrijden = allWedstrijden.filter(w => w.id !== wedstrijdId);
+                localStorage.setItem('wedstrijden', JSON.stringify(filteredWedstrijden));
+                
+                showNotification('Wedstrijd verwijderd', 'success');
+                renderWedstrijden();
+                updateDashboardStats();
+            }
+        }
+
+        // Setup wedstrijd form
+        function setupWedstrijdForm() {
+            const startLocationSelect = document.getElementById('startLocation');
+            const endLocationInput = document.getElementById('endLocation');
+            const distanceInput = document.getElementById('distance');
+            const wedstrijdForm = document.getElementById('wedstrijdForm');
+            const startTimeInput = document.getElementById('startTime');
+
+            // Vul huidige datum in
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const currentDate = `${year}-${month}-${day}`;
+            startTimeInput.value = currentDate + 'T00:00';
+
+            // Laad gebruiker locatie
+            const user = getCurrentUser();
+            const userLocation = localStorage.getItem('userLocation') || 'Oostakker, België';
+            endLocationInput.value = userLocation;
+
+            // Afstandsberekening functie (Haversine formule)
+            function calculateDistance(lat1, lon1, lat2, lon2) {
+                const R = 6371;
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                         Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                         Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                return Math.round(R * c * 10) / 10;
+            }
+
+            // Get user coordinates
+            function getUserCoordinates() {
+                const userLocation = localStorage.getItem('userLocation');
+                const locations = {
+                    'Oostakker, België': { lat: 51.0500, lng: 3.7500 },
+                    'Sas van Gent, Nederland': { lat: 51.2275, lng: 3.7997 },
+                    'Mendonk, België': { lat: 51.1500, lng: 3.8000 }
+                };
+                return locations[userLocation] || locations['Oostakker, België'];
+            }
+
+            // Update afstand
+            function updateDistance() {
+                const selectedOption = startLocationSelect.options[startLocationSelect.selectedIndex];
+                if (selectedOption && selectedOption.value) {
+                    const startLat = parseFloat(selectedOption.dataset.lat);
+                    const startLng = parseFloat(selectedOption.dataset.lng);
+                    const userCoords = getUserCoordinates();
+                    
+                    const distance = calculateDistance(startLat, startLng, userCoords.lat, userCoords.lng);
+                    distanceInput.value = distance;
+                }
+            }
+
+            // Event listeners
+            startLocationSelect.addEventListener('change', updateDistance);
+
+            // Form submit handler
+            wedstrijdForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const startLocation = startLocationSelect.value;
+                const startTime = document.getElementById('startTime').value;
+                const distance = distanceInput.value;
+                const prizeMoney = document.getElementById('prizeMoney').value;
+
+                if (!startLocation || !startTime || !prizeMoney) {
+                    showNotification('Vul alle velden in', 'error');
+                    return;
+                }
+
+                // Maak wedstrijd object
+                const wedstrijd = {
+                    id: Date.now().toString(),
+                    name: `Wedstrijd ${startLocation}`,
+                    startLocation: startLocation,
+                    endLocation: userLocation,
+                    distance: parseFloat(distance),
+                    startTime: startTime,
+                    prizeMoney: parseFloat(prizeMoney),
+                    status: 'gepland',
+                    owner: getCurrentUser().email,
+                    ingeschreven_duiven: [],
+                    createdAt: new Date().toISOString()
+                };
+
+                saveWedstrijd(wedstrijd);
+                
+                showNotification(`Wedstrijd "${startLocation}" gepland! Afstand: ${distance} km`, 'success');
+                
+                // Reset form
+                wedstrijdForm.reset();
+                distanceInput.value = '';
+                endLocationInput.value = userLocation;
+                
+                renderWedstrijden();
+            });
+        }
+
+        // Duiven inschrijven functies
+        function openPigeonRegistration(wedstrijdId) {
+            const wedstrijd = loadWedstrijden().find(w => w.id === wedstrijdId);
+            if (!wedstrijd) return;
+
+            const modal = document.getElementById('pigeonRegistrationModal');
+            
+            // Gebruik de updatePigeonRegistrationModal functie voor consistente layout
+            updatePigeonRegistrationModal(wedstrijdId);
+            
+            modal.style.display = 'block';
+        }
+
+        // Update modal zonder te sluiten
+        function updatePigeonRegistrationModal(wedstrijdId) {
+            const wedstrijd = loadWedstrijden().find(w => w.id === wedstrijdId);
+            
+            if (!wedstrijd) {
+                showNotification('Wedstrijd niet gevonden', 'error');
+                return;
+            }
+            
+            // Update beschikbare duiven lijst
+            const availablePigeonsList = document.getElementById('availablePigeonsList');
+            availablePigeonsList.innerHTML = '';
+            
+            const pigeonsPerCage = getPigeonsPerCage();
+            
+            if (Object.keys(pigeonsPerCage).length === 0) {
+                availablePigeonsList.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 10px;">🕊️</div>
+                        <p style="margin: 0;">Geen duiven in vliegkooien beschikbaar</p>
+                        <p style="font-size: 0.9rem; margin-top: 5px;">Plaats eerst duiven in vliegkooien via de Duiventil</p>
+                    </div>
+                `;
+            } else {
+                // Selecteer alle duiven knop
+                const selectAllButton = document.createElement('div');
+                selectAllButton.style.cssText = 'margin-bottom: 15px; padding: 10px 12px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-radius: 8px; border: 1px solid #2196f3;';
+                selectAllButton.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="font-size: 0.95rem; color: #1976d2;">Alle Duiven</strong>
+                            <div style="font-size: 0.75rem; color: #666; margin-top: 2px;">
+                                Schrijf alle duiven in
+                            </div>
+                        </div>
+                        <button class="btn btn-micro btn-primary" onclick="selectAllPigeonsForWedstrijd('${wedstrijdId}')">
+                            Alle
+                        </button>
+                    </div>
+                `;
+                availablePigeonsList.appendChild(selectAllButton);
+                
+                // Container voor horizontale vliegkooien layout
+                const cageSectionsContainer = document.createElement('div');
+                cageSectionsContainer.className = 'cage-sections-container';
+                cageSectionsContainer.style.cssText = `
+                    display: grid !important;
+                    grid-template-columns: repeat(3, 1fr) !important;
+                    gap: 15px !important;
+                    margin-top: 10px !important;
+                    width: 100% !important;
+                    min-width: 0 !important;
+                    flex-direction: row !important;
+                    flex-wrap: nowrap !important;
+                `;
+                
+                // Per vliegkooi secties
+                Object.keys(pigeonsPerCage).forEach(cageId => {
+                    const cage = pigeonsPerCage[cageId];
+                    const cagePigeons = cage.pigeons.filter(pigeon => {
+                        return !wedstrijd.registeredPigeons || 
+                               !wedstrijd.registeredPigeons.some(p => p.name === pigeon.name);
+                    });
+                    
+                    if (cagePigeons.length > 0) {
+                        const cageSection = document.createElement('div');
+                        cageSection.className = 'cage-section';
+                        cageSection.style.cssText = `
+                            background: #f8f9fa;
+                            border: 1px solid #dee2e6;
+                            border-radius: 8px;
+                            padding: 8px;
+                            margin-bottom: 10px;
+                        `;
+                        cageSection.innerHTML = `
+                            <div class="cage-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #dee2e6;">
+                                <div>
+                                    <div class="cage-title" style="font-weight: bold; font-size: 0.85rem; color: #495057;">${cage.name}</div>
+                                    <div class="cage-count" style="font-size: 0.7rem; color: #6c757d;">${cagePigeons.length} duiven</div>
+                                </div>
+                                <button class="btn btn-micro btn-success" onclick="selectCagePigeonsForWedstrijd('${cageId}', '${wedstrijdId}')" style="padding: 2px 6px; font-size: 0.65rem; border-radius: 4px;">
+                                    Kooi
+                                </button>
+                            </div>
+                            <div class="cage-pigeons">
+                                ${cagePigeons.map(pigeon => `
+                                    <div class="pigeon-item" style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 4px 6px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="pigeon-info">
+                                            <div class="pigeon-name" style="font-size: 0.75rem; font-weight: 500; color: #495057;">${pigeon.name}</div>
+                                            <div class="pigeon-details" style="display: flex; gap: 4px; align-items: center; margin-top: 2px;">
+                                                <span style="background: ${pigeon.geslacht === 'man' ? '#e3f2fd' : '#fce4ec'}; padding: 1px 4px; border-radius: 8px; font-size: 0.65rem;">
+                                                    ${pigeon.geslacht === 'man' ? '♂' : '♀'}
+                                                </span>
+                                                <span style="font-size: 0.65rem; color: #6c757d;">${pigeon.leeftijd || '0j 0m'}</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-micro btn-success" onclick="registerPigeonForWedstrijd('${pigeon.name}', '${wedstrijdId}')" style="padding: 1px 4px; font-size: 0.6rem; border-radius: 3px;">
+                                            +
+                                        </button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                        cageSectionsContainer.appendChild(cageSection);
+                    }
+                });
+                
+                availablePigeonsList.appendChild(cageSectionsContainer);
+            }
+            
+            // Update ingeschreven duiven lijst
+            renderRegisteredPigeons(wedstrijdId);
+        }
+
+        // Register pigeon for wedstrijd
+        function registerPigeonForWedstrijd(pigeonName, wedstrijdId) {
+            const wedstrijden = loadWedstrijden();
+            const wedstrijd = wedstrijden.find(w => w.id === wedstrijdId);
+            
+            if (!wedstrijd) return;
+            
+            // Initialiseer registeredPigeons array als het nog niet bestaat
+            if (!wedstrijd.registeredPigeons) {
+                wedstrijd.registeredPigeons = [];
+            }
+            
+            // Voeg duif toe als deze nog niet is ingeschreven
+            if (!wedstrijd.registeredPigeons.some(p => p.name === pigeonName)) {
+                const pigeon = loadPigeons().find(p => p.name === pigeonName);
+                if (pigeon) {
+                    wedstrijd.registeredPigeons.push(pigeon);
+                    
+                    // Update localStorage
+                    const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+                    const wedstrijdIndex = allWedstrijden.findIndex(w => w.id === wedstrijdId);
+                    if (wedstrijdIndex !== -1) {
+                        allWedstrijden[wedstrijdIndex] = wedstrijd;
+                        localStorage.setItem('wedstrijden', JSON.stringify(allWedstrijden));
+                    }
+                    
+                    showNotification(`Duif ${pigeon.name} ingeschreven voor wedstrijd`);
+                    
+                    // Update modal zonder te sluiten
+                    updatePigeonRegistrationModal(wedstrijdId);
+                } else {
+                    showNotification(`Duif met naam "${pigeonName}" niet gevonden.`, 'error');
+                }
+            } else {
+                showNotification(`Duif ${pigeonName} is al ingeschreven voor deze wedstrijd.`, 'info');
+            }
+        }
+
+        // Unregister pigeon from wedstrijd
+        function unregisterPigeonFromWedstrijd(pigeonName, wedstrijdId) {
+            const wedstrijden = loadWedstrijden();
+            const wedstrijd = wedstrijden.find(w => w.id === wedstrijdId);
+            
+            if (!wedstrijd || !wedstrijd.registeredPigeons) {
+                showNotification('Wedstrijd niet gevonden', 'error');
+                return;
+            }
+            
+            // Verwijder duif uit ingeschreven lijst
+            const pigeonIndex = wedstrijd.registeredPigeons.findIndex(p => p.name === pigeonName);
+            if (pigeonIndex !== -1) {
+                wedstrijd.registeredPigeons.splice(pigeonIndex, 1);
+                
+                // Update localStorage
+                const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+                const wedstrijdIndex = allWedstrijden.findIndex(w => w.id === wedstrijdId);
+                if (wedstrijdIndex !== -1) {
+                    allWedstrijden[wedstrijdIndex] = wedstrijd;
+                    localStorage.setItem('wedstrijden', JSON.stringify(allWedstrijden));
+                }
+                
+                showNotification(`Duif ${pigeonName} uitgeschreven van wedstrijd`);
+                
+                // Update modal zonder te sluiten
+                updatePigeonRegistrationModal(wedstrijdId);
+            } else {
+                showNotification(`Duif ${pigeonName} was niet ingeschreven voor deze wedstrijd.`, 'info');
+            }
+        }
+
+        // Unregister entire cage from wedstrijd
+        function unregisterCageFromWedstrijd(cageId, wedstrijdId) {
+            const wedstrijden = loadWedstrijden();
+            const wedstrijd = wedstrijden.find(w => w.id === wedstrijdId);
+            const pigeonsPerCage = getPigeonsPerCage();
+            const cage = pigeonsPerCage[cageId];
+            
+            if (!wedstrijd || !wedstrijd.registeredPigeons || !cage) {
+                showNotification('Wedstrijd of kooi niet gevonden', 'error');
+                return;
+            }
+            
+            // Remove all pigeons from this cage from the wedstrijd
+            const cagePigeonNames = cage.pigeons.map(p => p.name);
+            const originalCount = wedstrijd.registeredPigeons.length;
+            
+            wedstrijd.registeredPigeons = wedstrijd.registeredPigeons.filter(pigeon => 
+                !cagePigeonNames.includes(pigeon.name)
+            );
+            
+            const removedCount = originalCount - wedstrijd.registeredPigeons.length;
+            
+            if (removedCount > 0) {
+                // Update localStorage
+                const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+                const wedstrijdIndex = allWedstrijden.findIndex(w => w.id === wedstrijdId);
+                if (wedstrijdIndex !== -1) {
+                    allWedstrijden[wedstrijdIndex] = wedstrijd;
+                    localStorage.setItem('wedstrijden', JSON.stringify(allWedstrijden));
+                }
+                
+                showNotification(`${removedCount} duiven uit ${cage.name} uitgeschreven van wedstrijd`);
+                
+                // Update modal zonder te sluiten
+                updatePigeonRegistrationModal(wedstrijdId);
+            } else {
+                showNotification(`Geen duiven uit ${cage.name} waren ingeschreven voor deze wedstrijd.`, 'info');
+            }
+        }
+
+        // Render registered pigeons
+        function renderRegisteredPigeons(wedstrijdId) {
+            const wedstrijd = loadWedstrijden().find(w => w.id === wedstrijdId);
+            const registeredPigeonsList = document.getElementById('registeredPigeonsList');
+            
+            registeredPigeonsList.innerHTML = '';
+            
+            if (!wedstrijd || !wedstrijd.registeredPigeons || wedstrijd.registeredPigeons.length === 0) {
+                registeredPigeonsList.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 10px;">📝</div>
+                        <p style="margin: 0;">Nog geen duiven ingeschreven</p>
+                        <p style="font-size: 0.9rem; margin-top: 5px;">Schrijf duiven in om deel te nemen aan de wedstrijd</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Group registered pigeons by cage
+            const pigeonsPerCage = getPigeonsPerCage();
+            const registeredPigeonsPerCage = {};
+            
+            wedstrijd.registeredPigeons.forEach(pigeon => {
+                // Find in which cage this pigeon is
+                for (const [cageId, cage] of Object.entries(pigeonsPerCage)) {
+                    if (cage.pigeons.some(p => p.name === pigeon.name)) {
+                        if (!registeredPigeonsPerCage[cageId]) {
+                            registeredPigeonsPerCage[cageId] = {
+                                cage: cage,
+                                pigeons: []
+                            };
+                        }
+                        registeredPigeonsPerCage[cageId].pigeons.push(pigeon);
+                        break;
+                    }
+                }
+            });
+            
+            // Maak een container voor horizontale weergave
+            const cageSectionsContainer = document.createElement('div');
+            cageSectionsContainer.className = 'cage-sections-container';
+            cageSectionsContainer.style.cssText = `
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 15px !important;
+                margin-top: 10px !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+            `;
+            
+            // Show registered pigeons grouped by cage in horizontal layout
+            Object.keys(registeredPigeonsPerCage).forEach(cageId => {
+                const cageData = registeredPigeonsPerCage[cageId];
+                const cageSection = document.createElement('div');
+                cageSection.className = 'cage-section';
+                cageSection.style.cssText = `
+                    background: #f8f9fa;
+                    border: 1px solid #dee2e6;
+                    border-radius: 8px;
+                    padding: 8px;
+                    margin-bottom: 10px;
+                `;
+                cageSection.innerHTML = `
+                    <div class="cage-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #dee2e6;">
+                        <div>
+                            <div class="cage-title" style="font-weight: bold; font-size: 0.85rem; color: #495057;">${cageData.cage.name}</div>
+                            <div class="cage-count" style="font-size: 0.7rem; color: #6c757d;">${cageData.pigeons.length} ingeschreven</div>
+                        </div>
+                        <button class="btn btn-micro btn-danger" onclick="unregisterCageFromWedstrijd('${cageId}', '${wedstrijdId}')" style="padding: 2px 6px; font-size: 0.65rem; border-radius: 4px;">
+                            Kooi
+                        </button>
+                    </div>
+                    <div class="cage-pigeons">
+                        ${cageData.pigeons.map(pigeon => `
+                            <div class="pigeon-item" style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 6px; padding: 4px 6px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+                                <div class="pigeon-info">
+                                    <div class="pigeon-name" style="font-size: 0.75rem; font-weight: 500; color: #495057;">${pigeon.name}</div>
+                                    <div class="pigeon-details" style="display: flex; gap: 4px; align-items: center; margin-top: 2px;">
+                                        <span style="background: ${pigeon.geslacht === 'man' ? '#e3f2fd' : '#fce4ec'}; padding: 1px 4px; border-radius: 8px; font-size: 0.65rem;">
+                                            ${pigeon.geslacht === 'man' ? '♂' : '♀'}
+                                        </span>
+                                        <span style="font-size: 0.65rem; color: #6c757d;">${pigeon.leeftijd || '0j 0m'}</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-micro btn-danger" onclick="unregisterPigeonFromWedstrijd('${pigeon.name}', '${wedstrijdId}')" style="padding: 1px 4px; font-size: 0.6rem; border-radius: 3px;">
+                                    -
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                cageSectionsContainer.appendChild(cageSection);
+            });
+            
+            registeredPigeonsList.appendChild(cageSectionsContainer);
+        }
+
+        function togglePigeonRegistration(wedstrijdId, pigeonId) {
+            const wedstrijden = loadWedstrijden();
+            const wedstrijd = wedstrijden.find(w => w.id === wedstrijdId);
+            const pigeon = getPigeonsInFlightCages().find(p => p.id === pigeonId);
+            
+            if (!wedstrijd || !pigeon) return;
+
+            const registeredPigeons = wedstrijd.ingeschreven_duiven || [];
+            const isRegistered = registeredPigeons.some(rp => rp.id === pigeonId);
+            
+            if (isRegistered) {
+                // Uitschrijven
+                wedstrijd.ingeschreven_duiven = registeredPigeons.filter(rp => rp.id !== pigeonId);
+                showNotification(`${pigeon.name} uitgeschreven van wedstrijd`, 'success');
+            } else {
+                // Inschrijven
+                wedstrijd.ingeschreven_duiven.push({
+                    id: pigeon.id,
+                    name: pigeon.name,
+                    owner: pigeon.owner,
+                    ownerName: getPigeonOwner(pigeon)
+                });
+                showNotification(`${pigeon.name} ingeschreven voor wedstrijd`, 'success');
+            }
+            
+            // Update localStorage
+            const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+            const wedstrijdIndex = allWedstrijden.findIndex(w => w.id === wedstrijdId);
+            if (wedstrijdIndex !== -1) {
+                allWedstrijden[wedstrijdIndex] = wedstrijd;
+                localStorage.setItem('wedstrijden', JSON.stringify(allWedstrijden));
+            }
+            
+            // Refresh modal
+            openPigeonRegistration(wedstrijdId);
+        }
+
+        // Helper functies
+        function getPigeonsInFlightCages() {
+            const currentUser = getCurrentUser();
+            const allCages = JSON.parse(localStorage.getItem('cages') || '[]');
+            const userCages = allCages.filter(cage => cage.owner === currentUser.email && cage.type === 'vlieg');
+            
+            const allPigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const userPigeons = allPigeons.filter(p => p.owner === currentUser.email);
+            
+            const pigeonsInCages = [];
+            userCages.forEach(cage => {
+                if (cage.pigeon) {
+                    const pigeon = userPigeons.find(p => p.id === cage.pigeon);
+                    if (pigeon) {
+                        pigeonsInCages.push(pigeon);
+                    }
+                }
+            });
+            
+            return pigeonsInCages;
+        }
+
+        // Haal duiven op per vliegkooi
+        function getPigeonsPerCage() {
+            const flightCages = JSON.parse(localStorage.getItem('flightCages') || '[]');
+            const pigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const user = getCurrentUser();
+            
+            const userFlightCages = flightCages.filter(cage => cage.owner === user.email);
+            const userPigeons = pigeons.filter(pigeon => pigeon.owner === user.email);
+            
+            const pigeonsPerCage = {};
+            
+            userFlightCages.forEach(cage => {
+                const cagePigeons = userPigeons.filter(pigeon => pigeon.vliegkooi_id === cage.id);
+                if (cagePigeons.length > 0) {
+                    pigeonsPerCage[cage.id] = {
+                        name: `Vliegkooi ${cage.number}`,
+                        pigeons: cagePigeons
+                    };
+                }
+            });
+            
+            return pigeonsPerCage;
+        }
+
+        // Selecteer alle duiven voor wedstrijd
+        function selectAllPigeonsForWedstrijd(wedstrijdId) {
+            const pigeonsPerCage = getPigeonsPerCage();
+            const wedstrijden = loadWedstrijden();
+            const wedstrijd = wedstrijden.find(w => w.id === wedstrijdId);
+            
+            if (!wedstrijd) return;
+            
+            if (!wedstrijd.registeredPigeons) {
+                wedstrijd.registeredPigeons = [];
+            }
+            
+            let registeredCount = 0;
+            
+            Object.values(pigeonsPerCage).forEach(cage => {
+                cage.pigeons.forEach(pigeon => {
+                    if (!wedstrijd.registeredPigeons.some(p => p.name === pigeon.name)) {
+                        wedstrijd.registeredPigeons.push(pigeon);
+                        registeredCount++;
+                    }
+                });
+            });
+            
+            if (registeredCount > 0) {
+                // Update localStorage
+                const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+                const wedstrijdIndex = allWedstrijden.findIndex(w => w.id === wedstrijdId);
+                if (wedstrijdIndex !== -1) {
+                    allWedstrijden[wedstrijdIndex] = wedstrijd;
+                    localStorage.setItem('wedstrijden', JSON.stringify(allWedstrijden));
+                }
+                
+                showNotification(`${registeredCount} duiven ingeschreven voor wedstrijd!`, 'success');
+                updatePigeonRegistrationModal(wedstrijdId);
+            } else {
+                showNotification('Alle duiven zijn al ingeschreven!', 'info');
+            }
+        }
+
+        // Selecteer alle duiven van een specifieke kooi voor wedstrijd
+        function selectCagePigeonsForWedstrijd(cageId, wedstrijdId) {
+            const pigeonsPerCage = getPigeonsPerCage();
+            const wedstrijden = loadWedstrijden();
+            const wedstrijd = wedstrijden.find(w => w.id === wedstrijdId);
+            
+            if (!wedstrijd || !pigeonsPerCage[cageId]) return;
+            
+            if (!wedstrijd.registeredPigeons) {
+                wedstrijd.registeredPigeons = [];
+            }
+            
+            const cage = pigeonsPerCage[cageId];
+            let registeredCount = 0;
+            
+            cage.pigeons.forEach(pigeon => {
+                if (!wedstrijd.registeredPigeons.some(p => p.name === pigeon.name)) {
+                    wedstrijd.registeredPigeons.push(pigeon);
+                    registeredCount++;
+                }
+            });
+            
+            if (registeredCount > 0) {
+                // Update localStorage
+                const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+                const wedstrijdIndex = allWedstrijden.findIndex(w => w.id === wedstrijdId);
+                if (wedstrijdIndex !== -1) {
+                    allWedstrijden[wedstrijdIndex] = wedstrijd;
+                    localStorage.setItem('wedstrijden', JSON.stringify(allWedstrijden));
+                }
+                
+                showNotification(`${registeredCount} duiven uit ${cage.name} ingeschreven!`, 'success');
+                updatePigeonRegistrationModal(wedstrijdId);
+            } else {
+                showNotification(`Alle duiven uit ${cage.name} zijn al ingeschreven!`, 'info');
+            }
+        }
+
+        function getPigeonOwner(pigeon) {
+            const owners = {
+                'wesley.wyngaerd@outlook.com': 'Wesley Wyngaerd',
+                'maximeboelaert@hotmail.be': 'Maxime Boelaert',
+                'degraevetomas@gmail.com': 'Tomas Degraeve'
+            };
+            
+            if (pigeon.owner) {
+                return owners[pigeon.owner] || 'Onbekend';
+            }
+            
+            // Fallback voor duiven zonder directe owner
+            return 'Wesley Wyngaerd';
+        }
+
+        // Modal functies
+        function closeModal() {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Event listeners voor modal sluiting
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Live tracking functies
+        function viewLiveTracking(wedstrijdId) {
+            const wedstrijd = loadWedstrijden().find(w => w.id === wedstrijdId);
+            if (!wedstrijd) return;
+
+            // Open live tracking in nieuw venster
+            const trackingUrl = `live-tracking.html?type=wedstrijd&id=${wedstrijdId}`;
+            window.open(trackingUrl, '_blank', 'width=1200,height=800');
+        }
+
+        // Wedstrijd resultaten functies
+        function viewWedstrijdResults(wedstrijdId) {
+            const wedstrijd = loadWedstrijden().find(w => w.id === wedstrijdId);
+            if (!wedstrijd || !wedstrijd.resultaten) {
+                showNotification('Geen resultaten beschikbaar voor deze wedstrijd', 'error');
+                return;
+            }
+
+            const modal = document.getElementById('wedstrijdResultsModal');
+            const content = document.getElementById('wedstrijdResultsContent');
+            
+            let html = `<h4>${wedstrijd.name}</h4>`;
+            html += `<p>Afstand: ${wedstrijd.distance} km | Type: ${wedstrijd.type}</p>`;
+            html += `<p>Prijsgeld: €${wedstrijd.prizeMoney}</p>`;
+            html += '<div style="margin-top: 20px;">';
+            html += '<table style="width: 100%; border-collapse: collapse; margin-top: 15px;">';
+            html += '<thead><tr style="background-color: #f8f9fa;">';
+            html += '<th style="padding: 10px; text-align: left; border-bottom: 2px solid #dee2e6;">Pos</th>';
+            html += '<th style="padding: 10px; text-align: left; border-bottom: 2px solid #dee2e6;">Medaille</th>';
+            html += '<th style="padding: 10px; text-align: left; border-bottom: 2px solid #dee2e6;">Duif</th>';
+            html += '<th style="padding: 10px; text-align: left; border-bottom: 2px solid #dee2e6;">Eigenaar</th>';
+            html += '<th style="padding: 10px; text-align: left; border-bottom: 2px solid #dee2e6;">Snelheid</th>';
+            html += '<th style="padding: 10px; text-align: left; border-bottom: 2px solid #dee2e6;">Vluchttijd</th>';
+            html += '<th style="padding: 10px; text-align: left; border-bottom: 2px solid #dee2e6;">Prijsgeld</th>';
+            html += '</tr></thead><tbody>';
+            
+            wedstrijd.resultaten.forEach((result, index) => {
+                const position = index + 1;
+                let medalHtml = '';
+                let prizeMoney = 0;
+                
+                if (position === 1) {
+                    medalHtml = '<span class="medal gold">🥇</span>';
+                    prizeMoney = Math.round(wedstrijd.prizeMoney * 0.5); // 50% voor 1e
+                } else if (position === 2) {
+                    medalHtml = '<span class="medal silver">🥈</span>';
+                    prizeMoney = Math.round(wedstrijd.prizeMoney * 0.3); // 30% voor 2e
+                } else if (position === 3) {
+                    medalHtml = '<span class="medal bronze">🥉</span>';
+                    prizeMoney = Math.round(wedstrijd.prizeMoney * 0.2); // 20% voor 3e
+                }
+                
+                html += `<tr style="border-bottom: 1px solid #dee2e6;">`;
+                html += `<td style="padding: 10px; font-weight: bold;">${position}</td>`;
+                html += `<td style="padding: 10px;">${medalHtml}</td>`;
+                html += `<td style="padding: 10px;">${result.pigeonName}</td>`;
+                html += `<td style="padding: 10px;">${result.ownerName}</td>`;
+                html += `<td style="padding: 10px;">${result.speed} km/u</td>`;
+                html += `<td style="padding: 10px;">${result.flightTime}</td>`;
+                html += `<td style="padding: 10px;">€${prizeMoney}</td>`;
+                html += `</tr>`;
+            });
+            
+            html += '</tbody></table></div>';
+            content.innerHTML = html;
+            modal.style.display = 'block';
+        }
+
+        // Update dashboard statistieken
+        function updateDashboardStats() {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            const allPigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const userPigeons = allPigeons.filter(p => p.owner === user.email);
+            const totalPigeons = userPigeons.length;
+            
+            const allCages = JSON.parse(localStorage.getItem('cages') || '[]');
+            const userCages = allCages.filter(cage => cage.owner === user.email);
+            
+            let activePigeons = 0;
+            userCages.forEach(cage => {
+                if (cage.type === 'vlieg' && cage.pigeon) {
+                    activePigeons++;
+                } else if (cage.type === 'kweek' && cage.malePigeon && cage.femalePigeon) {
+                    activePigeons += 2;
+                }
+            });
+            
+            const totalCages = userCages.length;
+            const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+            const userTrainings = allTrainings.filter(t => t.owner === user.email);
+            const totalTrainings = userTrainings.length;
+            
+            const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+            const userWedstrijden = allWedstrijden.filter(w => w.owner === user.email);
+            const totalWedstrijden = userWedstrijden.length;
+            
+            localStorage.setItem('totalPigeons', totalPigeons.toString());
+            localStorage.setItem('activePigeons', activePigeons.toString());
+            localStorage.setItem('totalCages', totalCages.toString());
+            localStorage.setItem('totalTrainings', totalTrainings.toString());
+            localStorage.setItem('totalRaces', totalWedstrijden.toString());
+            localStorage.setItem('totalPrizes', '0');
+        }
+
+        // Logout functie
+        function logout() {
+            localStorage.removeItem('currentUserEmail');
+            localStorage.removeItem('currentUserName');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

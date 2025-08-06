@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profiel - Pigeon Legends</title>
+
+    <script src="config.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #34495e 0%, #2980b9 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .profile-subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            z-index: 1000;
+            font-weight: bold;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #27ae60;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Pigeon Legends</div>
+            <div class="nav-buttons">
+                <a href="dashboard.html" class="nav-btn">Dashboard</a>
+                <a href="duiven.html" class="nav-btn">Duiven</a>
+                <a href="duiventil.html" class="nav-btn">Duiventil</a>
+                <a href="training.html" class="nav-btn">Training</a>
+                <a href="live-tracking.html" class="nav-btn">Live Tracking</a>
+                <a href="index.html" class="nav-btn" onclick="logout()">Uitloggen</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar" id="userAvatar">U</div>
+                <h1 class="profile-title" id="userName">Gebruiker</h1>
+                <p class="profile-subtitle" id="userEmail">gebruiker@example.com</p>
+                <div class="profile-location" id="userLocation" style="margin-top: 10px; color: #3498db; font-size: 0.9rem;">
+                    📍 Locatie wordt gedetecteerd...
+                </div>
+            </div>
+
+            <form id="profileForm">
+                <div class="form-section">
+                    <h3>Persoonlijke Gegevens</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">Voornaam</label>
+                            <input type="text" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Achternaam</label>
+                            <input type="text" id="lastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">📍 Locatie</label>
+                            <input type="text" id="location" required placeholder="Locatie wordt automatisch gedetecteerd...">
+                            <small style="color: #7f8c8d; font-size: 0.8rem; margin-top: 5px; display: block;">
+                                Je locatie wordt automatisch gedetecteerd voor optimale spelervaring
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Account Instellingen</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="newPassword">Nieuw Wachtwoord</label>
+                            <input type="password" id="newPassword" placeholder="Laat leeg om niet te wijzigen">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Bevestig Wachtwoord</label>
+                            <input type="password" id="confirmPassword" placeholder="Bevestig nieuw wachtwoord">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn">Profiel Opslaan</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Eenvoudige user management met localStorage
+        function getCurrentUser() {
+            const email = localStorage.getItem('currentUserEmail');
+            const name = localStorage.getItem('currentUserName');
+            return email ? { email, name } : null;
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        // Check of gebruiker is ingelogd
+        function checkAuth() {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Laad gebruikersgegevens uit localStorage
+            const firstName = localStorage.getItem('userFirstName');
+            const lastName = localStorage.getItem('userLastName');
+            const savedLocation = localStorage.getItem('userLocation');
+            
+            // Bepaal de juiste naam - prioriteit aan individuele velden
+            let displayName = '';
+            if (firstName && lastName) {
+                displayName = `${firstName} ${lastName}`;
+            } else if (user.name) {
+                displayName = user.name;
+            } else {
+                displayName = 'Gebruiker';
+            }
+            
+            // Update UI met gebruikersgegevens
+            document.getElementById('userName').textContent = displayName;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
+            
+            // Vul formulier in met opgeslagen gegevens
+            document.getElementById('firstName').value = firstName || '';
+            document.getElementById('lastName').value = lastName || '';
+            document.getElementById('email').value = user.email;
+            document.getElementById('location').value = savedLocation || '';
+            
+            // Toon opgeslagen locatie in header
+            if (savedLocation) {
+                document.getElementById('userLocation').textContent = `📍 ${savedLocation}`;
+            } else {
+                document.getElementById('userLocation').textContent = '📍 Locatie wordt gedetecteerd...';
+            }
+        }
+
+        // Haal huidige geolocatie op
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        
+                        // Converteer coördinaten naar adres
+                        reverseGeocode(lat, lng);
+                    },
+                    function(error) {
+                        console.log('Geolocatie niet beschikbaar:', error);
+                        // Fallback naar Oostakker
+                        document.getElementById('location').value = 'Oostakker, België';
+                        document.getElementById('location').placeholder = 'Oostakker, België (automatisch gedetecteerd)';
+                    }
+                );
+            } else {
+                // Fallback naar Oostakker
+                document.getElementById('location').value = 'Oostakker, België';
+                document.getElementById('location').placeholder = 'Oostakker, België (automatisch gedetecteerd)';
+            }
+        }
+
+        // Converteer coördinaten naar adres
+        function reverseGeocode(lat, lng) {
+            // Check of er al een opgeslagen locatie is
+            const savedLocation = localStorage.getItem('userLocation');
+            if (savedLocation) {
+                // Locatie is al opgeslagen, gebruik die
+                document.getElementById('location').value = savedLocation;
+                document.getElementById('userLocation').textContent = `📍 ${savedLocation}`;
+                return;
+            }
+            
+            // Voor nu: simpele detectie van bekende locaties
+            const locations = {
+                'Oostakker': { lat: 51.0500, lng: 3.7500, name: 'Oostakker, België' },
+                'Sas van Gent': { lat: 51.2275, lng: 3.7997, name: 'Sas van Gent, Nederland' },
+                'Mendonk': { lat: 51.1500, lng: 3.8000, name: 'Mendonk, België' },
+                'Gent': { lat: 51.0500, lng: 3.7300, name: 'Gent, België' },
+                'Antwerpen': { lat: 51.2200, lng: 4.4100, name: 'Antwerpen, België' },
+                'Brussel': { lat: 50.8500, lng: 4.3500, name: 'Brussel, België' }
+            };
+            
+            // Zoek dichtstbijzijnde bekende locatie
+            let closestLocation = 'Oostakker, België';
+            let minDistance = Infinity;
+            
+            for (const [key, location] of Object.entries(locations)) {
+                const distance = calculateDistance(lat, lng, location.lat, location.lng);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestLocation = location.name;
+                }
+            }
+            
+            // Als dicht bij Oostakker, gebruik Oostakker
+            if (minDistance < 10) { // binnen 10km
+                closestLocation = 'Oostakker, België';
+            }
+            
+            document.getElementById('location').value = closestLocation;
+            document.getElementById('location').placeholder = `${closestLocation} (automatisch gedetecteerd)`;
+            
+            // Update header locatie
+            document.getElementById('userLocation').textContent = `📍 ${closestLocation}`;
+            
+            // Sla coördinaten op
+            localStorage.setItem('userLatitude', lat);
+            localStorage.setItem('userLongitude', lng);
+            localStorage.setItem('userLocation', closestLocation);
+        }
+
+        // Bereken afstand tussen twee punten
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radius van de aarde in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                     Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Formulier opslaan
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const location = document.getElementById('location').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!firstName || !lastName || !email || !location) {
+                showNotification('Vul alle verplichte velden in', 'error');
+                return;
+            }
+            
+            // Alleen wachtwoord controleren als er een nieuw wachtwoord is ingevoerd
+            if (newPassword && newPassword !== confirmPassword) {
+                showNotification('Wachtwoorden komen niet overeen', 'error');
+                return;
+            }
+            
+            // Update localStorage met correcte gegevens
+            const fullName = `${firstName} ${lastName}`;
+            localStorage.setItem('currentUserName', fullName);
+            localStorage.setItem('currentUserEmail', email);
+            localStorage.setItem('userFirstName', firstName);
+            localStorage.setItem('userLastName', lastName);
+            localStorage.setItem('userLocation', location);
+            
+            // Update wachtwoord alleen als er een nieuw is ingevoerd
+            if (newPassword) {
+                localStorage.setItem('userPassword', newPassword);
+            }
+            
+            // Update UI
+            document.getElementById('userName').textContent = fullName;
+            document.getElementById('userAvatar').textContent = fullName.charAt(0).toUpperCase();
+            document.getElementById('userLocation').textContent = `📍 ${location}`;
+            
+            showNotification('Profiel succesvol opgeslagen!', 'success');
+            
+            // Reset wachtwoord velden
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        });
+
+        function resetForm() {
+            const user = getCurrentUser();
+            if (user) {
+                const firstName = localStorage.getItem('userFirstName') || '';
+                const lastName = localStorage.getItem('userLastName') || '';
+                const location = localStorage.getItem('userLocation') || '';
+                
+                document.getElementById('firstName').value = firstName;
+                document.getElementById('lastName').value = lastName;
+                document.getElementById('email').value = user.email;
+                document.getElementById('location').value = location;
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+        });
+
+        // Logout functie
+        function logout() {
+            localStorage.removeItem('currentUserEmail');
+            localStorage.removeItem('currentUserName');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

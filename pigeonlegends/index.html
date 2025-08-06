@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pigeon Legends - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #34495e 0%, #2980b9 100%);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .app-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .app-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .feature-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-container {
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .form {
+            display: none;
+        }
+
+        .form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-btn {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-btn:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            z-index: 1000;
+            font-weight: bold;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #27ae60;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+                margin: 20px;
+            }
+
+            .left-panel {
+                padding: 30px 20px;
+            }
+
+            .app-title {
+                font-size: 2rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <h1 class="app-title">Pigeon Legends</h1>
+            <p class="app-subtitle">Het Ultieme Duiven Managementspel</p>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <img src="Wedstrijd.png" alt="Competitie" class="feature-icon">
+                    <div class="feature-title">Competitie</div>
+                    <div class="feature-description">Neem deel aan spannende wedstrijden</div>
+                </div>
+                <div class="feature-card">
+                    <img src="Duiventil.png" alt="Duiventil" class="feature-icon">
+                    <div class="feature-title">Duiventil</div>
+                    <div class="feature-description">Beheer je kweek- en vliegkooien</div>
+                </div>
+                <div class="feature-card">
+                    <img src="Financiën.png" alt="Financiën" class="feature-icon">
+                    <div class="feature-title">Financiën</div>
+                    <div class="feature-description">Houd je inkomsten en uitgaven bij</div>
+                </div>
+                <div class="feature-card">
+                    <img src="Prijzenkast.png" alt="Prijzen" class="feature-icon">
+                    <div class="feature-title">Prijzen</div>
+                    <div class="feature-description">Verzamel medailles en trofeeën</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="form-container">
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('login')">Inloggen</button>
+                    <button class="tab" onclick="showTab('register')">Registreren</button>
+                </div>
+                
+                <form id="loginForm" class="form active">
+                    <div class="form-group">
+                        <label for="loginEmail">E-mail</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Wachtwoord</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn" id="loginBtn">Inloggen</button>
+                    <div class="loading" id="loginLoading">
+                        <div class="spinner"></div>
+                        <p>Inloggen...</p>
+                    </div>
+                </form>
+
+                <form id="registerForm" class="form">
+                    <div class="form-group">
+                        <label for="registerEmail">E-mail</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Wachtwoord</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">Voornaam</label>
+                        <input type="text" id="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Achternaam</label>
+                        <input type="text" id="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Locatie</label>
+                        <input type="text" id="location" required placeholder="bijv. Gent, België">
+                    </div>
+                    <button type="submit" class="btn" id="registerBtn">Account Aanmaken</button>
+                    <div class="loading" id="registerLoading">
+                        <div class="spinner"></div>
+                        <p>Account wordt aangemaakt...</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="config.js"></script>
+    <script>
+
+        // Tab functie
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const forms = document.querySelectorAll('.form');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            forms.forEach(form => form.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Form').classList.add('active');
+        }
+
+        // Notificatie functie
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        // Eenvoudige login - werkt zonder CORS problemen
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showNotification('Vul alle velden in', 'error');
+                return;
+            }
+            
+            document.getElementById('loginLoading').style.display = 'block';
+            document.getElementById('loginBtn').disabled = true;
+            
+            try {
+                // Demo login - controleer tegen bekende accounts
+                const validAccounts = [
+                    { 
+                        email: 'wesley.wyngaerd@outlook.com', 
+                        password: 'Test.123', 
+                        firstName: 'Wesley',
+                        lastName: 'Wyngaerd',
+                        location: 'Oostakker, België'
+                    },
+                    { 
+                        email: 'maximeboelaert@hotmail.be', 
+                        password: 'Test.123', 
+                        firstName: 'Maxime',
+                        lastName: 'Boelaert',
+                        location: 'Sas van Gent, Nederland'
+                    },
+                    { 
+                        email: 'degraevetomas@gmail.com', 
+                        password: 'Test.123', 
+                        firstName: 'Tomas',
+                        lastName: 'Degraeve',
+                        location: 'Mendonk, België'
+                    }
+                ];
+                
+                const account = validAccounts.find(acc => acc.email === email && acc.password === password);
+                
+                if (!account) {
+                    throw new Error('Ongeldige e-mail of wachtwoord');
+                }
+                
+                // Sla gebruiker op met correcte gegevens
+                localStorage.setItem('currentUserEmail', email);
+                localStorage.setItem('currentUserName', `${account.firstName} ${account.lastName}`);
+                localStorage.setItem('userFirstName', account.firstName);
+                localStorage.setItem('userLastName', account.lastName);
+                localStorage.setItem('userLocation', account.location);
+                
+                showNotification(`Welkom ${account.firstName} ${account.lastName}!`, 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification('Inloggen mislukt: ' + error.message, 'error');
+            } finally {
+                document.getElementById('loginLoading').style.display = 'none';
+                document.getElementById('loginBtn').disabled = false;
+            }
+        });
+
+        // Eenvoudige registratie - werkt zonder CORS
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const location = document.getElementById('location').value;
+            
+            if (!email || !password || !firstName || !lastName || !location) {
+                showNotification('Vul alle velden in', 'error');
+                return;
+            }
+            
+            document.getElementById('registerLoading').style.display = 'block';
+            document.getElementById('registerBtn').disabled = true;
+            
+            try {
+                // Demo registratie - sla op in localStorage
+                const newUser = {
+                    email: email,
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName,
+                    location: location,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Sla op in localStorage
+                const users = JSON.parse(localStorage.getItem('demoUsers') || '[]');
+                users.push(newUser);
+                localStorage.setItem('demoUsers', JSON.stringify(users));
+                
+                // Sla gebruiker op als ingelogd
+                localStorage.setItem('currentUserEmail', email);
+                localStorage.setItem('currentUserName', `${firstName} ${lastName}`);
+                localStorage.setItem('userFirstName', firstName);
+                localStorage.setItem('userLastName', lastName);
+                localStorage.setItem('userLocation', location);
+                
+                showNotification('Account succesvol aangemaakt!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Registratie fout:', error);
+                showNotification('Registratie mislukt: ' + error.message, 'error');
+            } finally {
+                document.getElementById('registerLoading').style.display = 'none';
+                document.getElementById('registerBtn').disabled = false;
+            }
+        });
+
+        // Check of gebruiker al ingelogd is
+        async function checkAuth() {
+            const currentUser = localStorage.getItem('currentUserEmail');
+            if (currentUser) {
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        // Check auth bij laden
+        checkAuth();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duif Profiel - Pigeon Legends</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #34495e 0%, #2980b9 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .pigeon-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .pigeon-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .pigeon-info {
+            flex: 1;
+        }
+
+        .pigeon-name {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .pigeon-details {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .pigeon-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-male {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-female {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border-left: 4px solid #3498db;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: rgba(52, 152, 219, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin: -15px;
+        }
+
+        .section-header h3 {
+            margin: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            color: #3498db;
+            transition: transform 0.3s ease;
+            font-weight: bold;
+        }
+
+        .collapsible.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .collapsible.collapsed .history-list {
+            display: none;
+        }
+
+        .history-list {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .property-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .property-name {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+
+        .property-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transition: width 0.3s ease;
+        }
+
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            transition: background 0.3s ease;
+        }
+
+        .history-item:hover {
+            background: #f8f9fa;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .history-details {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .history-date {
+            color: #95a5a6;
+            font-size: 0.8rem;
+        }
+
+        .prize-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .prize-gold {
+            background: #ffd700;
+            color: #8b6914;
+        }
+
+        .prize-silver {
+            background: #c0c0c0;
+            color: #696969;
+        }
+
+        .prize-bronze {
+            background: #cd7f32;
+            color: #8b4513;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .pigeon-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .properties-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Pigeon Legends</div>
+            <div class="nav-buttons">
+                <a href="dashboard.html" class="nav-btn">Dashboard</a>
+                <a href="duiven.html" class="nav-btn">Duiven</a>
+                <a href="duiventil.html" class="nav-btn">Duiventil</a>
+                <a href="training.html" class="nav-btn">Training</a>
+                <a href="live-tracking.html" class="nav-btn">Live Tracking</a>
+                <a href="index.html" class="nav-btn" onclick="logout()">Uitloggen</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="page-header">
+            <h1 class="page-title">Duif Profiel</h1>
+            <p class="page-subtitle">Bekijk alle details van je duif</p>
+        </section>
+
+        <div id="pigeonProfile">
+            <!-- Duif profiel wordt hier dynamisch geladen -->
+        </div>
+    </main>
+
+    <script>
+        // Haal duif ID uit URL parameter
+        function getPigeonId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Laad duif gegevens
+        function loadPigeonData() {
+            const pigeonId = getPigeonId();
+            if (!pigeonId) {
+                showError('Geen duif ID opgegeven');
+                return;
+            }
+
+            const allPigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const pigeon = allPigeons.find(p => p.id === pigeonId);
+            
+            if (!pigeon) {
+                showError('Duif niet gevonden');
+                return;
+            }
+
+            renderPigeonProfile(pigeon);
+        }
+
+        // Render duif profiel
+        function renderPigeonProfile(pigeon) {
+            const container = document.getElementById('pigeonProfile');
+            
+            container.innerHTML = `
+                <div class="content-card">
+                    <div class="pigeon-header">
+                        <div class="pigeon-avatar">
+                            ${pigeon.geslacht === 'man' ? '♂' : '♀'}
+                        </div>
+                        <div class="pigeon-info">
+                            <div class="pigeon-name">${pigeon.name}</div>
+                            <div class="pigeon-details">
+                                ${pigeon.geslacht === 'man' ? 'Mannelijk' : 'Vrouwelijk'} • 
+                                ${pigeon.leeftijd || '0 jaar, 0 maand'} • 
+                                ${getPigeonCageStatus(pigeon.id)}
+                            </div>
+                        </div>
+                        <div class="pigeon-status ${pigeon.geslacht === 'man' ? 'status-male' : 'status-female'}">
+                            ${pigeon.geslacht === 'man' ? '♂ Man' : '♀ Vrouw'}
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="content-card">
+                    <h3 class="section-title">Eigenschappen Details</h3>
+                    <div class="properties-grid">
+                        ${renderPropertyCard('Vormpeil', pigeon.vormpeil || 0)}
+                        ${renderPropertyCard('Conditie', pigeon.conditie || 0)}
+                        ${renderPropertyCard('Snelheid', pigeon.snelheid || 0)}
+                        ${renderPropertyCard('Navigatie', pigeon.navigatie || 0)}
+                        ${renderPropertyCard('Vliegtechniek', pigeon.vliegtechniek || 0)}
+                        ${renderPropertyCard('Ervaring', pigeon.ervaring || 0)}
+                        ${renderPropertyCard('Aerodynamica', pigeon.aerodynamica || 0)}
+                        ${renderPropertyCard('Intelligentie', pigeon.intelligentie || 0)}
+                        ${renderPropertyCard('Nachtvliegen', pigeon.nachtvliegen || 0)}
+                        ${renderPropertyCard('Libido', pigeon.libido || 1)}
+                    </div>
+                </div>
+
+                <div class="content-card collapsible">
+                    <div class="section-header" onclick="toggleSection('trainingHistory')">
+                        <h3 class="section-title">Training Geschiedenis</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="history-list" id="trainingHistory">
+                        ${renderTrainingHistory(pigeon.id)}
+                    </div>
+                </div>
+
+                <div class="content-card collapsible">
+                    <div class="section-header" onclick="toggleSection('raceHistory')">
+                        <h3 class="section-title">Wedstrijd Geschiedenis</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="history-list" id="raceHistory">
+                        ${renderRaceHistory(pigeon.id)}
+                    </div>
+                </div>
+
+                <div class="content-card collapsible">
+                    <div class="section-header" onclick="toggleSection('prizesHistory')">
+                        <h3 class="section-title">Prijzenkast</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="history-list" id="prizesHistory">
+                        ${renderPrizesHistory(pigeon.id)}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render eigenschap kaart
+        function renderPropertyCard(name, value) {
+            // Bepaal maximum waarde per eigenschap
+            let maxValue = 100;
+            if (name === 'Libido') {
+                maxValue = 5;
+            }
+            
+            const percentage = Math.min((value / maxValue) * 100, 100);
+            return `
+                <div class="property-card">
+                    <div class="property-name">${name}</div>
+                    <div class="property-value">${value}</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Haal kooi status op
+        function getPigeonCageStatus(pigeonId) {
+            const allCages = JSON.parse(localStorage.getItem('cages') || '[]');
+            const user = getCurrentUser();
+            
+            if (!user) return 'Status onbekend';
+            
+            const userCages = allCages.filter(cage => cage.owner === user.email);
+            
+            // Check vliegkooien
+            const flightCage = userCages.find(cage => 
+                cage.type === 'vlieg' && cage.pigeon && cage.pigeon.id === pigeonId
+            );
+            if (flightCage) return `Vliegkooi ${flightCage.number}`;
+            
+            // Check kweekkooien
+            const breedingCage = userCages.find(cage => 
+                cage.type === 'kweek' && 
+                ((cage.malePigeon && cage.malePigeon.id === pigeonId) || 
+                 (cage.femalePigeon && cage.femalePigeon.id === pigeonId))
+            );
+            if (breedingCage) return `Kweekkooi ${breedingCage.number}`;
+            
+            return 'Vrij';
+        }
+
+        // Render training geschiedenis
+        function renderTrainingHistory(pigeonId) {
+            const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+            const user = getCurrentUser();
+            
+            if (!user) return '<div class="empty-state">Gebruiker niet ingelogd</div>';
+            
+            const userTrainings = allTrainings.filter(t => t.owner === user.email);
+            const pigeonTrainings = userTrainings.filter(t => 
+                t.registeredPigeons && t.registeredPigeons.some(p => p.id === pigeonId)
+            );
+            
+            if (pigeonTrainings.length === 0) {
+                return `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <img src="Training.png" alt="Training" style="width: 60px; height: 60px; opacity: 0.7;">
+                        </div>
+                        <p>Deze duif heeft nog geen trainingen voltooid</p>
+                    </div>
+                `;
+            }
+            
+            return pigeonTrainings.map(training => `
+                <div class="history-item">
+                    <div class="history-info">
+                        <div class="history-title">${training.name}</div>
+                        <div class="history-details">
+                            ${training.startLocation} → ${training.endLocation} (${training.distance} km)
+                        </div>
+                    </div>
+                    <div class="history-date">
+                        ${new Date(training.startTime).toLocaleDateString('nl-NL')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render wedstrijd geschiedenis
+        function renderRaceHistory(pigeonId) {
+            const allRaces = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+            const user = getCurrentUser();
+            
+            if (!user) return '<div class="empty-state">Gebruiker niet ingelogd</div>';
+            
+            const userRaces = allRaces.filter(r => r.owner === user.email);
+            const pigeonRaces = userRaces.filter(r => 
+                r.registeredPigeons && r.registeredPigeons.some(p => p.id === pigeonId)
+            );
+            
+            if (pigeonRaces.length === 0) {
+                return `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <img src="Wedstrijd.png" alt="Wedstrijd" style="width: 60px; height: 60px; opacity: 0.7;">
+                        </div>
+                        <p>Deze duif heeft nog geen wedstrijden voltooid</p>
+                    </div>
+                `;
+            }
+            
+            return pigeonRaces.map(race => `
+                <div class="history-item">
+                    <div class="history-info">
+                        <div class="history-title">${race.name}</div>
+                        <div class="history-details">
+                            ${race.startLocation} → ${race.endLocation} (${race.distance} km)
+                        </div>
+                    </div>
+                    <div class="history-date">
+                        ${new Date(race.startTime).toLocaleDateString('nl-NL')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render prijzen geschiedenis
+        function renderPrizesHistory(pigeonId) {
+            const allPrizes = JSON.parse(localStorage.getItem('prijzen') || '[]');
+            const user = getCurrentUser();
+            
+            if (!user) return '<div class="empty-state">Gebruiker niet ingelogd</div>';
+            
+            const userPrizes = allPrizes.filter(p => p.owner === user.email);
+            const pigeonPrizes = userPrizes.filter(p => p.pigeonId === pigeonId);
+            
+            if (pigeonPrizes.length === 0) {
+                return `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <img src="Prijzen.png" alt="Prijzen" style="width: 60px; height: 60px; opacity: 0.7;">
+                        </div>
+                        <p>Deze duif heeft nog geen prijzen gewonnen</p>
+                    </div>
+                `;
+            }
+            
+            return pigeonPrizes.map(prize => `
+                <div class="history-item">
+                    <div class="history-info">
+                        <div class="history-title">${prize.event}</div>
+                        <div class="history-details">${prize.description || ''}</div>
+                    </div>
+                    <div class="prize-badge prize-${prize.type}">
+                        ${prize.type.toUpperCase()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Haal huidige gebruiker op
+        function getCurrentUser() {
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return null;
+            
+            return {
+                email: currentUserEmail,
+                firstName: localStorage.getItem('userFirstName') || '',
+                lastName: localStorage.getItem('userLastName') || '',
+                location: localStorage.getItem('userLocation') || ''
+            };
+        }
+
+        // Toon foutmelding
+        function showError(message) {
+            const container = document.getElementById('pigeonProfile');
+            container.innerHTML = `
+                <div class="content-card">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❌</div>
+                        <h3>Fout</h3>
+                        <p>${message}</p>
+                        <button class="btn btn-secondary" onclick="history.back()">Terug</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Controleer authenticatie
+        function checkAuth() {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Toggle sectie functie
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const card = section.closest('.collapsible');
+            
+            if (card.classList.contains('collapsed')) {
+                card.classList.remove('collapsed');
+                section.style.display = 'block';
+            } else {
+                card.classList.add('collapsed');
+                section.style.display = 'none';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadPigeonData();
+        });
+
+        // Logout functie
+        function logout() {
+            localStorage.removeItem('currentUserEmail');
+            localStorage.removeItem('currentUserName');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

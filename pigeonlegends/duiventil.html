@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duiventil - Pigeon Legends</title>
+
+    <script src="config.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #34495e 0%, #2980b9 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            min-width: 120px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.6);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.6);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.6);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.6);
+        }
+
+        .lofts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            min-height: 100px;
+        }
+
+        #kweekkooien-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            min-height: 100px;
+        }
+
+        .loft-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 6px;
+            padding: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Specifieke grid voor vliegkooien - 3 naast elkaar */
+        #vliegkooien-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            min-height: 120px;
+        }
+
+        .loft-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .loft-card:hover::before {
+            opacity: 1;
+        }
+
+        .loft-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .loft-card.occupied {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, #f8fff9 0%, #ffffff 100%);
+        }
+
+        .loft-card.breeding {
+            border-color: #f39c12;
+            background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
+        }
+
+        .loft-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+
+        .loft-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            margin-right: 4px;
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .loft-info h3 {
+            margin: 0;
+            font-size: 0.75rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .loft-details {
+            font-size: 0.55rem;
+            color: #7f8c8d;
+            margin-top: 1px;
+        }
+
+        .loft-status {
+            padding: 1px 3px;
+            border-radius: 4px;
+            font-size: 0.55rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .status-empty {
+            background: #ecf0f1;
+            color: #7f8c8d;
+        }
+
+        .status-occupied {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .status-breeding {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+
+        .pigeon-info {
+            background: #f8f9fa;
+            border-radius: 3px;
+            padding: 3px;
+            margin-bottom: 3px;
+            font-size: 0.65rem;
+        }
+
+        .pigeon-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1px;
+            font-size: 0.65rem;
+        }
+
+        .pigeon-details {
+            font-size: 0.55rem;
+            color: #7f8c8d;
+        }
+
+        .loft-actions {
+            margin-top: auto;
+        }
+
+        .loft-actions .btn {
+            width: 100%;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .pigeon-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px;
+            background: #f8f9fa;
+        }
+
+        .pigeon-option {
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            border: 2px solid transparent;
+            background: white;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .pigeon-option:hover {
+            background: #e3f2fd;
+            border-color: #3498db;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+        }
+
+        .pigeon-option.selected {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .pigeon-option.selected:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #1f5f8b 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(52, 152, 219, 0.5);
+        }
+
+        .pigeon-option.selected::before {
+            content: "✓";
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: #27ae60;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pigeon-option.selected .pigeon-details {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        .pigeon-option.selected .status-free {
+            color: #a8e6cf !important;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-footer .btn {
+            min-width: 120px;
+        }
+
+        /* Upgrade Sectie Styling */
+        .upgrade-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .upgrade-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .current-level {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .til-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 3px solid white;
+        }
+
+        .level-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .upgrade-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .upgrade-option {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .upgrade-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .upgrade-option .til-image {
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+        }
+
+        .upgrade-info {
+            flex: 1;
+            color: white;
+        }
+
+        .upgrade-info h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.2rem;
+        }
+
+        .upgrade-info p {
+            margin: 0 0 12px 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .upgrade-info .btn {
+            background: #4facfe;
+            border: 2px solid #4facfe;
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upgrade-info .btn:hover {
+            background: #43a3f5;
+            border-color: #43a3f5;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .upgrade-info .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .lofts-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+
+            #kweekkooien-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+
+            #vliegkooien-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .lofts-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            #kweekkooien-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            #vliegkooien-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .page-header {
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .content-card {
+                padding: 20px;
+            }
+
+            .loft-card {
+                padding: 15px;
+            }
+
+            .upgrade-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .upgrade-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .upgrade-option {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Inklapbare secties */
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #43a3f5 0%, #00e6f0 100%);
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .section-header.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            background: white;
+            border-radius: 0 0 10px 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .section-content.collapsed {
+            max-height: 0;
+            padding: 0 20px;
+            opacity: 0;
+        }
+
+        /* Responsive design voor inklapbare secties */
+        @media (max-width: 768px) {
+            .section-header {
+                padding: 12px 15px;
+            }
+            
+            .section-header h2 {
+                font-size: 1.1rem;
+            }
+            
+            .section-content {
+                padding: 15px;
+            }
+        }
+
+        /* Upgrade sectie styling */
+        .upgrade-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .current-level {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .til-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 3px solid #4facfe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .til-image:hover {
+            transform: scale(1.05);
+            border-color: #00f2fe;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .level-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .upgrade-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .upgrade-option {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .upgrade-option:hover {
+            background: #e9ecef;
+            border-color: #4facfe;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.1);
+        }
+
+        .upgrade-option .til-image {
+            width: 70px;
+            height: 70px;
+            flex-shrink: 0;
+        }
+
+        .upgrade-info {
+            flex: 1;
+            color: #2c3e50;
+        }
+
+        .upgrade-info h3 {
+            margin: 0 0 6px 0;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        .upgrade-info p {
+            margin: 0 0 10px 0;
+            opacity: 0.8;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        /* Modal voor grote afbeeldingen */
+        .large-image-modal {
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .large-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        #modalTitle {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Pigeon Legends</div>
+            <div class="nav-buttons">
+                <a href="dashboard.html" class="nav-btn">Dashboard</a>
+                <a href="duiven.html" class="nav-btn">Duiven</a>
+                <a href="training.html" class="nav-btn">Training</a>
+                <a href="live-tracking.html" class="nav-btn">Live Tracking</a>
+                <a href="index.html" class="nav-btn" onclick="logout()">Uitloggen</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="page-header">
+            <h1 class="page-title">Duiventil</h1>
+            <p class="page-subtitle">Beheer je kweek- en vliegkooien</p>
+        </section>
+
+        <!-- Upgrade Sectie -->
+        <div class="section">
+                    <div class="section-header" onclick="toggleSection('upgrades')">
+            <h2>Duiventil Upgrade</h2>
+            <span class="toggle-icon">▼</span>
+        </div>
+            <div id="upgrades-content" class="section-content">
+                <div class="upgrade-header">
+                    <div class="current-level">
+                        <img src="Til1.png" alt="Basic" class="til-image" onclick="showLargeImage('Til1.png', 'Basic')">
+                        <span class="level-text">Huidige niveau: Basic</span>
+                    </div>
+                    <button class="btn btn-secondary" onclick="downgradeToBasic()" style="background: #6c757d; border: 2px solid #6c757d; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; cursor: pointer;">Terug naar Basic</button>
+                </div>
+                
+                <div class="upgrade-options">
+                    <div class="upgrade-option" onclick="upgradeToTil2()">
+                        <img src="Til2.png" alt="Average" class="til-image" onclick="showLargeImage('Til2.png', 'Average')">
+                        <div class="upgrade-info">
+                            <h3>Average Upgrade</h3>
+                            <p>8 kweekkooien • 3 vliegkooien (max 12 duiven elk)</p>
+                            <button class="btn btn-primary">Upgrade naar Average</button>
+                        </div>
+                    </div>
+                    
+                    <div class="upgrade-option" onclick="upgradeToTil3()">
+                        <img src="Til3.png" alt="Advanced" class="til-image" onclick="showLargeImage('Til3.png', 'Advanced')">
+                        <div class="upgrade-info">
+                            <h3>Advanced Upgrade</h3>
+                            <p>12 kweekkooien • 3 vliegkooien (max 18 duiven elk)</p>
+                            <button class="btn btn-primary">Upgrade naar Advanced</button>
+                        </div>
+                    </div>
+                    
+                    <div class="upgrade-option" onclick="upgradeToTil4()">
+                        <img src="Til4.png" alt="Ultramodern" class="til-image" onclick="showLargeImage('Til4.png', 'Ultramodern')">
+                        <div class="upgrade-info">
+                            <h3>Ultramodern Upgrade</h3>
+                            <p>16 kweekkooien • 3 vliegkooien (max 24 duiven elk)</p>
+                            <button class="btn btn-primary">Upgrade naar Ultramodern</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kweekkooien Sectie -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection('kweekkooien')">
+                <h2>Kweekkooien</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div id="kweekkooien-content" class="section-content">
+                <div id="kweekkooien-grid" class="loft-grid">
+                    <!-- Kweekkooien worden hier dynamisch geladen -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Vliegkooien Sectie -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection('vliegkooien')">
+                <h2>Vliegkooien</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div id="vliegkooien-content" class="section-content">
+                <div id="vliegkooien-grid" class="loft-grid">
+                    <!-- Vliegkooien worden hier dynamisch geladen -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal voor duif plaatsen -->
+    <div id="placePigeonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Duif Plaatsen in Vliegkooi</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 0.9rem;">
+                    <strong>📋 Instructies:</strong> Klik op een duif om deze te selecteren. Alleen vrije duiven worden getoond.
+                </p>
+                <div class="form-group">
+                    <label>Beschikbare duiven:</label>
+                    <div class="pigeon-list" id="pigeonList">
+                        <!-- Beschikbare duiven worden hier dynamisch geladen -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" onclick="placePigeonInCage()">Plaats Duif</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Annuleren</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal voor kweekkooi beheren -->
+    <div id="breedingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Kweekkooi Beheren</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 0.9rem;">
+                    <strong>📋 Instructies:</strong> Selecteer één mannelijke en één vrouwelijke duif. Alleen vrije duiven worden getoond.
+                </p>
+                <div class="form-group">
+                    <label>Mannelijke duif:</label>
+                    <div class="pigeon-list" id="malePigeonList">
+                        <!-- Mannelijke duiven worden hier dynamisch geladen -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Vrouwelijke duif:</label>
+                    <div class="pigeon-list" id="femalePigeonList">
+                        <!-- Vrouwelijke duiven worden hier dynamisch geladen -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" onclick="startBreeding()">Kweek Starten</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Annuleren</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal voor vergrote afbeeldingen -->
+    <div id="imageModal" class="modal" style="display: none;">
+        <div class="modal-content large-image-modal">
+            <span class="close" onclick="closeImageModal()">&times;</span>
+            <h3 id="modalTitle"></h3>
+            <img id="modalImage" src="" alt="" class="large-image">
+        </div>
+    </div>
+
+    <script>
+        // Eenvoudige user management met localStorage
+        function getCurrentUser() {
+            const email = localStorage.getItem('currentUserEmail');
+            const name = localStorage.getItem('currentUserName');
+            return email ? { email, name } : null;
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 5px;
+                color: white;
+                z-index: 1000;
+                font-weight: bold;
+                background-color: ${type === 'error' ? '#e74c3c' : '#27ae60'};
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Check of gebruiker is ingelogd
+        function checkAuth() {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+        }
+
+        // Laad duiven uit localStorage
+        function loadPigeons() {
+            const pigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            return pigeons.filter(pigeon => pigeon.owner === getCurrentUser().email);
+        }
+
+        // Laad kooien uit localStorage
+        function loadCages() {
+            const cages = JSON.parse(localStorage.getItem('cages') || '[]');
+            const user = getCurrentUser();
+            
+            // Als gebruiker nog geen kooien heeft, maak ze aan
+            if (!cages.find(cage => cage.owner === user.email)) {
+                const newCages = [];
+                
+                // 4 kweekkooien
+                for (let i = 1; i <= 4; i++) {
+                    newCages.push({
+                        id: `kweek-${user.email}-${i}`,
+                        type: 'kweek',
+                        number: i,
+                        owner: user.email,
+                        status: 'empty',
+                        malePigeon: null,
+                        femalePigeon: null
+                    });
+                }
+                
+                // 17 vliegkooien
+                for (let i = 1; i <= 17; i++) {
+                    newCages.push({
+                        id: `vlieg-${user.email}-${i}`,
+                        type: 'vlieg',
+                        number: i,
+                        owner: user.email,
+                        status: 'empty',
+                        pigeon: null
+                    });
+                }
+                
+                localStorage.setItem('cages', JSON.stringify([...cages, ...newCages]));
+                return newCages;
+            }
+            
+            return cages.filter(cage => cage.owner === user.email);
+        }
+
+        // Laad vliegkooien uit localStorage (3 grote kooien per gebruiker)
+        function loadFlightCages() {
+            const cages = JSON.parse(localStorage.getItem('flightCages') || '[]');
+            const user = getCurrentUser();
+            // Initieel 3 kooien per gebruiker, max 6 duiven per kooi
+            if (!cages.find(cage => cage.owner === user.email)) {
+                const newCages = [];
+                for (let i = 1; i <= 3; i++) {
+                    newCages.push({
+                        id: `vlieg-${user.email}-${i}`,
+                        number: i,
+                        owner: user.email,
+                        max: 6,
+                        pigeons: [] // lijst van duif objecten
+                    });
+                }
+                localStorage.setItem('flightCages', JSON.stringify([...cages, ...newCages]));
+                return newCages;
+            }
+            return cages.filter(cage => cage.owner === user.email);
+        }
+
+        // Render kooien
+        function renderCages() {
+            const cages = loadCages();
+            const kweekkooien = cages.filter(cage => cage.type === 'kweek');
+            const vliegkooien = cages.filter(cage => cage.type === 'vlieg');
+            
+            renderKweekkooien(kweekkooien);
+            renderVliegkooien(vliegkooien);
+        }
+
+        function renderKweekkooien(kooien) {
+            const grid = document.getElementById('kweekkooien-grid');
+            grid.innerHTML = '';
+            
+            console.log('Rendering kweekkooien:', kooien);
+            
+            if (kooien.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">🥚</div>
+                        <h3 style="margin-bottom: 10px; color: #2c3e50;">Geen kweekkooien gevonden</h3>
+                        <p>Kweekkooien worden automatisch aangemaakt voor nieuwe gebruikers.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            kooien.forEach(kooi => {
+                const card = document.createElement('div');
+                card.className = `loft-card ${kooi.status !== 'empty' ? 'occupied' : ''}`;
+                
+                let pigeonInfo = '';
+                if (kooi.status === 'breeding') {
+                    pigeonInfo = `
+                        <div class="pigeon-info">
+                            <div class="pigeon-name" style="cursor: pointer; color: #3498db;" onclick="openPigeonProfile('${kooi.malePigeon?.id}')">♂ ${kooi.malePigeon?.name || 'Onbekend'}</div>
+                            <div class="pigeon-name" style="cursor: pointer; color: #3498db;" onclick="openPigeonProfile('${kooi.femalePigeon?.id}')">♀ ${kooi.femalePigeon?.name || 'Onbekend'}</div>
+                            <div class="pigeon-details">Kweek actief</div>
+                        </div>
+                    `;
+                }
+                
+                card.innerHTML = `
+                    <div class="loft-header">
+                        <div class="loft-icon">🥚</div>
+                        <div class="loft-info">
+                            <h3>Kweekkooi ${kooi.number}</h3>
+                            <div class="loft-details">
+                                ${kooi.status === 'empty' ? 'Leeg • Beschikbaar voor kweek' : 
+                                  kooi.status === 'breeding' ? 'Kweek actief' : 'Bezet'}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="loft-status ${kooi.status === 'empty' ? 'status-empty' : 
+                                           kooi.status === 'breeding' ? 'status-breeding' : 'status-occupied'}">
+                        ${kooi.status === 'empty' ? 'Leeg' : 
+                          kooi.status === 'breeding' ? 'Kweek' : 'Bezet'}
+                    </div>
+                    ${pigeonInfo}
+                    <div class="loft-actions">
+                        ${kooi.status === 'empty' ? 
+                            `<button class="btn btn-success" onclick="openBreedingModal('${kooi.id}')" style="padding: 4px 8px; font-size: 0.7rem;">🥚 Kweek Starten</button>` :
+                            `<button class="btn btn-danger" onclick="removeFromCage('${kooi.id}')" style="padding: 4px 8px; font-size: 0.7rem;">🗑️ Leegmaken</button>`
+                        }
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function renderVliegkooien(kooien) {
+            const grid = document.getElementById('vliegkooien-grid');
+            grid.innerHTML = '';
+            
+            console.log('Rendering vliegkooien:', kooien);
+            
+            if (kooien.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">🏠</div>
+                        <h3 style="margin-bottom: 10px; color: #2c3e50;">Geen vliegkooien gevonden</h3>
+                        <p>Vliegkooien worden automatisch aangemaakt voor nieuwe gebruikers.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            kooien.forEach(kooi => {
+                const card = document.createElement('div');
+                card.className = `loft-card ${kooi.status !== 'empty' ? 'occupied' : ''}`;
+                
+                let pigeonInfo = '';
+                if (kooi.pigeon) {
+                    pigeonInfo = `
+                        <div class="pigeon-info">
+                            <div class="pigeon-name" style="cursor: pointer; color: #3498db;" onclick="openPigeonProfile('${kooi.pigeon.id}')">${kooi.pigeon.name}</div>
+                            <div class="pigeon-details">${kooi.pigeon.geslacht} • ${kooi.pigeon.leeftijd || '0 jaar, 0 maand'}</div>
+                        </div>
+                    `;
+                }
+                
+                card.innerHTML = `
+                    <div class="loft-header">
+                        <div class="loft-icon">🏠</div>
+                        <div class="loft-info">
+                            <h3>Vliegkooi ${kooi.number}</h3>
+                            <div class="loft-details">
+                                ${kooi.status === 'empty' ? 'Leeg • Beschikbaar voor duiven' : 'Bezet'}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="loft-status ${kooi.status === 'empty' ? 'status-empty' : 'status-occupied'}">
+                        ${kooi.status === 'empty' ? 'Leeg' : 'Bezet'}
+                    </div>
+                    ${pigeonInfo}
+                    <div class="loft-actions">
+                        ${kooi.status === 'empty' ? 
+                            `<button class="btn btn-primary" onclick="openPlacePigeonModal('${kooi.id}')">🕊️ Duif Plaatsen</button>` :
+                            `<button class="btn btn-danger" onclick="removeFromCage('${kooi.id}')">🗑️ Verwijderen</button>`
+                        }
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Render vliegkooien
+        function renderFlightCages() {
+            const cages = loadFlightCages();
+            const pigeons = loadPigeons();
+            const grid = document.getElementById('vliegkooien-grid');
+            grid.innerHTML = '';
+            
+            cages.forEach(cage => {
+                // Duiven in deze kooi
+                const cagePigeons = pigeons.filter(p => p.vliegkooi_id === cage.id);
+                const card = document.createElement('div');
+                card.className = 'loft-card occupied';
+                card.innerHTML = `
+                    <div class="loft-header">
+                        <div class="loft-icon">🏠</div>
+                        <div class="loft-info">
+                            <h3>Vliegkooi ${cage.number}</h3>
+                            <div class="loft-details">${cagePigeons.length} / ${cage.max} duiven</div>
+                        </div>
+                    </div>
+                    <div class="loft-status status-occupied">${cagePigeons.length < cage.max ? 'Beschikbaar' : 'Vol'}</div>
+                    <div style="margin-bottom: 6px;">
+                        ${cagePigeons.length === 0 ? '<div style="color:#7f8c8d;font-size:0.8rem;">Geen duiven in deze kooi</div>' : ''}
+                        <ul style="list-style:none;padding:0;">
+                            ${cagePigeons.map(p => `
+                                <li style="margin-bottom:3px;display:flex;align-items:center;justify-content:space-between;">
+                                    <span style="cursor:pointer;color:#3498db;font-size:0.8rem;" onclick="openPigeonProfile('${p.id}')">${p.name}</span>
+                                    <button class="btn btn-danger" style="padding:1px 4px;font-size:0.7rem;" onclick="removePigeonFromCage('${p.id}')">🗑️</button>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    ${cagePigeons.length < cage.max ? `<button class="btn btn-primary" onclick="openAddPigeonModal('${cage.id}')" style="padding: 6px 12px; font-size: 0.8rem;">🕊️ Duif toevoegen</button>` : ''}
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Modal functies
+        function openPlacePigeonModal(cageId) {
+            const modal = document.getElementById('placePigeonModal');
+            const allPigeons = loadPigeons();
+            const cages = loadCages();
+            
+            // Filter duiven die nog niet in een kooi zitten
+            const availablePigeons = allPigeons.filter(pigeon => {
+                // Check of duif al in een vliegkooi zit
+                const inFlightCage = cages.find(cage => 
+                    cage.type === 'vlieg' && 
+                    cage.pigeon && 
+                    cage.pigeon.name === pigeon.name
+                );
+                
+                // Check of duif al in een kweekkooi zit
+                const inBreedingCage = cages.find(cage => 
+                    cage.type === 'kweek' && 
+                    ((cage.malePigeon && cage.malePigeon.name === pigeon.name) ||
+                     (cage.femalePigeon && cage.femalePigeon.name === pigeon.name))
+                );
+                
+                // Duif is beschikbaar als hij in geen enkele kooi zit
+                return !inFlightCage && !inBreedingCage;
+            });
+            
+            const pigeonList = document.getElementById('pigeonList');
+            pigeonList.innerHTML = '';
+            
+            if (availablePigeons.length === 0) {
+                pigeonList.innerHTML = '<p style="color: #7f8c8d; text-align: center; padding: 20px;">Geen vrije duiven beschikbaar</p>';
+            } else {
+                availablePigeons.forEach(pigeon => {
+                    const option = document.createElement('div');
+                    option.className = 'pigeon-option';
+                    
+                    // Toon naam, leeftijd en geslacht
+                    const leeftijd = pigeon.leeftijd || '0 jaar, 0 maand';
+                    const geslacht = pigeon.geslacht === 'man' ? '♂ Man' : '♀ Vrouw';
+                    
+                    option.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div>
+                                <strong>${pigeon.name}</strong>
+                                <div class="pigeon-details" style="font-size: 0.8rem; color: #7f8c8d; margin-top: 2px;">
+                                    ${leeftijd} • ${geslacht}
+                                </div>
+                            </div>
+                            <div class="status-free" style="font-size: 0.7rem; color: #27ae60;">
+                                Vrij
+                            </div>
+                        </div>
+                    `;
+                    
+                    option.onclick = () => selectPigeon(pigeon, cageId);
+                    pigeonList.appendChild(option);
+                });
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function openBreedingModal(cageId) {
+            const modal = document.getElementById('breedingModal');
+            const allPigeons = loadPigeons();
+            const cages = loadCages();
+            
+            // Filter duiven die nog niet in een kooi zitten
+            const availablePigeons = allPigeons.filter(pigeon => {
+                // Check of duif al in een vliegkooi zit
+                const inFlightCage = cages.find(cage => 
+                    cage.type === 'vlieg' && 
+                    cage.pigeon && 
+                    cage.pigeon.name === pigeon.name
+                );
+                
+                // Check of duif al in een kweekkooi zit
+                const inBreedingCage = cages.find(cage => 
+                    cage.type === 'kweek' && 
+                    ((cage.malePigeon && cage.malePigeon.name === pigeon.name) ||
+                     (cage.femalePigeon && cage.femalePigeon.name === pigeon.name))
+                );
+                
+                // Duif is beschikbaar als hij in geen enkele kooi zit
+                return !inFlightCage && !inBreedingCage;
+            });
+            
+            const malePigeons = availablePigeons.filter(p => p.geslacht === 'man');
+            const femalePigeons = availablePigeons.filter(p => p.geslacht === 'vrouw');
+            
+            const maleList = document.getElementById('malePigeonList');
+            const femaleList = document.getElementById('femalePigeonList');
+            
+            maleList.innerHTML = '';
+            femaleList.innerHTML = '';
+            
+            if (malePigeons.length === 0) {
+                maleList.innerHTML = '<p style="color: #7f8c8d; text-align: center; padding: 10px;">Geen vrije mannelijke duiven</p>';
+            } else {
+                malePigeons.forEach(pigeon => {
+                    const option = document.createElement('div');
+                    option.className = 'pigeon-option';
+                    
+                    const leeftijd = pigeon.leeftijd || '0 jaar, 0 maand';
+                    
+                    option.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div>
+                                <strong>♂ ${pigeon.name}</strong>
+                                <div class="pigeon-details" style="font-size: 0.8rem; color: #7f8c8d; margin-top: 2px;">
+                                    ${leeftijd}
+                                </div>
+                            </div>
+                            <div class="status-free" style="font-size: 0.7rem; color: #27ae60;">
+                                Vrij
+                            </div>
+                        </div>
+                    `;
+                    
+                    option.onclick = () => selectBreedingPigeon(pigeon, 'male', cageId);
+                    maleList.appendChild(option);
+                });
+            }
+            
+            if (femalePigeons.length === 0) {
+                femaleList.innerHTML = '<p style="color: #7f8c8d; text-align: center; padding: 10px;">Geen vrije vrouwelijke duiven</p>';
+            } else {
+                femalePigeons.forEach(pigeon => {
+                    const option = document.createElement('div');
+                    option.className = 'pigeon-option';
+                    
+                    const leeftijd = pigeon.leeftijd || '0 jaar, 0 maand';
+                    
+                    option.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div>
+                                <strong>♀ ${pigeon.name}</strong>
+                                <div class="pigeon-details" style="font-size: 0.8rem; color: #7f8c8d; margin-top: 2px;">
+                                    ${leeftijd}
+                                </div>
+                            </div>
+                            <div class="status-free" style="font-size: 0.7rem; color: #27ae60;">
+                                Vrij
+                            </div>
+                        </div>
+                    `;
+                    
+                    option.onclick = () => selectBreedingPigeon(pigeon, 'female', cageId);
+                    femaleList.appendChild(option);
+                });
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('placePigeonModal').style.display = 'none';
+            document.getElementById('breedingModal').style.display = 'none';
+        }
+
+        let selectedPigeon = null;
+        let selectedMalePigeon = null;
+        let selectedFemalePigeon = null;
+        let currentCageId = null;
+
+        function selectPigeon(pigeon, cageId) {
+            selectedPigeon = pigeon;
+            currentCageId = cageId;
+            
+            // Verwijder alle vorige selecties
+            document.querySelectorAll('.pigeon-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Voeg selectie toe aan geklikte optie
+            event.currentTarget.classList.add('selected');
+            
+            // Toon bevestiging
+            showNotification(`${pigeon.name} geselecteerd voor vliegkooi!`, 'success');
+        }
+
+        function selectBreedingPigeon(pigeon, gender, cageId) {
+            if (gender === 'male') {
+                // Verwijder vorige mannelijke selectie
+                document.querySelectorAll('#malePigeonList .pigeon-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                selectedMalePigeon = pigeon;
+            } else {
+                // Verwijder vorige vrouwelijke selectie
+                document.querySelectorAll('#femalePigeonList .pigeon-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                selectedFemalePigeon = pigeon;
+            }
+            currentCageId = cageId;
+            
+            // Voeg selectie toe aan geklikte optie
+            event.currentTarget.classList.add('selected');
+            
+            // Toon bevestiging
+            const genderText = gender === 'male' ? 'mannelijke' : 'vrouwelijke';
+            showNotification(`${pigeon.name} geselecteerd als ${genderText} duif!`, 'success');
+        }
+
+        // Plaats duif in kooi
+        function placePigeonInCage() {
+            if (!selectedPigeon || !currentCageId) {
+                showNotification('Selecteer een duif en kooi', 'error');
+                return;
+            }
+            
+            // Update kooi in localStorage
+            const cages = loadCages();
+            const cageIndex = cages.findIndex(cage => cage.id === currentCageId);
+            
+            if (cageIndex !== -1) {
+                cages[cageIndex].pigeon = selectedPigeon;
+                cages[cageIndex].status = 'occupied';
+                
+                // Update localStorage
+                const allCages = JSON.parse(localStorage.getItem('cages') || '[]');
+                const user = getCurrentUser();
+                const userCages = allCages.filter(c => c.owner === user.email);
+                const otherCages = allCages.filter(c => c.owner !== user.email);
+                
+                // Update alleen de kooien van deze gebruiker
+                const updatedUserCages = userCages.map(cage => 
+                    cage.id === currentCageId ? cages[cageIndex] : cage
+                );
+                
+                localStorage.setItem('cages', JSON.stringify([...otherCages, ...updatedUserCages]));
+                
+                showNotification(`${selectedPigeon.name} is geplaatst in vliegkooi!`, 'success');
+                closeModal();
+                renderCages();
+                updateDashboardStats();
+            }
+        }
+
+        // Start kweek
+        function startBreeding() {
+            if (!selectedMalePigeon || !selectedFemalePigeon || !currentCageId) {
+                showNotification('Selecteer een mannelijke en vrouwelijke duif', 'error');
+                return;
+            }
+            
+            // Update kooi in localStorage
+            const cages = loadCages();
+            const cageIndex = cages.findIndex(cage => cage.id === currentCageId);
+            
+            if (cageIndex !== -1) {
+                cages[cageIndex].malePigeon = selectedMalePigeon;
+                cages[cageIndex].femalePigeon = selectedFemalePigeon;
+                cages[cageIndex].status = 'breeding';
+                cages[cageIndex].kweek_start = new Date().toISOString();
+                
+                // Update localStorage
+                const allCages = JSON.parse(localStorage.getItem('cages') || '[]');
+                const user = getCurrentUser();
+                const userCages = allCages.filter(c => c.owner === user.email);
+                const otherCages = allCages.filter(c => c.owner !== user.email);
+                
+                // Update alleen de kooien van deze gebruiker
+                const updatedUserCages = userCages.map(cage => 
+                    cage.id === currentCageId ? cages[cageIndex] : cage
+                );
+                
+                localStorage.setItem('cages', JSON.stringify([...otherCages, ...updatedUserCages]));
+                
+                showNotification(`Kweek gestart: ${selectedMalePigeon.name} + ${selectedFemalePigeon.name}`, 'success');
+                closeModal();
+                renderCages();
+                updateDashboardStats();
+            }
+        }
+
+        // Verwijder uit kooi
+        function removeFromCage(cageId) {
+            if (confirm('Weet je zeker dat je de duif uit de kooi wilt halen?')) {
+                // Update kooi in localStorage
+                const cages = loadCages();
+                const cageIndex = cages.findIndex(cage => cage.id === cageId);
+                
+                if (cageIndex !== -1) {
+                    const cage = cages[cageIndex];
+                    const pigeonName = cage.pigeon ? cage.pigeon.name : 
+                                     (cage.malePigeon ? cage.malePigeon.name : 'onbekend');
+                    
+                    // Reset kooi
+                    cages[cageIndex].pigeon = null;
+                    cages[cageIndex].malePigeon = null;
+                    cages[cageIndex].femalePigeon = null;
+                    cages[cageIndex].status = 'empty';
+                    cages[cageIndex].kweek_start = null;
+                    
+                    // Update localStorage
+                    const allCages = JSON.parse(localStorage.getItem('cages') || '[]');
+                    const user = getCurrentUser();
+                    const userCages = allCages.filter(c => c.owner === user.email);
+                    const otherCages = allCages.filter(c => c.owner !== user.email);
+                    
+                    // Update alleen de kooien van deze gebruiker
+                    const updatedUserCages = userCages.map(cage => 
+                        cage.id === cageId ? cages[cageIndex] : cage
+                    );
+                    
+                    localStorage.setItem('cages', JSON.stringify([...otherCages, ...updatedUserCages]));
+                    
+                    showNotification(`${pigeonName} is uit de kooi gehaald!`, 'success');
+                    renderCages();
+                    updateDashboardStats();
+                }
+            }
+        }
+
+        // Voeg duif toe aan vliegkooi
+        function addPigeonToCage(pigeonId, cageId) {
+            const pigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const idx = pigeons.findIndex(p => p.id === pigeonId);
+            
+            if (idx !== -1) {
+                // Controleer of de kooi nog niet vol is
+                const cages = loadFlightCages();
+                const targetCage = cages.find(c => c.id === cageId);
+                const pigeonsInCage = pigeons.filter(p => p.vliegkooi_id === cageId);
+                
+                if (pigeonsInCage.length >= targetCage.max) {
+                    showNotification('Deze kooi is vol!', 'error');
+                    return;
+                }
+                
+                // Controleer of de duif nog niet in een andere kooi zit
+                if (pigeons[idx].vliegkooi_id) {
+                    showNotification('Deze duif zit al in een kooi!', 'error');
+                    return;
+                }
+                
+                // Voeg duif toe aan kooi
+                pigeons[idx].vliegkooi_id = cageId;
+                localStorage.setItem('pigeons', JSON.stringify(pigeons));
+                
+                // Sluit modal
+                const modal = document.querySelector('.modal');
+                if (modal) modal.remove();
+                
+                // Update weergave
+                renderFlightCages();
+                showNotification('Duif succesvol toegevoegd aan kooi!', 'success');
+            }
+        }
+
+        // Verwijder duif uit vliegkooi
+        function removePigeonFromCage(pigeonId) {
+            const pigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const idx = pigeons.findIndex(p => p.id === pigeonId);
+            
+            if (idx !== -1) {
+                pigeons[idx].vliegkooi_id = null;
+                localStorage.setItem('pigeons', JSON.stringify(pigeons));
+                renderFlightCages();
+                showNotification('Duif verwijderd uit kooi!', 'success');
+            }
+        }
+
+        // Open modal om duif toe te voegen
+        function openAddPigeonModal(cageId) {
+            const pigeons = loadPigeons();
+            // Alleen duiven die nog niet in een vliegkooi zitten
+            const available = pigeons.filter(p => !p.vliegkooi_id);
+            
+            let html = '<h3 style="margin-bottom:10px;">Selecteer een duif</h3>';
+            if (available.length === 0) {
+                html += '<div style="color:#7f8c8d;">Geen vrije duiven beschikbaar</div>';
+            } else {
+                html += '<ul style="list-style:none;padding:0;">' +
+                    available.map(p => `<li style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
+                <span>${p.name}</span>
+                <button class="btn btn-success" style="padding:2px 8px;font-size:0.8rem;" onclick="addPigeonToCage('${p.id}','${cageId}')">Toevoegen</button>
+            </li>`).join('') + '</ul>';
+            }
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'block';
+            modal.innerHTML = `<div class='modal-content'><span class='close' onclick='this.parentNode.parentNode.remove()'>&times;</span>${html}</div>`;
+            document.body.appendChild(modal);
+        }
+
+        // Event listeners
+        const placePigeonForm = document.getElementById('placePigeonForm');
+        const breedingForm = document.getElementById('breedingForm');
+        
+        if (placePigeonForm) {
+            placePigeonForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                placePigeonInCage();
+            });
+        }
+
+        if (breedingForm) {
+            breedingForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                startBreeding();
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const placeModal = document.getElementById('placePigeonModal');
+            const breedingModal = document.getElementById('breedingModal');
+            if (event.target === placeModal) {
+                closeModal();
+            }
+            if (event.target === breedingModal) {
+                closeModal();
+            }
+        }
+
+        // Close modal with X button
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.onclick = function() {
+                closeModal();
+            }
+        });
+
+        // Update dashboard statistieken
+        function updateDashboardStats() {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            // Tel totaal duiven van deze gebruiker
+            const allPigeons = JSON.parse(localStorage.getItem('pigeons') || '[]');
+            const userPigeons = allPigeons.filter(p => p.owner === user.email);
+            const totalPigeons = userPigeons.length;
+            
+            // Tel duiven in kooien
+            const allCages = JSON.parse(localStorage.getItem('cages') || '[]');
+            const userCages = allCages.filter(cage => cage.owner === user.email);
+            
+            let activePigeons = 0;
+            userCages.forEach(cage => {
+                if (cage.type === 'vlieg' && cage.pigeon) {
+                    activePigeons++; // 1 duif per vliegkooi
+                } else if (cage.type === 'kweek' && cage.malePigeon && cage.femalePigeon) {
+                    activePigeons += 2; // 2 duiven per kweekkooi
+                }
+            });
+            
+            // Tel kooien
+            const totalCages = userCages.length;
+            
+            // Tel trainingen en wedstrijden
+            const allTrainings = JSON.parse(localStorage.getItem('trainings') || '[]');
+            const userTrainings = allTrainings.filter(t => t.owner === user.email);
+            const totalTrainings = userTrainings.length;
+            
+            const allWedstrijden = JSON.parse(localStorage.getItem('wedstrijden') || '[]');
+            const userWedstrijden = allWedstrijden.filter(w => w.owner === user.email);
+            const totalWedstrijden = userWedstrijden.length;
+            
+            // Sla op in localStorage voor dashboard
+            localStorage.setItem('totalPigeons', totalPigeons.toString());
+            localStorage.setItem('activePigeons', activePigeons.toString());
+            localStorage.setItem('totalCages', totalCages.toString());
+            localStorage.setItem('totalTrainings', totalTrainings.toString());
+            localStorage.setItem('totalRaces', totalWedstrijden.toString());
+            localStorage.setItem('totalPrizes', '0');
+        }
+
+        // Open duif profiel
+        function openPigeonProfile(pigeonId) {
+            if (pigeonId) {
+                window.open(`duif-profiel.html?id=${pigeonId}`, '_blank');
+            }
+        }
+
+        // Upgrade functies
+        function upgradeToTil2() {
+            const user = getCurrentUser();
+            const userUpgrades = JSON.parse(localStorage.getItem('userUpgrades') || '{}');
+            
+            if (userUpgrades[user.email] && userUpgrades[user.email] >= 2) {
+                showNotification('Je hebt al Average of hoger!', 'error');
+                return;
+            }
+            
+            // Update upgrade status
+            userUpgrades[user.email] = 2;
+            localStorage.setItem('userUpgrades', JSON.stringify(userUpgrades));
+            
+            // Update kweekkooien (4 -> 8)
+            const breedingCages = JSON.parse(localStorage.getItem('breedingCages') || '[]');
+            const userBreedingCages = breedingCages.filter(cage => cage.owner === user.email);
+            
+            // Voeg 4 extra kweekkooien toe
+            for (let i = 5; i <= 8; i++) {
+                userBreedingCages.push({
+                    id: `kweek-${user.email}-${i}`,
+                    number: i,
+                    owner: user.email,
+                    malePigeon: null,
+                    femalePigeon: null,
+                    status: 'leeg'
+                });
+            }
+            
+            // Update vliegkooien capaciteit (6 -> 12)
+            const flightCages = JSON.parse(localStorage.getItem('flightCages') || '[]');
+            const userFlightCages = flightCages.filter(cage => cage.owner === user.email);
+            
+            userFlightCages.forEach(cage => {
+                cage.max = 12;
+            });
+            
+            // Sla updates op
+            localStorage.setItem('breedingCages', JSON.stringify(breedingCages));
+            localStorage.setItem('flightCages', JSON.stringify(flightCages));
+            
+            showNotification('Succesvol geüpgraded naar Average!', 'success');
+            renderBreedingCages();
+            renderFlightCages();
+            updateCurrentLevel();
+        }
+
+        function upgradeToTil3() {
+            const user = getCurrentUser();
+            const userUpgrades = JSON.parse(localStorage.getItem('userUpgrades') || '{}');
+            
+            if (userUpgrades[user.email] && userUpgrades[user.email] >= 3) {
+                showNotification('Je hebt al Advanced of hoger!', 'error');
+                return;
+            }
+            
+            if (!userUpgrades[user.email] || userUpgrades[user.email] < 2) {
+                showNotification('Je moet eerst Average hebben!', 'error');
+                return;
+            }
+            
+            // Update upgrade status
+            userUpgrades[user.email] = 3;
+            localStorage.setItem('userUpgrades', JSON.stringify(userUpgrades));
+            
+            // Update kweekkooien (8 -> 12)
+            const breedingCages = JSON.parse(localStorage.getItem('breedingCages') || '[]');
+            const userBreedingCages = breedingCages.filter(cage => cage.owner === user.email);
+            
+            // Voeg 4 extra kweekkooien toe
+            for (let i = 9; i <= 12; i++) {
+                userBreedingCages.push({
+                    id: `kweek-${user.email}-${i}`,
+                    number: i,
+                    owner: user.email,
+                    malePigeon: null,
+                    femalePigeon: null,
+                    status: 'leeg'
+                });
+            }
+            
+            // Update vliegkooien capaciteit (12 -> 18)
+            const flightCages = JSON.parse(localStorage.getItem('flightCages') || '[]');
+            const userFlightCages = flightCages.filter(cage => cage.owner === user.email);
+            
+            userFlightCages.forEach(cage => {
+                cage.max = 18;
+            });
+            
+            // Sla updates op
+            localStorage.setItem('breedingCages', JSON.stringify(breedingCages));
+            localStorage.setItem('flightCages', JSON.stringify(flightCages));
+            
+            showNotification('Succesvol geüpgraded naar Advanced!', 'success');
+            renderBreedingCages();
+            renderFlightCages();
+            updateCurrentLevel();
+        }
+
+        function upgradeToTil4() {
+            const user = getCurrentUser();
+            const userUpgrades = JSON.parse(localStorage.getItem('userUpgrades') || '{}');
+            
+            if (userUpgrades[user.email] && userUpgrades[user.email] >= 4) {
+                showNotification('Je hebt al Ultramodern!', 'error');
+                return;
+            }
+            
+            if (!userUpgrades[user.email] || userUpgrades[user.email] < 3) {
+                showNotification('Je moet eerst Advanced hebben!', 'error');
+                return;
+            }
+            
+            // Update upgrade status
+            userUpgrades[user.email] = 4;
+            localStorage.setItem('userUpgrades', JSON.stringify(userUpgrades));
+            
+            // Update kweekkooien (12 -> 16)
+            const breedingCages = JSON.parse(localStorage.getItem('breedingCages') || '[]');
+            const userBreedingCages = breedingCages.filter(cage => cage.owner === user.email);
+            
+            // Voeg 4 extra kweekkooien toe
+            for (let i = 13; i <= 16; i++) {
+                userBreedingCages.push({
+                    id: `kweek-${user.email}-${i}`,
+                    number: i,
+                    owner: user.email,
+                    malePigeon: null,
+                    femalePigeon: null,
+                    status: 'leeg'
+                });
+            }
+            
+            // Update vliegkooien capaciteit (18 -> 24)
+            const flightCages = JSON.parse(localStorage.getItem('flightCages') || '[]');
+            const userFlightCages = flightCages.filter(cage => cage.owner === user.email);
+            
+            userFlightCages.forEach(cage => {
+                cage.max = 24;
+            });
+            
+            // Sla updates op
+            localStorage.setItem('breedingCages', JSON.stringify(breedingCages));
+            localStorage.setItem('flightCages', JSON.stringify(flightCages));
+            
+            showNotification('Succesvol geüpgraded naar Ultramodern!', 'success');
+            renderBreedingCages();
+            renderFlightCages();
+            updateCurrentLevel();
+        }
+
+        // Update huidige niveau weergave
+        function updateCurrentLevel() {
+            const user = getCurrentUser();
+            const userUpgrades = JSON.parse(localStorage.getItem('userUpgrades') || '{}');
+            const currentLevel = userUpgrades[user.email] || 1;
+            
+            const levelText = document.querySelector('.level-text');
+            const tilImage = document.querySelector('.current-level .til-image');
+            
+            // Map niveau nummers naar namen
+            const levelNames = {
+                1: 'Basic',
+                2: 'Average', 
+                3: 'Advanced',
+                4: 'Ultramodern'
+            };
+            
+            levelText.textContent = `Huidige niveau: ${levelNames[currentLevel]}`;
+            tilImage.src = `Til${currentLevel}.png`;
+            tilImage.alt = levelNames[currentLevel];
+        }
+
+        // Downgrade naar Basic
+        function downgradeToBasic() {
+            const user = getCurrentUser();
+            const userUpgrades = JSON.parse(localStorage.getItem('userUpgrades') || '{}');
+            
+            if (!userUpgrades[user.email] || userUpgrades[user.email] <= 1) {
+                showNotification('Je hebt al Basic niveau!', 'error');
+                return;
+            }
+            
+            if (confirm('Weet je zeker dat je terug wilt naar Basic niveau? Dit kan niet ongedaan worden gemaakt.')) {
+                // Reset naar Basic (niveau 1)
+                userUpgrades[user.email] = 1;
+                localStorage.setItem('userUpgrades', JSON.stringify(userUpgrades));
+                
+                // Reset kweekkooien naar 4
+                const breedingCages = JSON.parse(localStorage.getItem('breedingCages') || '[]');
+                const userBreedingCages = breedingCages.filter(cage => cage.owner === user.email);
+                
+                // Behoud alleen de eerste 4 kweekkooien
+                const updatedBreedingCages = breedingCages.filter(cage => cage.owner !== user.email);
+                const basicBreedingCages = userBreedingCages.slice(0, 4);
+                updatedBreedingCages.push(...basicBreedingCages);
+                
+                // Reset vliegkooien capaciteit naar 6
+                const flightCages = JSON.parse(localStorage.getItem('flightCages') || '[]');
+                const userFlightCages = flightCages.filter(cage => cage.owner === user.email);
+                
+                userFlightCages.forEach(cage => {
+                    cage.max = 6;
+                });
+                
+                // Sla updates op
+                localStorage.setItem('breedingCages', JSON.stringify(updatedBreedingCages));
+                localStorage.setItem('flightCages', JSON.stringify(flightCages));
+                
+                showNotification('Succesvol teruggezet naar Basic niveau!', 'success');
+                renderBreedingCages();
+                renderFlightCages();
+                updateCurrentLevel();
+            }
+        }
+
+        // Inklapbare secties functionaliteit
+        function toggleSection(sectionName) {
+            const header = document.querySelector(`#${sectionName}-content`).previousElementSibling;
+            const content = document.getElementById(`${sectionName}-content`);
+            
+            header.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+            
+            // Sla de status op in localStorage
+            const user = getCurrentUser();
+            const collapsedSections = JSON.parse(localStorage.getItem('collapsedSections') || '{}');
+            if (!collapsedSections[user.email]) {
+                collapsedSections[user.email] = {};
+            }
+            collapsedSections[user.email][sectionName] = content.classList.contains('collapsed');
+            localStorage.setItem('collapsedSections', JSON.stringify(collapsedSections));
+        }
+
+        // Laad opgeslagen sectie status
+        function loadSectionStatus() {
+            const user = getCurrentUser();
+            const collapsedSections = JSON.parse(localStorage.getItem('collapsedSections') || '{}');
+            
+            if (collapsedSections[user.email]) {
+                Object.keys(collapsedSections[user.email]).forEach(sectionName => {
+                    if (collapsedSections[user.email][sectionName]) {
+                        const header = document.querySelector(`#${sectionName}-content`).previousElementSibling;
+                        const content = document.getElementById(`${sectionName}-content`);
+                        header.classList.add('collapsed');
+                        content.classList.add('collapsed');
+                    }
+                });
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            
+            // Debug: Controleer of kooien bestaan
+            const cages = loadCages();
+            console.log('Geladen kooien:', cages);
+            console.log('Kweekkooien:', cages.filter(c => c.type === 'kweek'));
+            console.log('Vliegkooien:', cages.filter(c => c.type === 'vlieg'));
+            
+            renderCages();
+            updateDashboardStats();
+            renderFlightCages(); // Initial render van vliegkooien
+            updateCurrentLevel();
+            loadSectionStatus();
+        });
+
+        // Toon grote afbeelding modal
+        function showLargeImage(imageSrc, title) {
+            event.stopPropagation(); // Voorkom dat de upgrade functie wordt aangeroepen
+            
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalImage.src = imageSrc;
+            modalTitle.textContent = title;
+            modal.style.display = 'block';
+        }
+
+        // Sluit afbeelding modal
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+        }
+
+        // Sluit modal bij klik buiten de afbeelding
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Logout functie
+        function logout() {
+            localStorage.removeItem('currentUserEmail');
+            localStorage.removeItem('currentUserName');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
